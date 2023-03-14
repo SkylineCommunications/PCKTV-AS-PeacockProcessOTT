@@ -1,0 +1,176 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32228.430
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Internal", "Internal", "{66C1BAC2-2DA8-4188-8AA8-7AA09577D030}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{C5A26408-58B7-412C-BC02-7F0ACB422267}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dlls", "Dlls", "{84E1443D-24EF-40A9-9C6A-B1F20CCC7FE8}"
+	ProjectSection(SolutionItems) = preProject
+		Dlls\readme.txt = Dlls\readme.txt
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{0634C33B-20F3-49F6-A281-5B9C19D2455D}"
+	ProjectSection(SolutionItems) = preProject
+		Documentation\readme.txt = Documentation\readme.txt
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Code Analysis", "Code Analysis", "{400F306A-AF18-44DC-A7CA-043C1976AAD5}"
+	ProjectSection(SolutionItems) = preProject
+		Internal\Code Analysis\qaction-debug.ruleset = Internal\Code Analysis\qaction-debug.ruleset
+		Internal\Code Analysis\qaction-release.ruleset = Internal\Code Analysis\qaction-release.ruleset
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deactivate TS", "Deactivate TS", "{D7E64F44-D53B-4727-848E-EA79C7C71645}"
+	ProjectSection(SolutionItems) = preProject
+		Deactivate TS\Deactivate TS.xml = Deactivate TS\Deactivate TS.xml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Evaluate Event", "Evaluate Event", "{D8A4A283-01FC-4A77-967E-BAB315C100D1}"
+	ProjectSection(SolutionItems) = preProject
+		Evaluate Event\Evaluate Event.xml = Evaluate Event\Evaluate Event.xml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Provision TS", "Provision TS", "{DBC7F2F0-4525-4013-BC8B-FB1B68770A9E}"
+	ProjectSection(SolutionItems) = preProject
+		Provision TS\Provision TS.xml = Provision TS\Provision TS.xml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Start Conviva Subprocess", "Start Conviva Subprocess", "{DCDA673C-BB9A-41D7-9E42-A4EE64127356}"
+	ProjectSection(SolutionItems) = preProject
+		Start Conviva Subprocess\Start Conviva Subprocess.xml = Start Conviva Subprocess\Start Conviva Subprocess.xml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Start TAG Subprocess", "Start TAG Subprocess", "{C36C683B-85AC-44BF-935A-08383ACDFFA8}"
+	ProjectSection(SolutionItems) = preProject
+		Start TAG Subprocess\Start TAG Subprocess.xml = Start TAG Subprocess\Start TAG Subprocess.xml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "start_process", "start_process", "{31D45DCD-31CC-42A3-AE69-2033FF9A3FF9}"
+	ProjectSection(SolutionItems) = preProject
+		start_process\start_process.xml = start_process\start_process.xml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Waiting Conviva Subprocess", "Waiting Conviva Subprocess", "{637A9326-54DA-4908-B279-0BDD0F0C10FC}"
+	ProjectSection(SolutionItems) = preProject
+		Waiting Conviva Subprocess\Waiting Conviva Subprocess.xml = Waiting Conviva Subprocess\Waiting Conviva Subprocess.xml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Waiting TAG Subprocess", "Waiting TAG Subprocess", "{6B8330C3-2F53-428D-9D29-F24040E21A17}"
+	ProjectSection(SolutionItems) = preProject
+		Waiting TAG Subprocess\Waiting TAG Subprocess.xml = Waiting TAG Subprocess\Waiting TAG Subprocess.xml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Actions", "Actions", "{E10BF8E9-D619-40F7-9696-5E1820DF7ADF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Actions", "Actions", "{EA3B5367-72C0-4B38-97A5-7B437169871C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Actions", "Actions", "{426235A9-C1FD-4C35-9121-ABE3913B5833}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Actions", "Actions", "{8534C76C-1CA3-484B-AFAD-F0D5553683FA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Actions", "Actions", "{66333811-FE5B-41EC-A3E2-21C770D4AFB0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Actions", "Actions", "{D85954A7-CCC1-4568-803B-D9A827FF801B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Actions", "Actions", "{BBDC28A4-46B8-43FF-9C7E-EBCB54DDBDF4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Actions", "Actions", "{88524300-8472-452F-9218-E2402343D5DA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Waiting TAG Subprocess", "Waiting TAG Subprocess\Waiting TAG Subprocess\Waiting TAG Subprocess.csproj", "{C3CAAC3A-EDCE-44B8-AAC1-C1A3222F8A3C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Waiting Conviva Subprocess", "Waiting Conviva Subprocess\Waiting Conviva Subprocess\Waiting Conviva Subprocess.csproj", "{FA0F26FE-5BA1-4695-A749-1D0CF21F921B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "start_process", "start_process\start_process\start_process.csproj", "{AFFB56B6-E72F-4201-8A1C-7763C3E8053B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Start TAG Subprocess", "Start TAG Subprocess\Start TAG Subprocess\Start TAG Subprocess.csproj", "{ACED1EF0-9AFD-4BBA-8F01-E20EEBF6DC23}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Start Conviva Subprocess", "Start Conviva Subprocess\Start Conviva Subprocess\Start Conviva Subprocess.csproj", "{E70CFA28-DBDF-41BB-B945-80BFDFEFC168}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Provision TS", "Provision TS\Provision TS\Provision TS.csproj", "{2319B84E-44ED-4F34-9B25-5D5A45EF0C91}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Deactivate TS", "Deactivate TS\Deactivate TS\Deactivate TS.csproj", "{D0C704B0-83D4-4709-8CFA-1CD4B7F54BA3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Evaluate Event", "Evaluate Event\Evaluate Event\Evaluate Event.csproj", "{1DFB4A78-F060-4E50-912D-1633511DB1BB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Generic Classes", "Generic Classes", "{5CCA6C6B-8BEA-4EC3-9629-45AAB7B2F7F5}"
+	ProjectSection(SolutionItems) = preProject
+		ExternalRequest.cs = ExternalRequest.cs
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C3CAAC3A-EDCE-44B8-AAC1-C1A3222F8A3C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C3CAAC3A-EDCE-44B8-AAC1-C1A3222F8A3C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C3CAAC3A-EDCE-44B8-AAC1-C1A3222F8A3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C3CAAC3A-EDCE-44B8-AAC1-C1A3222F8A3C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA0F26FE-5BA1-4695-A749-1D0CF21F921B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA0F26FE-5BA1-4695-A749-1D0CF21F921B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA0F26FE-5BA1-4695-A749-1D0CF21F921B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA0F26FE-5BA1-4695-A749-1D0CF21F921B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AFFB56B6-E72F-4201-8A1C-7763C3E8053B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AFFB56B6-E72F-4201-8A1C-7763C3E8053B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AFFB56B6-E72F-4201-8A1C-7763C3E8053B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AFFB56B6-E72F-4201-8A1C-7763C3E8053B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ACED1EF0-9AFD-4BBA-8F01-E20EEBF6DC23}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ACED1EF0-9AFD-4BBA-8F01-E20EEBF6DC23}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ACED1EF0-9AFD-4BBA-8F01-E20EEBF6DC23}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ACED1EF0-9AFD-4BBA-8F01-E20EEBF6DC23}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E70CFA28-DBDF-41BB-B945-80BFDFEFC168}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E70CFA28-DBDF-41BB-B945-80BFDFEFC168}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E70CFA28-DBDF-41BB-B945-80BFDFEFC168}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E70CFA28-DBDF-41BB-B945-80BFDFEFC168}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2319B84E-44ED-4F34-9B25-5D5A45EF0C91}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2319B84E-44ED-4F34-9B25-5D5A45EF0C91}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2319B84E-44ED-4F34-9B25-5D5A45EF0C91}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2319B84E-44ED-4F34-9B25-5D5A45EF0C91}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0C704B0-83D4-4709-8CFA-1CD4B7F54BA3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0C704B0-83D4-4709-8CFA-1CD4B7F54BA3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0C704B0-83D4-4709-8CFA-1CD4B7F54BA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0C704B0-83D4-4709-8CFA-1CD4B7F54BA3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1DFB4A78-F060-4E50-912D-1633511DB1BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1DFB4A78-F060-4E50-912D-1633511DB1BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1DFB4A78-F060-4E50-912D-1633511DB1BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1DFB4A78-F060-4E50-912D-1633511DB1BB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{400F306A-AF18-44DC-A7CA-043C1976AAD5} = {66C1BAC2-2DA8-4188-8AA8-7AA09577D030}
+		{D7E64F44-D53B-4727-848E-EA79C7C71645} = {C5A26408-58B7-412C-BC02-7F0ACB422267}
+		{D8A4A283-01FC-4A77-967E-BAB315C100D1} = {C5A26408-58B7-412C-BC02-7F0ACB422267}
+		{DBC7F2F0-4525-4013-BC8B-FB1B68770A9E} = {C5A26408-58B7-412C-BC02-7F0ACB422267}
+		{DCDA673C-BB9A-41D7-9E42-A4EE64127356} = {C5A26408-58B7-412C-BC02-7F0ACB422267}
+		{C36C683B-85AC-44BF-935A-08383ACDFFA8} = {C5A26408-58B7-412C-BC02-7F0ACB422267}
+		{31D45DCD-31CC-42A3-AE69-2033FF9A3FF9} = {C5A26408-58B7-412C-BC02-7F0ACB422267}
+		{637A9326-54DA-4908-B279-0BDD0F0C10FC} = {C5A26408-58B7-412C-BC02-7F0ACB422267}
+		{6B8330C3-2F53-428D-9D29-F24040E21A17} = {C5A26408-58B7-412C-BC02-7F0ACB422267}
+		{E10BF8E9-D619-40F7-9696-5E1820DF7ADF} = {6B8330C3-2F53-428D-9D29-F24040E21A17}
+		{EA3B5367-72C0-4B38-97A5-7B437169871C} = {637A9326-54DA-4908-B279-0BDD0F0C10FC}
+		{426235A9-C1FD-4C35-9121-ABE3913B5833} = {31D45DCD-31CC-42A3-AE69-2033FF9A3FF9}
+		{8534C76C-1CA3-484B-AFAD-F0D5553683FA} = {C36C683B-85AC-44BF-935A-08383ACDFFA8}
+		{66333811-FE5B-41EC-A3E2-21C770D4AFB0} = {DCDA673C-BB9A-41D7-9E42-A4EE64127356}
+		{D85954A7-CCC1-4568-803B-D9A827FF801B} = {DBC7F2F0-4525-4013-BC8B-FB1B68770A9E}
+		{BBDC28A4-46B8-43FF-9C7E-EBCB54DDBDF4} = {D8A4A283-01FC-4A77-967E-BAB315C100D1}
+		{88524300-8472-452F-9218-E2402343D5DA} = {D7E64F44-D53B-4727-848E-EA79C7C71645}
+		{C3CAAC3A-EDCE-44B8-AAC1-C1A3222F8A3C} = {E10BF8E9-D619-40F7-9696-5E1820DF7ADF}
+		{FA0F26FE-5BA1-4695-A749-1D0CF21F921B} = {EA3B5367-72C0-4B38-97A5-7B437169871C}
+		{AFFB56B6-E72F-4201-8A1C-7763C3E8053B} = {426235A9-C1FD-4C35-9121-ABE3913B5833}
+		{ACED1EF0-9AFD-4BBA-8F01-E20EEBF6DC23} = {8534C76C-1CA3-484B-AFAD-F0D5553683FA}
+		{E70CFA28-DBDF-41BB-B945-80BFDFEFC168} = {66333811-FE5B-41EC-A3E2-21C770D4AFB0}
+		{2319B84E-44ED-4F34-9B25-5D5A45EF0C91} = {D85954A7-CCC1-4568-803B-D9A827FF801B}
+		{D0C704B0-83D4-4709-8CFA-1CD4B7F54BA3} = {88524300-8472-452F-9218-E2402343D5DA}
+		{1DFB4A78-F060-4E50-912D-1633511DB1BB} = {BBDC28A4-46B8-43FF-9C7E-EBCB54DDBDF4}
+		{5CCA6C6B-8BEA-4EC3-9629-45AAB7B2F7F5} = {C5A26408-58B7-412C-BC02-7F0ACB422267}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CFC078A0-8FA4-4C4A-B73C-14E985F4C3EC}
+	EndGlobalSection
+EndGlobal
