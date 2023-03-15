@@ -25,6 +25,7 @@ jobs:
       repository: ${{ github.repository }}
       owner: ${{ github.repository_owner }}
       sonarCloudProjectName: SkylineCommunications_PCKTV-AS-PeacockProcessActivities
+
       # The API-key: generated in the DCP Admin app (https://admin.dataminer.services/) as authentication for a certain DataMiner System.
     secrets:
       api-key: ${{ secrets.DATAMINER_DEPLOY_KEY }}
@@ -32,16 +33,14 @@ jobs:
     
   # Optional 0 or More CD Jobs as needed
   CD:
-    if: github.ref_type == 'tag'
     environment: production
     name: CD
     runs-on: ubuntu-latest
     needs: CI
 
     steps:
-      - uses: actions/checkout@v3
-
       - name: Skyline DataMiner Deploy Action
+
         uses: SkylineCommunications/Skyline-DataMiner-Deploy-Action@v1
         with:
           # Stage deploy
