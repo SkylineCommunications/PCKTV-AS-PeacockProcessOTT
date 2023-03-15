@@ -347,7 +347,6 @@ C:\GIT\GITHUB\PCKTV-AS-PeacockProcessActivities2\Waiting Conviva Subprocess\Wait
 C:\GIT\GITHUB\PCKTV-AS-PeacockProcessActivities2\Waiting Conviva Subprocess\Waiting Conviva Subprocess\bin\Debug\System.Xml.XPath.XDocument.dll
 C:\GIT\GITHUB\PCKTV-AS-PeacockProcessActivities2\Waiting Conviva Subprocess\Waiting Conviva Subprocess\bin\Debug\ProcessAutomation.dll
 C:\GIT\GITHUB\PCKTV-AS-PeacockProcessActivities2\Waiting Conviva Subprocess\Waiting Conviva Subprocess\bin\Debug\SLSolutionCLCommon.dll
-C:\GIT\GITHUB\PCKTV-AS-PeacockProcessActivities2\Waiting Conviva Subprocess\Waiting Conviva Subprocess\bin\Debug\ProcessAutomation.xml
 C:\GIT\GITHUB\PCKTV-AS-PeacockProcessActivities2\Waiting Conviva Subprocess\Waiting Conviva Subprocess\obj\Debug\Waiting Conviva Subprocess.csproj.AssemblyReference.cache
 C:\GIT\GITHUB\PCKTV-AS-PeacockProcessActivities2\Waiting Conviva Subprocess\Waiting Conviva Subprocess\obj\Debug\Waiting Conviva Subprocess.csproj.CoreCompileInputs.cache
 C:\GIT\GITHUB\PCKTV-AS-PeacockProcessActivities2\Waiting Conviva Subprocess\Waiting Conviva Subprocess\obj\Debug\Waiting Conviva Subprocess.csproj.CopyComplete
