@@ -108,27 +108,6 @@
           "lib/net462/SLProtoBufLibrary.dll": {}
         }
       },
-      "SLC.Lib.Automation/1.4.0.1": {
-        "type": "package",
-        "dependencies": {
-          "SLC.Lib.Common": "1.4.0.1"
-        },
-        "compile": {
-          "lib/net462/SLC.Lib.Automation.dll": {}
-        },
-        "runtime": {
-          "lib/net462/SLC.Lib.Automation.dll": {}
-        }
-      },
-      "SLC.Lib.Common/1.4.0.1": {
-        "type": "package",
-        "compile": {
-          "lib/net462/SLC.Lib.Common.dll": {}
-        },
-        "runtime": {
-          "lib/net462/SLC.Lib.Common.dll": {}
-        }
-      },
       "StyleCop.Analyzers/1.2.0-beta.435": {
         "type": "package",
         "dependencies": {
@@ -244,27 +223,6 @@
         },
         "runtime": {
           "lib/net462/SLProtoBufLibrary.dll": {}
-        }
-      },
-      "SLC.Lib.Automation/1.4.0.1": {
-        "type": "package",
-        "dependencies": {
-          "SLC.Lib.Common": "1.4.0.1"
-        },
-        "compile": {
-          "lib/net462/SLC.Lib.Automation.dll": {}
-        },
-        "runtime": {
-          "lib/net462/SLC.Lib.Automation.dll": {}
-        }
-      },
-      "SLC.Lib.Common/1.4.0.1": {
-        "type": "package",
-        "compile": {
-          "lib/net462/SLC.Lib.Common.dll": {}
-        },
-        "runtime": {
-          "lib/net462/SLC.Lib.Common.dll": {}
         }
       },
       "StyleCop.Analyzers/1.2.0-beta.435": {
@@ -384,27 +342,6 @@
           "lib/net462/SLProtoBufLibrary.dll": {}
         }
       },
-      "SLC.Lib.Automation/1.4.0.1": {
-        "type": "package",
-        "dependencies": {
-          "SLC.Lib.Common": "1.4.0.1"
-        },
-        "compile": {
-          "lib/net462/SLC.Lib.Automation.dll": {}
-        },
-        "runtime": {
-          "lib/net462/SLC.Lib.Automation.dll": {}
-        }
-      },
-      "SLC.Lib.Common/1.4.0.1": {
-        "type": "package",
-        "compile": {
-          "lib/net462/SLC.Lib.Common.dll": {}
-        },
-        "runtime": {
-          "lib/net462/SLC.Lib.Common.dll": {}
-        }
-      },
       "StyleCop.Analyzers/1.2.0-beta.435": {
         "type": "package",
         "dependencies": {
@@ -520,27 +457,6 @@
         },
         "runtime": {
           "lib/net462/SLProtoBufLibrary.dll": {}
-        }
-      },
-      "SLC.Lib.Automation/1.4.0.1": {
-        "type": "package",
-        "dependencies": {
-          "SLC.Lib.Common": "1.4.0.1"
-        },
-        "compile": {
-          "lib/net462/SLC.Lib.Automation.dll": {}
-        },
-        "runtime": {
-          "lib/net462/SLC.Lib.Automation.dll": {}
-        }
-      },
-      "SLC.Lib.Common/1.4.0.1": {
-        "type": "package",
-        "compile": {
-          "lib/net462/SLC.Lib.Common.dll": {}
-        },
-        "runtime": {
-          "lib/net462/SLC.Lib.Common.dll": {}
         }
       },
       "StyleCop.Analyzers/1.2.0-beta.435": {
@@ -745,32 +661,6 @@
         "skyline.dataminer.files.slprotobuflibrary.nuspec"
       ]
     },
-    "SLC.Lib.Automation/1.4.0.1": {
-      "sha512": "P0ULJHJLj/UVm2yNWI/dmF71vdNKqgwvKNstpDa3i9KIRQ9Mb6iS4zYeGtAPkyZYh/fl4ipj3/wXPqmrcpOSuQ==",
-      "type": "package",
-      "path": "slc.lib.automation/1.4.0.1",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "lib/net462/SLC.Lib.Automation.dll",
-        "lib/net462/SLC.Lib.Automation.xml",
-        "slc.lib.automation.1.4.0.1.nupkg.sha512",
-        "slc.lib.automation.nuspec"
-      ]
-    },
-    "SLC.Lib.Common/1.4.0.1": {
-      "sha512": "/bFEKNEWFDNpZNH9Pi0V802jkk7HuY4HOSs1Q20LeDbN67gBRbmawyVoy4pPE3XCj3T8CZ+qE+DdL+l64qX04Q==",
-      "type": "package",
-      "path": "slc.lib.common/1.4.0.1",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "lib/net462/SLC.Lib.Common.dll",
-        "lib/net462/SLC.Lib.Common.xml",
-        "slc.lib.common.1.4.0.1.nupkg.sha512",
-        "slc.lib.common.nuspec"
-      ]
-    },
     "StyleCop.Analyzers/1.2.0-beta.435": {
       "sha512": "TADk7vdGXtfTnYCV7GyleaaRTQjfoSfZXprQrVMm7cSJtJbFc1QIbWPyLvrgrfGdfHbGmUPvaN4ODKNxg2jgPQ==",
       "type": "package",
@@ -814,7 +704,6 @@
   "projectFileDependencyGroups": {
     ".NETFramework,Version=v4.6.2": [
       "Newtonsoft.Json >= 13.0.3",
-      "SLC.Lib.Automation >= 1.4.0.1",
       "Skyline.DataMiner.Dev.Automation >= 10.3.3",
       "StyleCop.Analyzers >= 1.2.0-beta.435"
     ]
@@ -826,11 +715,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\GIT\\Automation\\Customers\\NBC Sports\\Peacock Process Activities\\Start TAG Subprocess\\Start TAG Subprocess\\Start TAG Subprocess.csproj",
+      "projectUniqueName": "C:\\GIT\\GITHUB\\PCKTV-AS-PeacockProcessActivities2\\Start TAG Subprocess\\Start TAG Subprocess\\Start TAG Subprocess.csproj",
       "projectName": "Provision Touchstream_1",
-      "projectPath": "C:\\GIT\\Automation\\Customers\\NBC Sports\\Peacock Process Activities\\Start TAG Subprocess\\Start TAG Subprocess\\Start TAG Subprocess.csproj",
+      "projectPath": "C:\\GIT\\GITHUB\\PCKTV-AS-PeacockProcessActivities2\\Start TAG Subprocess\\Start TAG Subprocess\\Start TAG Subprocess.csproj",
       "packagesPath": "C:\\Users\\BlakeSM\\.nuget\\packages\\",
-      "outputPath": "C:\\GIT\\Automation\\Customers\\NBC Sports\\Peacock Process Activities\\Start TAG Subprocess\\Start TAG Subprocess\\obj\\",
+      "outputPath": "C:\\GIT\\GITHUB\\PCKTV-AS-PeacockProcessActivities2\\Start TAG Subprocess\\Start TAG Subprocess\\obj\\",
       "projectStyle": "PackageReference",
       "skipContentFileWrite": true,
       "fallbackFolders": [
@@ -860,10 +749,6 @@
           "Newtonsoft.Json": {
             "target": "Package",
             "version": "[13.0.3, )"
-          },
-          "SLC.Lib.Automation": {
-            "target": "Package",
-            "version": "[1.4.0.1, )"
           },
           "Skyline.DataMiner.Dev.Automation": {
             "target": "Package",

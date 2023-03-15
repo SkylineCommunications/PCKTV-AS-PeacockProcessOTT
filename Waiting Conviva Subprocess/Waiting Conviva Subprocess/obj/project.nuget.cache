@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "tCsSQ8MPf6tLL3gkh0NpIglfq1S1IeBTHLKnT56oPrrEOsaJkTG5E02H43vhk//7fQRMKi7DIjlA5U0cj3KfIw==",
+  "dgSpecHash": "X7HgQYQLl9PnzE8OCzNcqMtmYIHYTeb9nnz9Vr2i/FIj2xH/Cf2i0nbvNqErzqEMOkJe13lIPKDpmxn7a4GdYQ==",
   "success": true,
-  "projectFilePath": "C:\\GIT\\Automation\\Customers\\NBC Sports\\Peacock Process Activities\\Waiting Conviva Subprocess\\Waiting Conviva Subprocess\\Waiting Conviva Subprocess.csproj",
+  "projectFilePath": "C:\\GIT\\GITHUB\\PCKTV-AS-PeacockProcessActivities2\\Waiting Conviva Subprocess\\Waiting Conviva Subprocess\\Waiting Conviva Subprocess.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\BlakeSM\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512",
     "C:\\Users\\BlakeSM\\.nuget\\packages\\sharpziplib\\1.3.3\\sharpziplib.1.3.3.nupkg.sha512",
@@ -15,8 +15,6 @@
     "C:\\Users\\BlakeSM\\.nuget\\packages\\skyline.dataminer.files.slmanagedautomation\\10.3.3\\skyline.dataminer.files.slmanagedautomation.10.3.3.nupkg.sha512",
     "C:\\Users\\BlakeSM\\.nuget\\packages\\skyline.dataminer.files.slnettypes\\10.3.3\\skyline.dataminer.files.slnettypes.10.3.3.nupkg.sha512",
     "C:\\Users\\BlakeSM\\.nuget\\packages\\skyline.dataminer.files.slprotobuflibrary\\10.3.3\\skyline.dataminer.files.slprotobuflibrary.10.3.3.nupkg.sha512",
-    "C:\\Users\\BlakeSM\\.nuget\\packages\\slc.lib.automation\\1.4.0.1\\slc.lib.automation.1.4.0.1.nupkg.sha512",
-    "C:\\Users\\BlakeSM\\.nuget\\packages\\slc.lib.common\\1.4.0.1\\slc.lib.common.1.4.0.1.nupkg.sha512",
     "C:\\Users\\BlakeSM\\.nuget\\packages\\stylecop.analyzers\\1.2.0-beta.435\\stylecop.analyzers.1.2.0-beta.435.nupkg.sha512",
     "C:\\Users\\BlakeSM\\.nuget\\packages\\stylecop.analyzers.unstable\\1.2.0.435\\stylecop.analyzers.unstable.1.2.0.435.nupkg.sha512"
   ],

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\GIT\\Automation\\Customers\\NBC Sports\\Peacock Process Activities\\start_process\\start_process\\start_process.csproj": {}
+    "C:\\GIT\\GITHUB\\PCKTV-AS-PeacockProcessActivities2\\start_process\\start_process\\start_process.csproj": {}
   },
   "projects": {
-    "C:\\GIT\\Automation\\Customers\\NBC Sports\\Peacock Process Activities\\start_process\\start_process\\start_process.csproj": {
+    "C:\\GIT\\GITHUB\\PCKTV-AS-PeacockProcessActivities2\\start_process\\start_process\\start_process.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\GIT\\Automation\\Customers\\NBC Sports\\Peacock Process Activities\\start_process\\start_process\\start_process.csproj",
+        "projectUniqueName": "C:\\GIT\\GITHUB\\PCKTV-AS-PeacockProcessActivities2\\start_process\\start_process\\start_process.csproj",
         "projectName": "Provision Touchstream_1",
-        "projectPath": "C:\\GIT\\Automation\\Customers\\NBC Sports\\Peacock Process Activities\\start_process\\start_process\\start_process.csproj",
+        "projectPath": "C:\\GIT\\GITHUB\\PCKTV-AS-PeacockProcessActivities2\\start_process\\start_process\\start_process.csproj",
         "packagesPath": "C:\\Users\\BlakeSM\\.nuget\\packages\\",
-        "outputPath": "C:\\GIT\\Automation\\Customers\\NBC Sports\\Peacock Process Activities\\start_process\\start_process\\obj\\",
+        "outputPath": "C:\\GIT\\GITHUB\\PCKTV-AS-PeacockProcessActivities2\\start_process\\start_process\\obj\\",
         "projectStyle": "PackageReference",
         "skipContentFileWrite": true,
         "fallbackFolders": [
@@ -41,10 +41,6 @@
             "Newtonsoft.Json": {
               "target": "Package",
               "version": "[13.0.3, )"
-            },
-            "SLC.Lib.Automation": {
-              "target": "Package",
-              "version": "[1.4.0.1, )"
             },
             "Skyline.DataMiner.Dev.Automation": {
               "target": "Package",

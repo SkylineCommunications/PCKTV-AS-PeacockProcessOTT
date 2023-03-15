@@ -12,7 +12,7 @@
         </member>
         <member name="M:PA.ProfileLoadDomTemplate.Script.Retry(System.Func{System.Boolean},System.TimeSpan)">
             <summary>
-            Retry until success or until timeout. 
+            Retry until success or until timeout.
             </summary>
             <param name="func">Operation to retry.</param>
             <param name="timeout">Max TimeSpan during which the operation specified in <paramref name="func"/> can be retried.</param>
