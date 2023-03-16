@@ -1,5 +1,5 @@
 
-name: DataMiner CICD Automation
+name: LAB DataMiner CICD Automation
 
 # Controls when the workflow will run
 on:
