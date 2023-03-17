@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "X7HgQYQLl9PnzE8OCzNcqMtmYIHYTeb9nnz9Vr2i/FIj2xH/Cf2i0nbvNqErzqEMOkJe13lIPKDpmxn7a4GdYQ==",
+  "dgSpecHash": "Sp6HarTEIaKfVUCThj7Bw4lZxs6NNjwmBN57mB1hoMl1+JlKodCknNOWERwT7aeOWlpi31LnDIC9t3RVxjzCew==",
   "success": true,
   "projectFilePath": "C:\\GIT\\GITHUB\\PCKTV-AS-PeacockProcessActivities2\\Waiting Conviva Subprocess\\Waiting Conviva Subprocess\\Waiting Conviva Subprocess.csproj",
   "expectedPackageFiles": [
@@ -15,8 +15,7 @@
     "C:\\Users\\BlakeSM\\.nuget\\packages\\skyline.dataminer.files.slmanagedautomation\\10.3.3\\skyline.dataminer.files.slmanagedautomation.10.3.3.nupkg.sha512",
     "C:\\Users\\BlakeSM\\.nuget\\packages\\skyline.dataminer.files.slnettypes\\10.3.3\\skyline.dataminer.files.slnettypes.10.3.3.nupkg.sha512",
     "C:\\Users\\BlakeSM\\.nuget\\packages\\skyline.dataminer.files.slprotobuflibrary\\10.3.3\\skyline.dataminer.files.slprotobuflibrary.10.3.3.nupkg.sha512",
-    "C:\\Users\\BlakeSM\\.nuget\\packages\\stylecop.analyzers\\1.2.0-beta.435\\stylecop.analyzers.1.2.0-beta.435.nupkg.sha512",
-    "C:\\Users\\BlakeSM\\.nuget\\packages\\stylecop.analyzers.unstable\\1.2.0.435\\stylecop.analyzers.unstable.1.2.0.435.nupkg.sha512"
+    "C:\\Users\\BlakeSM\\.nuget\\packages\\stylecop.analyzers\\1.1.118\\stylecop.analyzers.1.1.118.nupkg.sha512"
   ],
   "logs": []
 }

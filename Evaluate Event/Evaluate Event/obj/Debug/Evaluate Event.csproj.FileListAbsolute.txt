@@ -227,7 +227,6 @@ C:\GIT\GITHUB\PCKTV-AS-PeacockProcessActivities2\Evaluate Event\Evaluate Event\b
 C:\GIT\GITHUB\PCKTV-AS-PeacockProcessActivities2\Evaluate Event\Evaluate Event\bin\Debug\System.Xml.XPath.dll
 C:\GIT\GITHUB\PCKTV-AS-PeacockProcessActivities2\Evaluate Event\Evaluate Event\bin\Debug\System.Xml.XPath.XDocument.dll
 C:\GIT\GITHUB\PCKTV-AS-PeacockProcessActivities2\Evaluate Event\Evaluate Event\bin\Debug\ProcessAutomation.dll
-C:\GIT\GITHUB\PCKTV-AS-PeacockProcessActivities2\Evaluate Event\Evaluate Event\bin\Debug\SLSolutionCLCommon.dll
 C:\GIT\GITHUB\PCKTV-AS-PeacockProcessActivities2\Evaluate Event\Evaluate Event\obj\Debug\Evaluate Event.csproj.AssemblyReference.cache
 C:\GIT\GITHUB\PCKTV-AS-PeacockProcessActivities2\Evaluate Event\Evaluate Event\obj\Debug\Evaluate Event.csproj.CoreCompileInputs.cache
 C:\GIT\GITHUB\PCKTV-AS-PeacockProcessActivities2\Evaluate Event\Evaluate Event\obj\Debug\Evaluate Event.csproj.CopyComplete
