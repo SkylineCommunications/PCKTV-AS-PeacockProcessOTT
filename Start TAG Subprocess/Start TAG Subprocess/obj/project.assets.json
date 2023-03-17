@@ -5,19 +5,27 @@
       "Newtonsoft.Json/13.0.3": {
         "type": "package",
         "compile": {
-          "lib/net45/Newtonsoft.Json.dll": {}
+          "lib/net45/Newtonsoft.Json.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/net45/Newtonsoft.Json.dll": {}
+          "lib/net45/Newtonsoft.Json.dll": {
+            "related": ".xml"
+          }
         }
       },
       "SharpZipLib/1.3.3": {
         "type": "package",
         "compile": {
-          "lib/net45/_._": {}
+          "lib/net45/_._": {
+            "related": ".pdb;.xml"
+          }
         },
         "runtime": {
-          "lib/net45/ICSharpCode.SharpZipLib.dll": {}
+          "lib/net45/ICSharpCode.SharpZipLib.dll": {
+            "related": ".pdb;.xml"
+          }
         }
       },
       "Skyline.DataMiner.Dev.Automation/10.3.3": {
@@ -84,19 +92,27 @@
       "Skyline.DataMiner.Files.SLManagedAutomation/10.3.3": {
         "type": "package",
         "compile": {
-          "lib/net462/SLManagedAutomation.dll": {}
+          "lib/net462/SLManagedAutomation.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/net462/SLManagedAutomation.dll": {}
+          "lib/net462/SLManagedAutomation.dll": {
+            "related": ".xml"
+          }
         }
       },
       "Skyline.DataMiner.Files.SLNetTypes/10.3.3": {
         "type": "package",
         "compile": {
-          "ref/net462/SLNetTypes.dll": {}
+          "ref/net462/SLNetTypes.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/net462/SLNetTypes.dll": {}
+          "lib/net462/SLNetTypes.dll": {
+            "related": ".xml"
+          }
         }
       },
       "Skyline.DataMiner.Files.SLProtoBufLibrary/10.3.3": {
@@ -108,13 +124,7 @@
           "lib/net462/SLProtoBufLibrary.dll": {}
         }
       },
-      "StyleCop.Analyzers/1.2.0-beta.435": {
-        "type": "package",
-        "dependencies": {
-          "StyleCop.Analyzers.Unstable": "1.2.0.435"
-        }
-      },
-      "StyleCop.Analyzers.Unstable/1.2.0.435": {
+      "StyleCop.Analyzers/1.1.118": {
         "type": "package"
       }
     },
@@ -122,19 +132,27 @@
       "Newtonsoft.Json/13.0.3": {
         "type": "package",
         "compile": {
-          "lib/net45/Newtonsoft.Json.dll": {}
+          "lib/net45/Newtonsoft.Json.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/net45/Newtonsoft.Json.dll": {}
+          "lib/net45/Newtonsoft.Json.dll": {
+            "related": ".xml"
+          }
         }
       },
       "SharpZipLib/1.3.3": {
         "type": "package",
         "compile": {
-          "lib/net45/_._": {}
+          "lib/net45/_._": {
+            "related": ".pdb;.xml"
+          }
         },
         "runtime": {
-          "lib/net45/ICSharpCode.SharpZipLib.dll": {}
+          "lib/net45/ICSharpCode.SharpZipLib.dll": {
+            "related": ".pdb;.xml"
+          }
         }
       },
       "Skyline.DataMiner.Dev.Automation/10.3.3": {
@@ -201,19 +219,27 @@
       "Skyline.DataMiner.Files.SLManagedAutomation/10.3.3": {
         "type": "package",
         "compile": {
-          "lib/net462/SLManagedAutomation.dll": {}
+          "lib/net462/SLManagedAutomation.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/net462/SLManagedAutomation.dll": {}
+          "lib/net462/SLManagedAutomation.dll": {
+            "related": ".xml"
+          }
         }
       },
       "Skyline.DataMiner.Files.SLNetTypes/10.3.3": {
         "type": "package",
         "compile": {
-          "ref/net462/SLNetTypes.dll": {}
+          "ref/net462/SLNetTypes.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/net462/SLNetTypes.dll": {}
+          "lib/net462/SLNetTypes.dll": {
+            "related": ".xml"
+          }
         }
       },
       "Skyline.DataMiner.Files.SLProtoBufLibrary/10.3.3": {
@@ -225,13 +251,7 @@
           "lib/net462/SLProtoBufLibrary.dll": {}
         }
       },
-      "StyleCop.Analyzers/1.2.0-beta.435": {
-        "type": "package",
-        "dependencies": {
-          "StyleCop.Analyzers.Unstable": "1.2.0.435"
-        }
-      },
-      "StyleCop.Analyzers.Unstable/1.2.0.435": {
+      "StyleCop.Analyzers/1.1.118": {
         "type": "package"
       }
     },
@@ -239,19 +259,27 @@
       "Newtonsoft.Json/13.0.3": {
         "type": "package",
         "compile": {
-          "lib/net45/Newtonsoft.Json.dll": {}
+          "lib/net45/Newtonsoft.Json.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/net45/Newtonsoft.Json.dll": {}
+          "lib/net45/Newtonsoft.Json.dll": {
+            "related": ".xml"
+          }
         }
       },
       "SharpZipLib/1.3.3": {
         "type": "package",
         "compile": {
-          "lib/net45/_._": {}
+          "lib/net45/_._": {
+            "related": ".pdb;.xml"
+          }
         },
         "runtime": {
-          "lib/net45/ICSharpCode.SharpZipLib.dll": {}
+          "lib/net45/ICSharpCode.SharpZipLib.dll": {
+            "related": ".pdb;.xml"
+          }
         }
       },
       "Skyline.DataMiner.Dev.Automation/10.3.3": {
@@ -318,19 +346,27 @@
       "Skyline.DataMiner.Files.SLManagedAutomation/10.3.3": {
         "type": "package",
         "compile": {
-          "lib/net462/SLManagedAutomation.dll": {}
+          "lib/net462/SLManagedAutomation.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/net462/SLManagedAutomation.dll": {}
+          "lib/net462/SLManagedAutomation.dll": {
+            "related": ".xml"
+          }
         }
       },
       "Skyline.DataMiner.Files.SLNetTypes/10.3.3": {
         "type": "package",
         "compile": {
-          "ref/net462/SLNetTypes.dll": {}
+          "ref/net462/SLNetTypes.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/net462/SLNetTypes.dll": {}
+          "lib/net462/SLNetTypes.dll": {
+            "related": ".xml"
+          }
         }
       },
       "Skyline.DataMiner.Files.SLProtoBufLibrary/10.3.3": {
@@ -342,13 +378,7 @@
           "lib/net462/SLProtoBufLibrary.dll": {}
         }
       },
-      "StyleCop.Analyzers/1.2.0-beta.435": {
-        "type": "package",
-        "dependencies": {
-          "StyleCop.Analyzers.Unstable": "1.2.0.435"
-        }
-      },
-      "StyleCop.Analyzers.Unstable/1.2.0.435": {
+      "StyleCop.Analyzers/1.1.118": {
         "type": "package"
       }
     },
@@ -356,19 +386,27 @@
       "Newtonsoft.Json/13.0.3": {
         "type": "package",
         "compile": {
-          "lib/net45/Newtonsoft.Json.dll": {}
+          "lib/net45/Newtonsoft.Json.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/net45/Newtonsoft.Json.dll": {}
+          "lib/net45/Newtonsoft.Json.dll": {
+            "related": ".xml"
+          }
         }
       },
       "SharpZipLib/1.3.3": {
         "type": "package",
         "compile": {
-          "lib/net45/_._": {}
+          "lib/net45/_._": {
+            "related": ".pdb;.xml"
+          }
         },
         "runtime": {
-          "lib/net45/ICSharpCode.SharpZipLib.dll": {}
+          "lib/net45/ICSharpCode.SharpZipLib.dll": {
+            "related": ".pdb;.xml"
+          }
         }
       },
       "Skyline.DataMiner.Dev.Automation/10.3.3": {
@@ -435,19 +473,27 @@
       "Skyline.DataMiner.Files.SLManagedAutomation/10.3.3": {
         "type": "package",
         "compile": {
-          "lib/net462/SLManagedAutomation.dll": {}
+          "lib/net462/SLManagedAutomation.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/net462/SLManagedAutomation.dll": {}
+          "lib/net462/SLManagedAutomation.dll": {
+            "related": ".xml"
+          }
         }
       },
       "Skyline.DataMiner.Files.SLNetTypes/10.3.3": {
         "type": "package",
         "compile": {
-          "ref/net462/SLNetTypes.dll": {}
+          "ref/net462/SLNetTypes.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/net462/SLNetTypes.dll": {}
+          "lib/net462/SLNetTypes.dll": {
+            "related": ".xml"
+          }
         }
       },
       "Skyline.DataMiner.Files.SLProtoBufLibrary/10.3.3": {
@@ -459,13 +505,7 @@
           "lib/net462/SLProtoBufLibrary.dll": {}
         }
       },
-      "StyleCop.Analyzers/1.2.0-beta.435": {
-        "type": "package",
-        "dependencies": {
-          "StyleCop.Analyzers.Unstable": "1.2.0.435"
-        }
-      },
-      "StyleCop.Analyzers.Unstable/1.2.0.435": {
+      "StyleCop.Analyzers/1.1.118": {
         "type": "package"
       }
     }
@@ -661,23 +701,10 @@
         "skyline.dataminer.files.slprotobuflibrary.nuspec"
       ]
     },
-    "StyleCop.Analyzers/1.2.0-beta.435": {
-      "sha512": "TADk7vdGXtfTnYCV7GyleaaRTQjfoSfZXprQrVMm7cSJtJbFc1QIbWPyLvrgrfGdfHbGmUPvaN4ODKNxg2jgPQ==",
+    "StyleCop.Analyzers/1.1.118": {
+      "sha512": "Onx6ovGSqXSK07n/0eM3ZusiNdB6cIlJdabQhWGgJp3Vooy9AaLS/tigeybOJAobqbtggTamoWndz72JscZBvw==",
       "type": "package",
-      "path": "stylecop.analyzers/1.2.0-beta.435",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "LICENSE",
-        "THIRD-PARTY-NOTICES.txt",
-        "stylecop.analyzers.1.2.0-beta.435.nupkg.sha512",
-        "stylecop.analyzers.nuspec"
-      ]
-    },
-    "StyleCop.Analyzers.Unstable/1.2.0.435": {
-      "sha512": "ouwPWZxbOV3SmCZxIRqHvljkSzkCyi1tDoMzQtDb/bRP8ctASV/iRJr+A2Gdj0QLaLmWnqTWDrH82/iP+X80Lg==",
-      "type": "package",
-      "path": "stylecop.analyzers.unstable/1.2.0.435",
+      "path": "stylecop.analyzers/1.1.118",
       "hasTools": true,
       "files": [
         ".nupkg.metadata",
@@ -693,9 +720,8 @@
         "analyzers/dotnet/cs/pl-PL/StyleCop.Analyzers.resources.dll",
         "analyzers/dotnet/cs/pt-BR/StyleCop.Analyzers.resources.dll",
         "analyzers/dotnet/cs/ru-RU/StyleCop.Analyzers.resources.dll",
-        "rulesets/StyleCopAnalyzersDefault.ruleset",
-        "stylecop.analyzers.unstable.1.2.0.435.nupkg.sha512",
-        "stylecop.analyzers.unstable.nuspec",
+        "stylecop.analyzers.1.1.118.nupkg.sha512",
+        "stylecop.analyzers.nuspec",
         "tools/install.ps1",
         "tools/uninstall.ps1"
       ]
@@ -705,35 +731,31 @@
     ".NETFramework,Version=v4.6.2": [
       "Newtonsoft.Json >= 13.0.3",
       "Skyline.DataMiner.Dev.Automation >= 10.3.3",
-      "StyleCop.Analyzers >= 1.2.0-beta.435"
+      "StyleCop.Analyzers >= 1.1.118"
     ]
   },
   "packageFolders": {
-    "C:\\Users\\BlakeSM\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "C:\\Users\\GERMANBS\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\GIT\\GITHUB\\PCKTV-AS-PeacockProcessActivities2\\Start TAG Subprocess\\Start TAG Subprocess\\Start TAG Subprocess.csproj",
+      "projectUniqueName": "C:\\GIT\\Automation\\PCKTV-AS-PeacockProcessOTT\\Start TAG Subprocess\\Start TAG Subprocess\\Start TAG Subprocess.csproj",
       "projectName": "Provision Touchstream_1",
-      "projectPath": "C:\\GIT\\GITHUB\\PCKTV-AS-PeacockProcessActivities2\\Start TAG Subprocess\\Start TAG Subprocess\\Start TAG Subprocess.csproj",
-      "packagesPath": "C:\\Users\\BlakeSM\\.nuget\\packages\\",
-      "outputPath": "C:\\GIT\\GITHUB\\PCKTV-AS-PeacockProcessActivities2\\Start TAG Subprocess\\Start TAG Subprocess\\obj\\",
+      "projectPath": "C:\\GIT\\Automation\\PCKTV-AS-PeacockProcessOTT\\Start TAG Subprocess\\Start TAG Subprocess\\Start TAG Subprocess.csproj",
+      "packagesPath": "C:\\Users\\GERMANBS\\.nuget\\packages\\",
+      "outputPath": "C:\\GIT\\Automation\\PCKTV-AS-PeacockProcessOTT\\Start TAG Subprocess\\Start TAG Subprocess\\obj\\",
       "projectStyle": "PackageReference",
       "skipContentFileWrite": true,
-      "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-      ],
       "configFilePaths": [
-        "C:\\Users\\BlakeSM\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Users\\GERMANBS\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net462"
       ],
       "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "http://devcore3:81/nuget": {},
         "https://api.nuget.org/v3/index.json": {}
       },
@@ -758,7 +780,7 @@
             "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
             "suppressParent": "All",
             "target": "Package",
-            "version": "[1.2.0-beta.435, )"
+            "version": "[1.1.118, )"
           }
         }
       }
@@ -774,5 +796,13 @@
         "#import": []
       }
     }
-  }
+  },
+  "logs": [
+    {
+      "code": "NU1803",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "You are running the 'restore' operation with an 'HTTP' source, 'http://devcore3:81/nuget'. Non-HTTPS access will be removed in a future version. Consider migrating to an 'HTTPS' source."
+    }
+  ]
 }

@@ -100,6 +100,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Generic Classes", "Generic 
 		ExternalRequest.cs = ExternalRequest.cs
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Create Peacock Provision DOM", "Create Peacock Provision DOM", "{F34FE5FE-EA63-48A8-A714-5B019B5318A3}"
+	ProjectSection(SolutionItems) = preProject
+		Create Peacock Provision DOM\Create DOM Peacock Provision.xml = Create Peacock Provision DOM\Create DOM Peacock Provision.xml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Actions", "Actions", "{0F7EBC3E-F703-42D6-997C-30C41F7DC7D8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Create DOM Peacock Provision", "Create Peacock Provision DOM\Create DOM Peacock Provision\Create DOM Peacock Provision.csproj", "{F1DFE073-51DF-4BE5-8420-2775169296EB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -138,6 +147,10 @@ Global
 		{1DFB4A78-F060-4E50-912D-1633511DB1BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1DFB4A78-F060-4E50-912D-1633511DB1BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1DFB4A78-F060-4E50-912D-1633511DB1BB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F1DFE073-51DF-4BE5-8420-2775169296EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1DFE073-51DF-4BE5-8420-2775169296EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1DFE073-51DF-4BE5-8420-2775169296EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1DFE073-51DF-4BE5-8420-2775169296EB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -169,6 +182,9 @@ Global
 		{D0C704B0-83D4-4709-8CFA-1CD4B7F54BA3} = {88524300-8472-452F-9218-E2402343D5DA}
 		{1DFB4A78-F060-4E50-912D-1633511DB1BB} = {BBDC28A4-46B8-43FF-9C7E-EBCB54DDBDF4}
 		{5CCA6C6B-8BEA-4EC3-9629-45AAB7B2F7F5} = {C5A26408-58B7-412C-BC02-7F0ACB422267}
+		{F34FE5FE-EA63-48A8-A714-5B019B5318A3} = {C5A26408-58B7-412C-BC02-7F0ACB422267}
+		{0F7EBC3E-F703-42D6-997C-30C41F7DC7D8} = {F34FE5FE-EA63-48A8-A714-5B019B5318A3}
+		{F1DFE073-51DF-4BE5-8420-2775169296EB} = {0F7EBC3E-F703-42D6-997C-30C41F7DC7D8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CFC078A0-8FA4-4C4A-B73C-14E985F4C3EC}
