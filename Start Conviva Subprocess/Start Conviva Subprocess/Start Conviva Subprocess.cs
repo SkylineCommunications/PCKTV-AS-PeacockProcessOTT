@@ -94,7 +94,7 @@ public class Script
 			engine.GenerateInformation("status of main process: " + mainInstance.StatusId);
 			if (action == "provision")
 			{
-				domHelper.DomInstances.ExecuteAction(subInstance.ID, "start_provision");
+				domHelper.DomInstances.ExecuteAction(subInstance.ID, "provision");
 			}
 			else if (action == "reprovision")
 			{
@@ -106,12 +106,16 @@ public class Script
 			}
 			else if (action == "complete-reprovision")
 			{
-				domHelper.DomInstances.ExecuteAction(subInstance.ID, "complete-reprovision");
+				domHelper.DomInstances.ExecuteAction(subInstance.ID, "complete-provision");
 			}
 
 			if (mainInstance.StatusId == "ready")
 			{
 				helper.TransitionState("ready_to_inprogress");
+			}
+			else if (mainInstance.StatusId == "reprovision")
+			{
+				helper.TransitionState("reprovision_to_inprogress");
 			}
 
 			helper.ReturnSuccess();

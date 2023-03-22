@@ -53,6 +53,8 @@ using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
+using Helper;
+using Newtonsoft.Json;
 using Skyline.DataMiner.Automation;
 using Skyline.DataMiner.DataMinerSolutions.ProcessAutomation.Helpers.Logging;
 using Skyline.DataMiner.DataMinerSolutions.ProcessAutomation.Manager;
@@ -74,44 +76,28 @@ public class Script
 		try
 		{
 			// gathering instance id from parent is the challenge
-			// var subdomInstance = helper.GetParameterValue<Guid>("TAG");
+			var tagInstanceId = helper.GetParameterValue<Guid>("TAG");
 			var domHelper = new DomHelper(engine.SendSLNetMessages, "process_automation");
-
-			var subdomInstance = helper.GetParameterValue<Guid>("TAG");
-			var maindomInstance = helper.GetParameterValue<string>("InstanceId");
-
-			var subFilter = DomInstanceExposers.Id.Equal(new DomInstanceId(subdomInstance));
-			var subInstances = domHelper.DomInstances.Read(subFilter);
-
-			if (subInstances.Count == 0)
-			{
-				// returning success until conviva is ready
-				helper.ReturnSuccess();
-				return;
-			}
-
-			var subInstance = subInstances.First();
-
-			var mainFilter = DomInstanceExposers.Id.Equal(new DomInstanceId(Guid.Parse(maindomInstance)));
-			var mainInstance = domHelper.DomInstances.Read(mainFilter).First();
-			engine.GenerateInformation("status of main process: " + mainInstance.StatusId);
-			if (mainInstance.StatusId == "ready")
-			{
-				helper.TransitionState("ready_to_inprogress");
-			}
 
 			bool CheckStateChange()
 			{
 				try
 				{
-					// data
-					// var filter = DomInstanceExposers.Id.Equal(new DomInstanceId(subdomInstance));
-					// var instance = domHelper.DomInstances.Read(filter).First();
-					// engine.Log(DateTime.Now + "|instance " + instance.ID.Id + " with status: " + instance.StatusId);
-					// if (instance.StatusId == "active") // complete
-					// {
-					return true;
-					// }
+					var filter = DomInstanceExposers.Id.Equal(new DomInstanceId(tagInstanceId));
+					var tagInstances = domHelper.DomInstances.Read(filter);
+					if (tagInstances.Count == 0)
+					{
+						// returning success until conviva is ready
+						throw new NullReferenceException("No TAG DOM instance found with id: " + tagInstanceId);
+					}
+
+					var tagInstance = tagInstances.First();
+
+					engine.GenerateInformation(DateTime.Now + "|tag instance " + tagInstance.ID.Id + " with status: " + tagInstance.StatusId);
+					if (tagInstance.StatusId == "active" || tagInstance.StatusId == "complete")
+					{
+						return true;
+					}
 
 					return false;
 				}
@@ -124,8 +110,32 @@ public class Script
 
 			if (Retry(CheckStateChange, new TimeSpan(0, 10, 0)))
 			{
+				var filter = DomInstanceExposers.Id.Equal(new DomInstanceId(tagInstanceId));
+				var tagInstances = domHelper.DomInstances.Read(filter);
+				var tagInstance = tagInstances.First();
+
 				// successfully created filter
 				engine.GenerateInformation("TAG process dom reports complete");
+				var sourceElement = helper.GetParameterValue<string>("Source Element");
+				var provisionName = helper.GetParameterValue<string>("Provision Name");
+
+				ExternalRequest evtmgrUpdate = new ExternalRequest
+				{
+					Type = "Process Automation",
+					ProcessResponse = new ProcessResponse
+					{
+						EventName = provisionName,
+						Tag = new TagResponse
+						{
+							Status = tagInstance.StatusId == "active" ? "Active" : "Complete",
+						},
+					},
+				};
+
+				var elementSplit = sourceElement.Split('/');
+				var eventManager = engine.FindElement(Convert.ToInt32(elementSplit[0]), Convert.ToInt32(elementSplit[1]));
+				eventManager.SetParameter(999, JsonConvert.SerializeObject(evtmgrUpdate));
+
 				helper.ReturnSuccess();
 			}
 			else
@@ -137,8 +147,6 @@ public class Script
 		{
 			engine.Log("Error: " + ex);
 		}
-
-		helper.ReturnSuccess();
 	}
 
 	/// <summary>

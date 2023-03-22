@@ -54,9 +54,7 @@ namespace Script
 					if (field.GetFieldDescriptor().Name == "InstanceId")
 					{
 						instance.AddOrUpdateFieldValue(section.GetSectionDefinition(), field.GetFieldDescriptor(), instanceId.Id.ToString());
-						engine.GenerateInformation("setting instance id: " + instanceId.Id.ToString());
 						instanceSet = true;
-						engine.GenerateInformation("field value:" + field.Value.ToString());
 					}
 
 					if (field.GetFieldDescriptor().Name == keyField)

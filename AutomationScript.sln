@@ -23,29 +23,29 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Code Analysis", "Code Analy
 		Internal\Code Analysis\qaction-release.ruleset = Internal\Code Analysis\qaction-release.ruleset
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deactivate TS", "Deactivate TS", "{D7E64F44-D53B-4727-848E-EA79C7C71645}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Verify Touchstream Provision", "Verify Touchstream Provision", "{D7E64F44-D53B-4727-848E-EA79C7C71645}"
 	ProjectSection(SolutionItems) = preProject
-		Deactivate TS\Deactivate TS.xml = Deactivate TS\Deactivate TS.xml
+		Deactivate TS\PA_PCK_Verify Touchstream Provision.xml = Deactivate TS\PA_PCK_Verify Touchstream Provision.xml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Evaluate Event", "Evaluate Event", "{D8A4A283-01FC-4A77-967E-BAB315C100D1}"
 	ProjectSection(SolutionItems) = preProject
-		Evaluate Event\Evaluate Event.xml = Evaluate Event\Evaluate Event.xml
+		Evaluate Event\PA_PCK_Evaluate Event.xml = Evaluate Event\PA_PCK_Evaluate Event.xml
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Provision TS", "Provision TS", "{DBC7F2F0-4525-4013-BC8B-FB1B68770A9E}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Start Touchstream Instance", "Start Touchstream Instance", "{DBC7F2F0-4525-4013-BC8B-FB1B68770A9E}"
 	ProjectSection(SolutionItems) = preProject
-		Provision TS\Provision TS.xml = Provision TS\Provision TS.xml
+		Provision TS\PA_PCK_Start Touchstream Instance.xml = Provision TS\PA_PCK_Start Touchstream Instance.xml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Start Conviva Subprocess", "Start Conviva Subprocess", "{DCDA673C-BB9A-41D7-9E42-A4EE64127356}"
 	ProjectSection(SolutionItems) = preProject
-		Start Conviva Subprocess\Start Conviva Subprocess.xml = Start Conviva Subprocess\Start Conviva Subprocess.xml
+		Start Conviva Subprocess\PA_PCK_Start Conviva Subprocess.xml = Start Conviva Subprocess\PA_PCK_Start Conviva Subprocess.xml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Start TAG Subprocess", "Start TAG Subprocess", "{C36C683B-85AC-44BF-935A-08383ACDFFA8}"
 	ProjectSection(SolutionItems) = preProject
-		Start TAG Subprocess\Start TAG Subprocess.xml = Start TAG Subprocess\Start TAG Subprocess.xml
+		Start TAG Subprocess\PA_PCK_Start TAG Subprocess.xml = Start TAG Subprocess\PA_PCK_Start TAG Subprocess.xml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "start_process", "start_process", "{31D45DCD-31CC-42A3-AE69-2033FF9A3FF9}"
@@ -55,12 +55,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "start_process", "start_proc
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Waiting Conviva Subprocess", "Waiting Conviva Subprocess", "{637A9326-54DA-4908-B279-0BDD0F0C10FC}"
 	ProjectSection(SolutionItems) = preProject
-		Waiting Conviva Subprocess\Waiting Conviva Subprocess.xml = Waiting Conviva Subprocess\Waiting Conviva Subprocess.xml
+		Waiting Conviva Subprocess\PA_PCK_Waiting Conviva Subprocess.xml = Waiting Conviva Subprocess\PA_PCK_Waiting Conviva Subprocess.xml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Waiting TAG Subprocess", "Waiting TAG Subprocess", "{6B8330C3-2F53-428D-9D29-F24040E21A17}"
 	ProjectSection(SolutionItems) = preProject
-		Waiting TAG Subprocess\Waiting TAG Subprocess.xml = Waiting TAG Subprocess\Waiting TAG Subprocess.xml
+		Waiting TAG Subprocess\PA_PCK_Waiting TAG Subprocess.xml = Waiting TAG Subprocess\PA_PCK_Waiting TAG Subprocess.xml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Actions", "Actions", "{E10BF8E9-D619-40F7-9696-5E1820DF7ADF}"

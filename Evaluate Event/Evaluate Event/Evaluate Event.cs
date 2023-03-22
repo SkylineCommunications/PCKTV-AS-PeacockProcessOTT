@@ -127,23 +127,25 @@ namespace PA.ProfileLoadDomTemplate
 
 				var sourceElement = helper.GetParameterValue<string>("Source Element");
 				var provisionName = helper.GetParameterValue<string>("Provision Name");
-
-				ExternalRequest evtmgrUpdate = new ExternalRequest
+				if (!String.IsNullOrWhiteSpace(sourceElement))
 				{
-					Type = "Process Automation",
-					ProcessResponse = new ProcessResponse
+					ExternalRequest evtmgrUpdate = new ExternalRequest
 					{
-						EventName = provisionName,
-						Peacock = new PeacockResponse
+						Type = "Process Automation",
+						ProcessResponse = new ProcessResponse
 						{
-							Status = mainInstance.StatusId == "in_progress" ? "Active" : "Complete",
+							EventName = provisionName,
+							Peacock = new PeacockResponse
+							{
+								Status = mainInstance.StatusId == "in_progress" ? "Active" : "Complete",
+							},
 						},
-					},
-				};
+					};
 
-				var elementSplit = sourceElement.Split('/');
-				var eventManager = engine.FindElement(Convert.ToInt32(elementSplit[0]), Convert.ToInt32(elementSplit[1]));
-				eventManager.SetParameter(999, JsonConvert.SerializeObject(evtmgrUpdate));
+					var elementSplit = sourceElement.Split('/');
+					var eventManager = engine.FindElement(Convert.ToInt32(elementSplit[0]), Convert.ToInt32(elementSplit[1]));
+					eventManager.SetParameter(999, JsonConvert.SerializeObject(evtmgrUpdate));
+				}
 
 				// helper.TransitionState("inprogress_to_active");
 				helper.SendFinishMessageToTokenHandler();

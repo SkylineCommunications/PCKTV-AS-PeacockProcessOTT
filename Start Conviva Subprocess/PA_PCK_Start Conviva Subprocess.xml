@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <DMSScript options="272" xmlns="http://www.skyline.be/automation">
-	<Name>Waiting Conviva Subprocess</Name>
+	<Name>PA_PCK_Start Conviva Subprocess</Name>
 	<Description></Description>
 	<Type>Automation</Type>
 	<Author>SKYLINE2\BlakeSM</Author>
 	<CheckSets>FALSE</CheckSets>
-	<Folder></Folder>
+	<Folder>PA OTT Provision/Peacock</Folder>
 
 	<Protocols>
 		<Protocol id="1">
@@ -34,7 +34,7 @@
 
 	<Script>
 		<Exe id="4" type="csharp">
-			<Value><![CDATA[[Project:Waiting Conviva Subprocess]]]></Value>
+			<Value><![CDATA[[Project:Start Conviva Subprocess]]]></Value>
 			<!--<Param type="debug">true</Param>-->
 			<Message></Message>
 		</Exe>

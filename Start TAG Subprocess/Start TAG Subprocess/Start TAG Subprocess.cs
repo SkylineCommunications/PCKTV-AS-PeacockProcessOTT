@@ -50,18 +50,19 @@ dd/mm/2022	1.0.0.1		XXX, Skyline	Initial version
 */
 
 using System;
-using System.Diagnostics;
 using System.Linq;
 using Skyline.DataMiner.Automation;
-using Skyline.DataMiner.DataMinerSolutions.ProcessAutomation.Helpers.Logging;
 using Skyline.DataMiner.DataMinerSolutions.ProcessAutomation.Manager;
 using Skyline.DataMiner.Net.Apps.DataMinerObjectModel;
+using Skyline.DataMiner.Net.Sections;
 
 /// <summary>
 /// DataMiner Script Class.
 /// </summary>
 public class Script
 {
+	private DomHelper innerDomHelper;
+
 	/// <summary>
 	/// The Script entry point.
 	/// </summary>
@@ -72,40 +73,63 @@ public class Script
 
 		try
 		{
-			// var subdomInstance = helper.GetParameterValue<Guid>("TAG");
-			var maindomInstance = helper.GetParameterValue<string>("InstanceId");
-			var domHelper = new DomHelper(engine.SendSLNetMessages, "process_automation");
-			var mainFilter = DomInstanceExposers.Id.Equal(new DomInstanceId(Guid.Parse(maindomInstance)));
-			var mainInstance = domHelper.DomInstances.Read(mainFilter).First();
+			var tagInstanceId = helper.GetParameterValue<Guid>("TAG");
+			var peacockInstanceId = helper.GetParameterValue<string>("InstanceId");
+			var action = helper.GetParameterValue<string>("Action");
+			innerDomHelper = new DomHelper(engine.SendSLNetMessages, "process_automation");
+			var peacockFilter = DomInstanceExposers.Id.Equal(new DomInstanceId(Guid.Parse(peacockInstanceId)));
+			var peacockInstance = innerDomHelper.DomInstances.Read(peacockFilter).First();
 			engine.Log("Starting TAG Subprocess");
 
-			if (mainInstance.StatusId == "ready")
+			var tagFilter = DomInstanceExposers.Id.Equal(new DomInstanceId(tagInstanceId));
+			var tagInstance = innerDomHelper.DomInstances.Read(tagFilter).First();
+
+			ExecuteActionOnInstance(engine, action, tagInstance);
+
+			if (action == "provision" && peacockInstance.StatusId == "ready")
 			{
 				helper.TransitionState("ready_to_inprogress");
 			}
-
-			//var subFilter = DomInstanceExposers.Id.Equal(new DomInstanceId(subdomInstance));
-			//var subInstance = domHelper.DomInstances.Read(subFilter).First();
-
-
-			//if (mainInstance.StatusId == "ready")
-			//{
-			//	domHelper.DomInstances.ExecuteAction(subInstance.ID, "start_provision");
-			//}
-			//else if (mainInstance.StatusId == "reprovision")
-			//{
-			//	domHelper.DomInstances.ExecuteAction(subInstance.ID, "reprovision");
-			//}
-			//else if (mainInstance.StatusId == "deactivate")
-			//{
-			//	domHelper.DomInstances.ExecuteAction(subInstance.ID, "deactivate");
-			//}
+			else if (action == "deactivate" && peacockInstance.StatusId == "deactivate")
+			{
+				helper.TransitionState("deactivate_to_deactivating");
+			}
+			else if (action == "reprovision" && peacockInstance.StatusId == "reprovision")
+			{
+				helper.TransitionState("reprovision_to_inprogress");
+			}
 
 			helper.ReturnSuccess();
 		}
 		catch (Exception ex)
 		{
-			engine.Log("Error: " + ex);
+			engine.GenerateInformation("Error starting TAG: " + ex);
 		}
+	}
+
+	private void ExecuteActionOnInstance(Engine engine, string action, DomInstance instance)
+	{
+		foreach (var section in instance.Sections)
+		{
+			Func<SectionDefinitionID, SectionDefinition> sectionDefinitionFunc = SetSectionDefinitionById;
+
+			section.Stitch(sectionDefinitionFunc);
+			var fieldDescriptors = section.GetSectionDefinition().GetAllFieldDescriptors();
+			if (fieldDescriptors.Any(x => x.Name == "Action"))
+			{
+				var fieldToUpdate = fieldDescriptors.First(x => x.Name == "Action");
+				instance.AddOrUpdateFieldValue(section.GetSectionDefinition(), fieldToUpdate, action);
+				innerDomHelper.DomInstances.Update(instance);
+
+				innerDomHelper.DomInstances.ExecuteAction(instance.ID, action);
+
+				break;
+			}
+		}
+	}
+
+	private SectionDefinition SetSectionDefinitionById(SectionDefinitionID sectionDefinitionId)
+	{
+		return innerDomHelper.SectionDefinitions.Read(SectionDefinitionExposers.ID.Equal(sectionDefinitionId)).First();
 	}
 }

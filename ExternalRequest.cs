@@ -19,11 +19,19 @@ namespace Helper
         [JsonProperty("peacock", NullValueHandling = NullValueHandling.Ignore)]
         public PeacockResponse Peacock { get; set; }
 
+        [JsonProperty("tag", NullValueHandling = NullValueHandling.Ignore)]
+        public TagResponse Tag { get; set; }
+
         [JsonProperty("eventName")]
         public string EventName { get; set; }
     }
 
     public class ConvivaResponse
+    {
+        public string Status { get; set; }
+    }
+
+    public class TagResponse
     {
         public string Status { get; set; }
     }
