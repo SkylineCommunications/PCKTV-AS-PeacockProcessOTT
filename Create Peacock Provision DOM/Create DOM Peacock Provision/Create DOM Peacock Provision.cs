@@ -54,6 +54,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Skyline.DataMiner.Automation;
 using Skyline.DataMiner.Net.Apps.DataMinerObjectModel;
+using Skyline.DataMiner.Net.Apps.DataMinerObjectModel.Actions;
+using Skyline.DataMiner.Net.Apps.DataMinerObjectModel.Buttons;
+using Skyline.DataMiner.Net.Apps.DataMinerObjectModel.Concatenation;
+using Skyline.DataMiner.Net.Apps.DataMinerObjectModel.Conditions;
 using Skyline.DataMiner.Net.Apps.DataMinerObjectModel.Status;
 using Skyline.DataMiner.Net.Apps.Sections.SectionDefinitions;
 using Skyline.DataMiner.Net.Messages.SLDataGateway;
@@ -99,7 +103,8 @@ public class Script
 		try
 		{
 			// Create SectionDefinitions
-			var provisionInfoSectionDefinitions = SectionDefinitions.CreateProvisionInfoServiceDefinition(domHelper);
+			var nameDescriptor = new FieldDescriptorID();
+			var provisionInfoSectionDefinitions = SectionDefinitions.CreateProvisionInfoServiceDefinition(domHelper, ref nameDescriptor);
 			var domInstancesSectionDefinitions = SectionDefinitions.CreateDomInstancesServiceDefinition(engine, domHelper);
 
 			var sections = new List<SectionDefinition> { provisionInfoSectionDefinitions, domInstancesSectionDefinitions };
@@ -113,17 +118,31 @@ public class Script
 				behavior = new List<DomBehaviorDefinition> { domBehaviorDefinition };
 			}
 
-			// Create DOMDefinition
+			var nameDefinition = new ModuleSettingsOverrides
+			{
+				NameDefinition = new DomInstanceNameDefinition
+				{
+					ConcatenationItems = new List<IDomInstanceConcatenationItem>
+					{
+						new FieldValueConcatenationItem
+						{
+							FieldDescriptorId = nameDescriptor,
+						},
+					},
+				},
+			};
+
 			return new DomDefinition
 			{
 				Name = DefinitionName,
 				SectionDefinitionLinks = new List<SectionDefinitionLink> { new SectionDefinitionLink(provisionInfoSectionDefinitions.GetID()), new SectionDefinitionLink(domInstancesSectionDefinitions.GetID()) },
 				DomBehaviorDefinitionId = behavior.FirstOrDefault()?.ID,
+				ModuleSettingsOverrides = nameDefinition,
 			};
 		}
 		catch (Exception ex)
 		{
-			engine.Log($"error on CreateDomDefinition method with exception {ex}");
+			engine.GenerateInformation($"Error on CreateDomDefinition method with exception: {ex}");
 			return null;
 		}
 	}
@@ -133,11 +152,12 @@ public class Script
 		public static SectionDefinition CreateDomInstancesServiceDefinition(Engine engine, DomHelper domHelper)
 		{
 			var convivaDefinitionId = domHelper.DomDefinitions.Read(DomDefinitionExposers.Name.Equal("Conviva")).First().ID.Id;
-			engine.Log($"convivaDefinitionId: {convivaDefinitionId}");
+			var tagDefinitionId = domHelper.DomDefinitions.Read(DomDefinitionExposers.Name.Equal("TAG")).First().ID.Id;
+			var tsDefinitionId = domHelper.DomDefinitions.Read(DomDefinitionExposers.Name.Equal("Touchstream")).First().ID.Id;
 
-			var convivaFieldDescriptor = CreateConvivaDomInstanceFieldDescriptorObject<Guid>("Conviva", "Link to the DOM Instance that contains the information for Conviva provisioning.", convivaDefinitionId);
-			var tagFieldDescriptor = CreateDomInstanceFieldDescriptorObject<Guid>("TAG", "Link to the DOM Instance that contains the information for TAG provisioning.");
-			var touchstreamFieldDescriptor = CreateDomInstanceFieldDescriptorObject<Guid>("Touchstream", "Link to the DOM Instance that contains the information for TS provisioning.");
+			var convivaFieldDescriptor = CreateDomInstanceFieldDescriptorObject<Guid>("Conviva (Peacock)", "Link to the DOM Instance that contains the information for Conviva provisioning.", convivaDefinitionId);
+			var tagFieldDescriptor = CreateDomInstanceFieldDescriptorObject<Guid>("TAG (Peacock)", "Link to the DOM Instance that contains the information for TAG provisioning.", tagDefinitionId);
+			var touchstreamFieldDescriptor = CreateDomInstanceFieldDescriptorObject<Guid>("Touchstream (Peacock)", "Link to the DOM Instance that contains the information for TS provisioning.", tsDefinitionId);
 
 			List<FieldDescriptor> fieldDescriptors = new List<FieldDescriptor>
 			{
@@ -151,17 +171,23 @@ public class Script
 			return domInstanceSection;
 		}
 
-		public static SectionDefinition CreateProvisionInfoServiceDefinition(DomHelper domHelper)
+		public static SectionDefinition CreateProvisionInfoServiceDefinition(DomHelper domHelper, ref FieldDescriptorID nameDescriptor)
 		{
-			var provisionNameFieldDescriptor = CreateFieldDescriptorObject<string>("Provision Name", "A name to describe the Event or Channel being provisioned.");
-			var eventIdFieldDescriptor = CreateFieldDescriptorObject<string>("Event ID", "Unique ID to link the provision to an Event or Channel.");
-			var sourceElementFieldDescriptor = CreateFieldDescriptorObject<string>("Source Element", "A DMAID/ELEMID/PID that has been configured to receive process updates (if configured).");
+			var provisionNameFieldDescriptor = CreateFieldDescriptorObject<string>("Provision Name (Peacock)", "A name to describe the Event or Channel being provisioned.");
+			var eventIdFieldDescriptor = CreateFieldDescriptorObject<string>("Event ID (Peacock)", "Unique ID to link the provision to an Event or Channel.");
+			var sourceElementFieldDescriptor = CreateFieldDescriptorObject<string>("Source Element (Peacock)", "A DMAID/ELEMID/PID that has been configured to receive process updates (if configured).");
+			var instanceFieldDescriptor = CreateFieldDescriptorObject<string>("InstanceId (Peacock)", "The id of the DOM instance.");
+			var actionFieldDescriptor = CreateFieldDescriptorObject<string>("Action (Peacock)", "The action to be executed on this provision.");
+
+			nameDescriptor = provisionNameFieldDescriptor.ID;
 
 			List<FieldDescriptor> fieldDescriptors = new List<FieldDescriptor>
 			{
 				provisionNameFieldDescriptor,
 				eventIdFieldDescriptor,
 				sourceElementFieldDescriptor,
+				instanceFieldDescriptor,
+				actionFieldDescriptor,
 			};
 
 			var provisionInfoSection = CreateOrUpdateSection("Provision Info", domHelper, fieldDescriptors);
@@ -234,17 +260,7 @@ public class Script
 			};
 		}
 
-		private static DomInstanceFieldDescriptor CreateDomInstanceFieldDescriptorObject<T>(string fieldName, string toolTip)
-		{
-			return new DomInstanceFieldDescriptor
-			{
-				FieldType = typeof(T),
-				Name = fieldName,
-				Tooltip = toolTip,
-			};
-		}
-
-		private static DomInstanceFieldDescriptor CreateConvivaDomInstanceFieldDescriptorObject<T>(string fieldName, string toolTip, Guid definitionId)
+		private static DomInstanceFieldDescriptor CreateDomInstanceFieldDescriptorObject<T>(string fieldName, string toolTip, Guid definitionId)
 		{
 			var field = new DomInstanceFieldDescriptor("process_automation")
 			{
@@ -285,6 +301,9 @@ public class Script
 				new DomStatusTransition("complete_to_ready", "complete", "ready"),
 			};
 
+			var behaviorActions = GetBehaviorActions("Peacock Process", "Provision Name");
+			var buttonDefinitions = GetBehaviorButtons();
+
 			return new DomBehaviorDefinition
 			{
 				Name = BehaviorDefinitionName,
@@ -292,6 +311,8 @@ public class Script
 				Statuses = statuses,
 				StatusTransitions = transitions,
 				StatusSectionDefinitionLinks = GetStatusLinks(sections),
+				ActionDefinitions = behaviorActions,
+				ButtonDefinitions = buttonDefinitions,
 			};
 		}
 
@@ -308,6 +329,98 @@ public class Script
 			var completeStatusLinks = StatusSectionDefinitions.GetSectionDefinitionLinks(sections, fieldsList, "complete", true);
 
 			return draftStatusLinks.Concat(readyStatusLinks).Concat(inprogressStatusLinks).Concat(activeStatusLinks).Concat(deactivateStatusLinks).Concat(reprovisionStatusLinks).Concat(completeStatusLinks).ToList();
+		}
+
+		private static List<IDomButtonDefinition> GetBehaviorButtons()
+		{
+			DomInstanceButtonDefinition provisionButton = new DomInstanceButtonDefinition("provision")
+			{
+				VisibilityCondition = new StatusCondition(new List<string> { "draft" }),
+				ActionDefinitionIds = new List<string> { "provision" },
+				Layout = new DomButtonDefinitionLayout { Text = "Provision" },
+			};
+
+			DomInstanceButtonDefinition deactivateButton = new DomInstanceButtonDefinition("deactivate")
+			{
+				VisibilityCondition = new StatusCondition(new List<string> { "active" }),
+				ActionDefinitionIds = new List<string> { "deactivate" },
+				Layout = new DomButtonDefinitionLayout { Text = "Deactivate" },
+			};
+
+			DomInstanceButtonDefinition reprovisionButton = new DomInstanceButtonDefinition("reprovision")
+			{
+				VisibilityCondition = new StatusCondition(new List<string> { "active" }),
+				ActionDefinitionIds = new List<string> { "reprovision" },
+				Layout = new DomButtonDefinitionLayout { Text = "Reprovision" },
+			};
+
+			DomInstanceButtonDefinition completeProvision = new DomInstanceButtonDefinition("complete-provision")
+			{
+				VisibilityCondition = new StatusCondition(new List<string> { "complete" }),
+				ActionDefinitionIds = new List<string> { "complete-provision" },
+				Layout = new DomButtonDefinitionLayout { Text = "Provision" },
+			};
+
+			List<IDomButtonDefinition> domButtons = new List<IDomButtonDefinition> { provisionButton, deactivateButton, reprovisionButton, completeProvision };
+			return domButtons;
+		}
+
+		private static List<IDomActionDefinition> GetBehaviorActions(string processName, string businessKeyField)
+		{
+			var provisionAction = new ExecuteScriptDomActionDefinition("provision")
+			{
+				Script = "start_process",
+				IsInteractive = false,
+				ScriptOptions = new List<string>
+				{
+					$"PARAMETER:1:{processName}",
+					"PARAMETER:2:draft_to_ready",
+					$"PARAMETER:3:{businessKeyField}",
+					"PARAMETER:4:provision",
+				},
+			};
+
+			var deactivateAction = new ExecuteScriptDomActionDefinition("deactivate")
+			{
+				Script = "start_process",
+				IsInteractive = false,
+				ScriptOptions = new List<string>
+				{
+					$"PARAMETER:1:{processName}",
+					"PARAMETER:2:active_to_complete",
+					$"PARAMETER:3:{businessKeyField}",
+					"PARAMETER:4:deactivate",
+				},
+			};
+
+			var reprovisionAction = new ExecuteScriptDomActionDefinition("reprovision")
+			{
+				Script = "start_process",
+				IsInteractive = false,
+				ScriptOptions = new List<string>
+				{
+					$"PARAMETER:1:{processName}",
+					"PARAMETER:2:active_to_reprovision",
+					$"PARAMETER:3:{businessKeyField}",
+					"PARAMETER:4:reprovision",
+				},
+			};
+
+			var completeProvisionAction = new ExecuteScriptDomActionDefinition("complete-provision")
+			{
+				Script = "start_process",
+				IsInteractive = false,
+				ScriptOptions = new List<string>
+				{
+					$"PARAMETER:1:{processName}",
+					"PARAMETER:2:complete_to_ready",
+					$"PARAMETER:3:{businessKeyField}",
+					"PARAMETER:4:complete-provision",
+				},
+			};
+
+			var behaviorActions = new List<IDomActionDefinition> { provisionAction, deactivateAction, reprovisionAction, completeProvisionAction, };
+			return behaviorActions;
 		}
 
 		private static Dictionary<string, List<FieldDescriptorID>> GetFieldDescriptorDictionary(List<SectionDefinition> sections)
@@ -370,50 +483,62 @@ public class Script
 				var draftStatusLinkProvisionInfo = new DomStatusSectionDefinitionLink(draftProvisionInfoStatusLink)
 				{
 					FieldDescriptorLinks = new List<DomStatusFieldDescriptorLink>
-				{
-					new DomStatusFieldDescriptorLink(fieldsList["Provision Name"])
 					{
-						Visible = true,
-						ReadOnly = false,
-						RequiredForStatus = true,
+						new DomStatusFieldDescriptorLink(fieldsList["Provision Name (Peacock)"])
+						{
+							Visible = true,
+							ReadOnly = false,
+							RequiredForStatus = true,
+						},
+						new DomStatusFieldDescriptorLink(fieldsList["Event ID (Peacock)"])
+						{
+							Visible = true,
+							ReadOnly = false,
+							RequiredForStatus = true,
+						},
+						new DomStatusFieldDescriptorLink(fieldsList["Source Element (Peacock)"])
+						{
+							Visible = true,
+							ReadOnly = false,
+							RequiredForStatus = false,
+						},
+						new DomStatusFieldDescriptorLink(fieldsList["InstanceId (Peacock)"])
+						{
+							Visible = true,
+							ReadOnly = false,
+							RequiredForStatus = false,
+						},
+						new DomStatusFieldDescriptorLink(fieldsList["Action (Peacock)"])
+						{
+							Visible = true,
+							ReadOnly = false,
+							RequiredForStatus = false,
+						},
 					},
-					new DomStatusFieldDescriptorLink(fieldsList["Event ID"])
-					{
-						Visible = true,
-						ReadOnly = false,
-						RequiredForStatus = true,
-					},
-					new DomStatusFieldDescriptorLink(fieldsList["Source Element"])
-					{
-						Visible = true,
-						ReadOnly = false,
-						RequiredForStatus = false,
-					},
-				},
 				};
 				var draftStatusLinkDomInstance = new DomStatusSectionDefinitionLink(draftDomInstanceStatusLink)
 				{
 					FieldDescriptorLinks = new List<DomStatusFieldDescriptorLink>
-				{
-					new DomStatusFieldDescriptorLink(fieldsList["Conviva"])
 					{
-						Visible = true,
-						ReadOnly = false,
-						RequiredForStatus = false,
+						new DomStatusFieldDescriptorLink(fieldsList["Conviva (Peacock)"])
+						{
+							Visible = true,
+							ReadOnly = false,
+							RequiredForStatus = false,
+						},
+						new DomStatusFieldDescriptorLink(fieldsList["TAG (Peacock)"])
+						{
+							Visible = true,
+							ReadOnly = false,
+							RequiredForStatus = false,
+						},
+						new DomStatusFieldDescriptorLink(fieldsList["Touchstream (Peacock)"])
+						{
+							Visible = true,
+							ReadOnly = false,
+							RequiredForStatus = false,
+						},
 					},
-					new DomStatusFieldDescriptorLink(fieldsList["TAG"])
-					{
-						Visible = true,
-						ReadOnly = false,
-						RequiredForStatus = false,
-					},
-					new DomStatusFieldDescriptorLink(fieldsList["Touchstream"])
-					{
-						Visible = true,
-						ReadOnly = false,
-						RequiredForStatus = false,
-					},
-				},
 				};
 
 				return new List<DomStatusSectionDefinitionLink>() { draftStatusLinkProvisionInfo, draftStatusLinkDomInstance };
