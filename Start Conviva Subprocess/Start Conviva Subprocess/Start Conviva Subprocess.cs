@@ -72,9 +72,9 @@ public class Script
 
 		try
 		{
-			var subdomInstance = helper.GetParameterValue<Guid>("Conviva");
-			var maindomInstance = helper.GetParameterValue<string>("InstanceId");
-			var action = helper.GetParameterValue<string>("Action");
+			var subdomInstance = helper.GetParameterValue<Guid>("Conviva (Peacock)");
+			var maindomInstance = helper.GetParameterValue<string>("InstanceId (Peacock)");
+			var action = helper.GetParameterValue<string>("Action (Peacock)");
 			var domHelper = new DomHelper(engine.SendSLNetMessages, "process_automation");
 			engine.Log("Starting Conviva Subprocess");
 

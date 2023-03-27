@@ -76,7 +76,7 @@ public class Script
 		try
 		{
 			// gathering instance id from parent is the challenge
-			var subdomInstance = helper.GetParameterValue<Guid>("Conviva");
+			var subdomInstance = helper.GetParameterValue<Guid>("Conviva (Peacock)");
 			var domHelper = new DomHelper(engine.SendSLNetMessages, "process_automation");
 
 			bool CheckStateChange()
@@ -117,8 +117,8 @@ public class Script
 
 				// successfully created filter
 				engine.GenerateInformation("Conviva process dom reports complete");
-				var sourceElement = helper.GetParameterValue<string>("Source Element");
-				var provisionName = helper.GetParameterValue<string>("Provision Name");
+				var sourceElement = helper.GetParameterValue<string>("Source Element (Peacock)");
+				var provisionName = helper.GetParameterValue<string>("Provision Name (Peacock)");
 				if (!String.IsNullOrWhiteSpace(sourceElement))
 				{
 					ExternalRequest evtmgrUpdate = new ExternalRequest

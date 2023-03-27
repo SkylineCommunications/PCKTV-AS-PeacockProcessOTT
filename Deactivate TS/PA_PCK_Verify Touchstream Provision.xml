@@ -34,7 +34,7 @@
 
 	<Script>
 		<Exe id="4" type="csharp">
-			<Value><![CDATA[[Project:Deactivate TS]]]></Value>
+			<Value><![CDATA[[Project:Verify Touchstream Provision]]]></Value>
 			<!--<Param type="debug">true</Param>-->
 			<Message></Message>
 		</Exe>

@@ -75,16 +75,12 @@ namespace PA.ProfileLoadDomTemplate
 			var scriptName = "Evaluate Event";
 			var helper = new PaProfileLoadDomHelper(engine);
 
-			// test
 			var domHelper = new DomHelper(engine.SendSLNetMessages, "process_automation");
-			var mainId = helper.GetParameterValue<string>("InstanceId");
-			var convivaId = helper.GetParameterValue<Guid>("Conviva");
 
-			var maindomInstance = helper.GetParameterValue<string>("InstanceId");
+			var maindomInstance = helper.GetParameterValue<string>("InstanceId (Peacock)");
 
 			var mainFilter = DomInstanceExposers.Id.Equal(new DomInstanceId(Guid.Parse(maindomInstance)));
 			var mainInstance = domHelper.DomInstances.Read(mainFilter).First();
-			// end
 
 			engine.GenerateInformation("START " + scriptName);
 			helper.Log("START " + scriptName, PaLogLevel.Information);
@@ -105,7 +101,7 @@ namespace PA.ProfileLoadDomTemplate
 
 			try
 			{
-				var eventName = helper.GetParameterValue<string>("Event ID");
+				var eventName = helper.GetParameterValue<string>("Event ID (Peacock)");
 
 				// var touchstreamId = helper.GetParameterValue<Guid>("Touchstream");
 				// var tagId = helper.GetParameterValue<Guid>("TAG");
@@ -123,10 +119,10 @@ namespace PA.ProfileLoadDomTemplate
 				//var tagInstance = domHelper.DomInstances.Read(tagFilter).First();
 
 				// check statuses via tagInstance.StatusId == "complete" etc
-				Thread.Sleep(5000);
+				// Thread.Sleep(5000);
 
-				var sourceElement = helper.GetParameterValue<string>("Source Element");
-				var provisionName = helper.GetParameterValue<string>("Provision Name");
+				var sourceElement = helper.GetParameterValue<string>("Source Element (Peacock)");
+				var provisionName = helper.GetParameterValue<string>("Provision Name (Peacock)");
 				if (!String.IsNullOrWhiteSpace(sourceElement))
 				{
 					ExternalRequest evtmgrUpdate = new ExternalRequest
@@ -147,10 +143,7 @@ namespace PA.ProfileLoadDomTemplate
 					eventManager.SetParameter(999, JsonConvert.SerializeObject(evtmgrUpdate));
 				}
 
-				// helper.TransitionState("inprogress_to_active");
 				helper.SendFinishMessageToTokenHandler();
-
-				//}
 			}
 			catch (Exception ex)
 			{
@@ -159,32 +152,6 @@ namespace PA.ProfileLoadDomTemplate
 				//helper.SendErrorMessageToTokenHandler();
 				helper.SendFinishMessageToTokenHandler();
 			}
-		}
-
-		/// <summary>
-		/// Retry until success or until timeout.
-		/// </summary>
-		/// <param name="func">Operation to retry.</param>
-		/// <param name="timeout">Max TimeSpan during which the operation specified in <paramref name="func"/> can be retried.</param>
-		/// <returns><c>true</c> if one of the retries succeeded within the specified <paramref name="timeout"/>. Otherwise <c>false</c>.</returns>
-		public static bool Retry(Func<bool> func, TimeSpan timeout)
-		{
-			bool success = false;
-
-			Stopwatch sw = new Stopwatch();
-			sw.Start();
-
-			do
-			{
-				success = func();
-				if (!success)
-				{
-					System.Threading.Thread.Sleep(3000);
-				}
-			}
-			while (!success && sw.Elapsed <= timeout);
-
-			return success;
 		}
 	}
 }

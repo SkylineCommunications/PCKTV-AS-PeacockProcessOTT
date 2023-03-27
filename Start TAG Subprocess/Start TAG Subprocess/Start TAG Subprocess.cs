@@ -73,9 +73,9 @@ public class Script
 
 		try
 		{
-			var tagInstanceId = helper.GetParameterValue<Guid>("TAG");
-			var peacockInstanceId = helper.GetParameterValue<string>("InstanceId");
-			var action = helper.GetParameterValue<string>("Action");
+			var tagInstanceId = helper.GetParameterValue<Guid>("TAG (Peacock)");
+			var peacockInstanceId = helper.GetParameterValue<string>("InstanceId (Peacock)");
+			var action = helper.GetParameterValue<string>("Action (Peacock)");
 			innerDomHelper = new DomHelper(engine.SendSLNetMessages, "process_automation");
 			var peacockFilter = DomInstanceExposers.Id.Equal(new DomInstanceId(Guid.Parse(peacockInstanceId)));
 			var peacockInstance = innerDomHelper.DomInstances.Read(peacockFilter).First();

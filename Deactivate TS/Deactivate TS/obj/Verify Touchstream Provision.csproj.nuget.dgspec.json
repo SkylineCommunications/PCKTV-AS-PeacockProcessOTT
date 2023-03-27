@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\GIT\\GITHUB\\PCKTV-AS-PeacockProcessActivities2\\Evaluate Event\\Evaluate Event\\Evaluate Event.csproj": {}
+    "C:\\GIT\\GITHUB\\PCKTV-AS-PeacockProcessActivities2\\Deactivate TS\\Deactivate TS\\Verify Touchstream Provision.csproj": {}
   },
   "projects": {
-    "C:\\GIT\\GITHUB\\PCKTV-AS-PeacockProcessActivities2\\Evaluate Event\\Evaluate Event\\Evaluate Event.csproj": {
+    "C:\\GIT\\GITHUB\\PCKTV-AS-PeacockProcessActivities2\\Deactivate TS\\Deactivate TS\\Verify Touchstream Provision.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\GIT\\GITHUB\\PCKTV-AS-PeacockProcessActivities2\\Evaluate Event\\Evaluate Event\\Evaluate Event.csproj",
+        "projectUniqueName": "C:\\GIT\\GITHUB\\PCKTV-AS-PeacockProcessActivities2\\Deactivate TS\\Deactivate TS\\Verify Touchstream Provision.csproj",
         "projectName": "Provision Touchstream_1",
-        "projectPath": "C:\\GIT\\GITHUB\\PCKTV-AS-PeacockProcessActivities2\\Evaluate Event\\Evaluate Event\\Evaluate Event.csproj",
+        "projectPath": "C:\\GIT\\GITHUB\\PCKTV-AS-PeacockProcessActivities2\\Deactivate TS\\Deactivate TS\\Verify Touchstream Provision.csproj",
         "packagesPath": "C:\\Users\\BlakeSM\\.nuget\\packages\\",
-        "outputPath": "C:\\GIT\\GITHUB\\PCKTV-AS-PeacockProcessActivities2\\Evaluate Event\\Evaluate Event\\obj\\",
+        "outputPath": "C:\\GIT\\GITHUB\\PCKTV-AS-PeacockProcessActivities2\\Deactivate TS\\Deactivate TS\\obj\\",
         "projectStyle": "PackageReference",
         "skipContentFileWrite": true,
         "fallbackFolders": [

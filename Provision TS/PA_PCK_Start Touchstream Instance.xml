@@ -34,7 +34,7 @@
 
 	<Script>
 		<Exe id="4" type="csharp">
-			<Value><![CDATA[[Project:Provision TS]]]></Value>
+			<Value><![CDATA[[Project:Start Touchstream Instance]]]></Value>
 			<!--<Param type="debug">true</Param>-->
 			<Message></Message>
 		</Exe>

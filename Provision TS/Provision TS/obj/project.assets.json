@@ -108,7 +108,13 @@
           "lib/net462/SLProtoBufLibrary.dll": {}
         }
       },
-      "StyleCop.Analyzers/1.1.118": {
+      "StyleCop.Analyzers/1.2.0-beta.435": {
+        "type": "package",
+        "dependencies": {
+          "StyleCop.Analyzers.Unstable": "1.2.0.435"
+        }
+      },
+      "StyleCop.Analyzers.Unstable/1.2.0.435": {
         "type": "package"
       }
     },
@@ -219,7 +225,13 @@
           "lib/net462/SLProtoBufLibrary.dll": {}
         }
       },
-      "StyleCop.Analyzers/1.1.118": {
+      "StyleCop.Analyzers/1.2.0-beta.435": {
+        "type": "package",
+        "dependencies": {
+          "StyleCop.Analyzers.Unstable": "1.2.0.435"
+        }
+      },
+      "StyleCop.Analyzers.Unstable/1.2.0.435": {
         "type": "package"
       }
     },
@@ -330,7 +342,13 @@
           "lib/net462/SLProtoBufLibrary.dll": {}
         }
       },
-      "StyleCop.Analyzers/1.1.118": {
+      "StyleCop.Analyzers/1.2.0-beta.435": {
+        "type": "package",
+        "dependencies": {
+          "StyleCop.Analyzers.Unstable": "1.2.0.435"
+        }
+      },
+      "StyleCop.Analyzers.Unstable/1.2.0.435": {
         "type": "package"
       }
     },
@@ -441,7 +459,13 @@
           "lib/net462/SLProtoBufLibrary.dll": {}
         }
       },
-      "StyleCop.Analyzers/1.1.118": {
+      "StyleCop.Analyzers/1.2.0-beta.435": {
+        "type": "package",
+        "dependencies": {
+          "StyleCop.Analyzers.Unstable": "1.2.0.435"
+        }
+      },
+      "StyleCop.Analyzers.Unstable/1.2.0.435": {
         "type": "package"
       }
     }
@@ -637,10 +661,23 @@
         "skyline.dataminer.files.slprotobuflibrary.nuspec"
       ]
     },
-    "StyleCop.Analyzers/1.1.118": {
-      "sha512": "Onx6ovGSqXSK07n/0eM3ZusiNdB6cIlJdabQhWGgJp3Vooy9AaLS/tigeybOJAobqbtggTamoWndz72JscZBvw==",
+    "StyleCop.Analyzers/1.2.0-beta.435": {
+      "sha512": "TADk7vdGXtfTnYCV7GyleaaRTQjfoSfZXprQrVMm7cSJtJbFc1QIbWPyLvrgrfGdfHbGmUPvaN4ODKNxg2jgPQ==",
       "type": "package",
-      "path": "stylecop.analyzers/1.1.118",
+      "path": "stylecop.analyzers/1.2.0-beta.435",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE",
+        "THIRD-PARTY-NOTICES.txt",
+        "stylecop.analyzers.1.2.0-beta.435.nupkg.sha512",
+        "stylecop.analyzers.nuspec"
+      ]
+    },
+    "StyleCop.Analyzers.Unstable/1.2.0.435": {
+      "sha512": "ouwPWZxbOV3SmCZxIRqHvljkSzkCyi1tDoMzQtDb/bRP8ctASV/iRJr+A2Gdj0QLaLmWnqTWDrH82/iP+X80Lg==",
+      "type": "package",
+      "path": "stylecop.analyzers.unstable/1.2.0.435",
       "hasTools": true,
       "files": [
         ".nupkg.metadata",
@@ -656,8 +693,9 @@
         "analyzers/dotnet/cs/pl-PL/StyleCop.Analyzers.resources.dll",
         "analyzers/dotnet/cs/pt-BR/StyleCop.Analyzers.resources.dll",
         "analyzers/dotnet/cs/ru-RU/StyleCop.Analyzers.resources.dll",
-        "stylecop.analyzers.1.1.118.nupkg.sha512",
-        "stylecop.analyzers.nuspec",
+        "rulesets/StyleCopAnalyzersDefault.ruleset",
+        "stylecop.analyzers.unstable.1.2.0.435.nupkg.sha512",
+        "stylecop.analyzers.unstable.nuspec",
         "tools/install.ps1",
         "tools/uninstall.ps1"
       ]
@@ -667,7 +705,7 @@
     ".NETFramework,Version=v4.6.2": [
       "Newtonsoft.Json >= 13.0.3",
       "Skyline.DataMiner.Dev.Automation >= 10.3.3.1",
-      "StyleCop.Analyzers >= 1.1.118"
+      "StyleCop.Analyzers >= 1.2.0-beta.435"
     ]
   },
   "packageFolders": {
@@ -720,7 +758,7 @@
             "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
             "suppressParent": "All",
             "target": "Package",
-            "version": "[1.1.118, )"
+            "version": "[1.2.0-beta.435, )"
           }
         }
       }

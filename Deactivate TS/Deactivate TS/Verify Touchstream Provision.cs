@@ -69,19 +69,16 @@ public class Script
 	public void Run(Engine engine)
 	{
 		var helper = new PaProfileLoadDomHelper(engine);
-		// test
-		var processInfo = engine.GetScriptParam("ProcessInfo");
-		engine.GenerateInformation("st ts: " + processInfo.Value);
+		engine.GenerateInformation("START Verify TS Provison");
 
-		// end
 		try
 		{
 			// var subdomInstance = helper.GetParameterValue<Guid>("Touchstream");
-			var maindomInstance = helper.GetParameterValue<string>("InstanceId");
+			var maindomInstance = helper.GetParameterValue<string>("InstanceId (Peacock)");
 			var domHelper = new DomHelper(engine.SendSLNetMessages, "process_automation");
 			var mainFilter = DomInstanceExposers.Id.Equal(new DomInstanceId(Guid.Parse(maindomInstance)));
 			var mainInstance = domHelper.DomInstances.Read(mainFilter).First();
-			engine.Log("Starting TS Process 1");
+			
 
 			if (mainInstance.StatusId == "ready")
 			{

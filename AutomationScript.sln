@@ -89,9 +89,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Start TAG Subprocess", "Sta
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Start Conviva Subprocess", "Start Conviva Subprocess\Start Conviva Subprocess\Start Conviva Subprocess.csproj", "{E70CFA28-DBDF-41BB-B945-80BFDFEFC168}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Provision TS", "Provision TS\Provision TS\Provision TS.csproj", "{2319B84E-44ED-4F34-9B25-5D5A45EF0C91}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Start Touchstream Instance", "Provision TS\Provision TS\Start Touchstream Instance.csproj", "{2319B84E-44ED-4F34-9B25-5D5A45EF0C91}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Deactivate TS", "Deactivate TS\Deactivate TS\Deactivate TS.csproj", "{D0C704B0-83D4-4709-8CFA-1CD4B7F54BA3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Verify Touchstream Provision", "Deactivate TS\Deactivate TS\Verify Touchstream Provision.csproj", "{D0C704B0-83D4-4709-8CFA-1CD4B7F54BA3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Evaluate Event", "Evaluate Event\Evaluate Event\Evaluate Event.csproj", "{1DFB4A78-F060-4E50-912D-1633511DB1BB}"
 EndProject

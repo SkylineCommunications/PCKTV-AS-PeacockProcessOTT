@@ -51,7 +51,7 @@ namespace Script
 
 				foreach (var field in section.FieldValues)
 				{
-					if (field.GetFieldDescriptor().Name == "InstanceId")
+					if (field.GetFieldDescriptor().Name.Contains("InstanceId"))
 					{
 						instance.AddOrUpdateFieldValue(section.GetSectionDefinition(), field.GetFieldDescriptor(), instanceId.Id.ToString());
 						instanceSet = true;
