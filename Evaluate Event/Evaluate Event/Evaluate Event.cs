@@ -70,6 +70,7 @@ namespace PA.ProfileLoadDomTemplate
         /// The Script entry point.
         /// </summary>
         /// <param name="engine">The <see cref="Engine" /> instance used to communicate with DataMiner.</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S125:Sections of code should not be commented out", Justification = "Ignored")]
         public void Run(Engine engine)
         {
             var scriptName = "Evaluate Event";
@@ -101,29 +102,26 @@ namespace PA.ProfileLoadDomTemplate
 
             try
             {
-                var eventName = helper.GetParameterValue<string>("Event ID (Peacock)");
-
                 // var touchstreamId = helper.GetParameterValue<Guid>("Touchstream");
                 // var tagId = helper.GetParameterValue<Guid>("TAG");
 
-                //var mainFilter = DomInstanceExposers.Id.Equal(new DomInstanceId(maindomInstance));
-                //var mainInstance = domHelper.DomInstances.Read(filter).First();
+                // var mainFilter = DomInstanceExposers.Id.Equal(new DomInstanceId(maindomInstance));
+                // var mainInstance = domHelper.DomInstances.Read(filter).First();
 
-                //var convivaFilter = DomInstanceExposers.Id.Equal(new DomInstanceId(convivaId));
-                //var convivaInstance = domHelper.DomInstances.Read(convivaFilter).First();
+                // var convivaFilter = DomInstanceExposers.Id.Equal(new DomInstanceId(convivaId));
+                // var convivaInstance = domHelper.DomInstances.Read(convivaFilter).First();
 
-                //var touchstreamFilter = DomInstanceExposers.Id.Equal(new DomInstanceId(touchstreamId));
-                //var touchstreamInstance = domHelper.DomInstances.Read(touchstreamFilter).First();
+                // var touchstreamFilter = DomInstanceExposers.Id.Equal(new DomInstanceId(touchstreamId));
+                // var touchstreamInstance = domHelper.DomInstances.Read(touchstreamFilter).First();
 
-                //var tagFilter = DomInstanceExposers.Id.Equal(new DomInstanceId(tagId));
-                //var tagInstance = domHelper.DomInstances.Read(tagFilter).First();
+                // var tagFilter = DomInstanceExposers.Id.Equal(new DomInstanceId(tagId));
+                // var tagInstance = domHelper.DomInstances.Read(tagFilter).First();
 
                 // check statuses via tagInstance.StatusId == "complete" etc
                 // Thread.Sleep(5000);
-
                 var sourceElement = helper.GetParameterValue<string>("Source Element (Peacock)");
                 var provisionName = helper.GetParameterValue<string>("Provision Name (Peacock)");
-                if (!String.IsNullOrWhiteSpace(sourceElement))
+                if (!string.IsNullOrWhiteSpace(sourceElement))
                 {
                     ExternalRequest evtmgrUpdate = new ExternalRequest
                     {
@@ -149,7 +147,7 @@ namespace PA.ProfileLoadDomTemplate
             {
                 helper.Log($"An issue occurred while evaluating the event: {ex}", PaLogLevel.Error);
                 engine.GenerateInformation("exception in evaluate event: " + ex);
-                //helper.SendErrorMessageToTokenHandler();
+                // helper.SendErrorMessageToTokenHandler();
                 helper.SendFinishMessageToTokenHandler();
             }
         }

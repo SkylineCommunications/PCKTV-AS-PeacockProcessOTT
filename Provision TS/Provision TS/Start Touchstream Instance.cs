@@ -85,7 +85,6 @@ public class Script
             }
 
             // code
-
             helper.ReturnSuccess();
         }
         catch (Exception ex)

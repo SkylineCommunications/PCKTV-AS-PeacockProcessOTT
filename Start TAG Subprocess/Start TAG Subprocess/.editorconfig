@@ -12,3 +12,9 @@ dotnet_sort_system_directives_first = true
 
 # Default severity for analyzer diagnostics with category 'StyleCop.CSharp.ReadabilityRules'
 dotnet_analyzer_diagnostic.category-StyleCop.CSharp.ReadabilityRules.severity = none
+
+# S3903: Types should be defined in named namespaces
+dotnet_diagnostic.S3903.severity = none
+
+# SA1649: File name should match first type name
+dotnet_diagnostic.SA1649.severity = none

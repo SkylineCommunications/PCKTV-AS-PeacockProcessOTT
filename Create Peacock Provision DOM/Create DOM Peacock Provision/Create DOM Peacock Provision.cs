@@ -142,6 +142,7 @@ public class Script
         }
     }
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S1118:Utility classes should not have public constructors", Justification = "Ignored")]
     public class SectionDefinitions
     {
         public static SectionDefinition CreateDomInstancesServiceDefinition(Engine engine, DomHelper domHelper)

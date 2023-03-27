@@ -78,7 +78,6 @@ public class Script
             var domHelper = new DomHelper(engine.SendSLNetMessages, "process_automation");
             var mainFilter = DomInstanceExposers.Id.Equal(new DomInstanceId(Guid.Parse(maindomInstance)));
             var mainInstance = domHelper.DomInstances.Read(mainFilter).First();
-            
 
             if (mainInstance.StatusId == "ready")
             {
@@ -86,7 +85,6 @@ public class Script
             }
 
             // code
-
             helper.ReturnSuccess();
         }
         catch (Exception ex)

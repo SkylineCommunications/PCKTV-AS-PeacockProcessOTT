@@ -11,7 +11,7 @@ namespace Script
 
     public class Script
     {
-        private DomHelper InnerDomHelper;
+        private DomHelper innerDomHelper;
 
         /// <summary>
         /// The Script entry point.
@@ -30,18 +30,19 @@ namespace Script
             var keyField = engine.GetScriptParam("key").Value;
 
             var instanceId = context.ContextId as DomInstanceId;
-            InnerDomHelper = new DomHelper(engine.SendSLNetMessages, instanceId.ModuleId);
-            string businessKey = GetBusinessKey(engine, keyField, instanceId);
+            innerDomHelper = new DomHelper(engine.SendSLNetMessages, instanceId.ModuleId);
+            string businessKey = GetBusinessKey(keyField, instanceId);
 
-            InnerDomHelper.DomInstances.DoStatusTransition(instanceId, transition);
+            innerDomHelper.DomInstances.DoStatusTransition(instanceId, transition);
             ProcessHelper.PushToken(process, businessKey, instanceId);
         }
 
-        private string GetBusinessKey(IEngine engine, string keyField, DomInstanceId instanceId)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1101:Prefix local calls with this", Justification = "Ignored")]
+        private string GetBusinessKey(string keyField, DomInstanceId instanceId)
         {
             string businessKey = "default";
             var dominstance = DomInstanceExposers.Id.Equal(instanceId);
-            var instance = InnerDomHelper.DomInstances.Read(dominstance).First();
+            var instance = innerDomHelper.DomInstances.Read(dominstance).First();
             var instanceSet = false;
             var keyFound = false;
             foreach (var section in instance.Sections)
@@ -65,7 +66,7 @@ namespace Script
 
                     if (keyFound && instanceSet)
                     {
-                        InnerDomHelper.DomInstances.Update(instance);
+                        innerDomHelper.DomInstances.Update(instance);
                         return businessKey;
                     }
                 }
@@ -76,7 +77,7 @@ namespace Script
 
         private SectionDefinition SetSectionDefinitionById(SectionDefinitionID sectionDefinitionId)
         {
-            return InnerDomHelper.SectionDefinitions.Read(SectionDefinitionExposers.ID.Equal(sectionDefinitionId)).First();
+            return innerDomHelper.SectionDefinitions.Read(SectionDefinitionExposers.ID.Equal(sectionDefinitionId)).First();
         }
     }
 }

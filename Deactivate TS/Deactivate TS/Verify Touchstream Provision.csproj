@@ -49,6 +49,7 @@
     <Content Include=".editorconfig" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Verify Touchstream Provision.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
