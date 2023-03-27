@@ -30,22 +30,22 @@ Skyline Communications.
 
 Any inquiries can be addressed to:
 
-	Skyline Communications NV
-	Ambachtenstraat 33
-	B-8870 Izegem
-	Belgium
-	Tel.	: +32 51 31 35 69
-	Fax.	: +32 51 31 01 29
-	E-mail	: info@skyline.be
-	Web		: www.skyline.be
-	Contact	: Ben Vandenberghe
+    Skyline Communications NV
+    Ambachtenstraat 33
+    B-8870 Izegem
+    Belgium
+    Tel.    : +32 51 31 35 69
+    Fax.    : +32 51 31 01 29
+    E-mail  : info@skyline.be
+    Web     : www.skyline.be
+    Contact : Ben Vandenberghe
 
 ****************************************************************************
 Revision History:
 
-DATE		VERSION		AUTHOR			COMMENTS
+DATE        VERSION     AUTHOR          COMMENTS
 
-dd/mm/2022	1.0.0.1		XXX, Skyline	Initial version
+dd/mm/2022  1.0.0.1     XXX, Skyline    Initial version
 ****************************************************************************
 */
 
@@ -62,35 +62,35 @@ using Skyline.DataMiner.Net.Apps.DataMinerObjectModel;
 /// </summary>
 public class Script
 {
-	/// <summary>
-	/// The Script entry point.
-	/// </summary>
-	/// <param name="engine">Link with SLAutomation process.</param>
-	public void Run(Engine engine)
-	{
-		var helper = new PaProfileLoadDomHelper(engine);
-		engine.GenerateInformation("START Start Touchstream Instance");
+    /// <summary>
+    /// The Script entry point.
+    /// </summary>
+    /// <param name="engine">Link with SLAutomation process.</param>
+    public void Run(Engine engine)
+    {
+        var helper = new PaProfileLoadDomHelper(engine);
+        engine.GenerateInformation("START Start Touchstream Instance");
 
-		try
-		{
-			// var subdomInstance = helper.GetParameterValue<Guid>("Touchstream");
-			var maindomInstance = helper.GetParameterValue<string>("InstanceId");
-			var domHelper = new DomHelper(engine.SendSLNetMessages, "process_automation");
-			var mainFilter = DomInstanceExposers.Id.Equal(new DomInstanceId(Guid.Parse(maindomInstance)));
-			var mainInstance = domHelper.DomInstances.Read(mainFilter).First();
+        try
+        {
+            // var subdomInstance = helper.GetParameterValue<Guid>("Touchstream");
+            var maindomInstance = helper.GetParameterValue<string>("InstanceId");
+            var domHelper = new DomHelper(engine.SendSLNetMessages, "process_automation");
+            var mainFilter = DomInstanceExposers.Id.Equal(new DomInstanceId(Guid.Parse(maindomInstance)));
+            var mainInstance = domHelper.DomInstances.Read(mainFilter).First();
 
-			if (mainInstance.StatusId == "ready")
-			{
-				helper.TransitionState("ready_to_inprogress");
-			}
+            if (mainInstance.StatusId == "ready")
+            {
+                helper.TransitionState("ready_to_inprogress");
+            }
 
-			// code
+            // code
 
-			helper.ReturnSuccess();
-		}
-		catch (Exception ex)
-		{
-			engine.Log("Error: " + ex);
-		}
-	}
+            helper.ReturnSuccess();
+        }
+        catch (Exception ex)
+        {
+            engine.Log("Error: " + ex);
+        }
+    }
 }
