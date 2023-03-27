@@ -110,13 +110,8 @@ public class Script
 			var sections = new List<SectionDefinition> { provisionInfoSectionDefinitions, domInstancesSectionDefinitions };
 
 			// Create DomBehaviorDefinition
-			var behavior = domHelper.DomBehaviorDefinitions.Read(DomBehaviorDefinitionExposers.Name.Equal(BehaviorDefinitionName));
-			if (!behavior.Any())
-			{
-				var domBehaviorDefinition = BehaviorDefinitions.CreateDomBehaviorDefinition(sections);
-				domBehaviorDefinition = domHelper.DomBehaviorDefinitions.Create(domBehaviorDefinition);
-				behavior = new List<DomBehaviorDefinition> { domBehaviorDefinition };
-			}
+			var domBehaviorDefinition = BehaviorDefinitions.CreateDomBehaviorDefinition(sections);
+			CreateOrUpdateDomBehaviorDefinition(domBehaviorDefinition);
 
 			var nameDefinition = new ModuleSettingsOverrides
 			{
@@ -136,7 +131,7 @@ public class Script
 			{
 				Name = DefinitionName,
 				SectionDefinitionLinks = new List<SectionDefinitionLink> { new SectionDefinitionLink(provisionInfoSectionDefinitions.GetID()), new SectionDefinitionLink(domInstancesSectionDefinitions.GetID()) },
-				DomBehaviorDefinitionId = behavior.FirstOrDefault()?.ID,
+				DomBehaviorDefinitionId = domBehaviorDefinition.ID,
 				ModuleSettingsOverrides = nameDefinition,
 			};
 		}
@@ -271,6 +266,23 @@ public class Script
 
 			field.DomDefinitionIds.Add(new DomDefinitionId(definitionId));
 			return field;
+		}
+	}
+
+	private void CreateOrUpdateDomBehaviorDefinition(DomBehaviorDefinition newDomBehaviorDefinition)
+	{
+		if (newDomBehaviorDefinition != null)
+		{
+			var domBehaviorDefinition = domHelper.DomBehaviorDefinitions.Read(DomBehaviorDefinitionExposers.Name.Equal(newDomBehaviorDefinition.Name));
+			if (domBehaviorDefinition.Any())
+			{
+				newDomBehaviorDefinition.ID = domBehaviorDefinition.FirstOrDefault()?.ID;
+				domHelper.DomBehaviorDefinitions.Update(newDomBehaviorDefinition);
+			}
+			else
+			{
+				domHelper.DomBehaviorDefinitions.Create(newDomBehaviorDefinition);
+			}
 		}
 	}
 
