@@ -1,7 +1,10 @@
-using Newtonsoft.Json;
-
+#pragma warning disable SA1633 // File should have header
 namespace Helper
+#pragma warning restore SA1633 // File should have header
 {
+    using Newtonsoft.Json;
+
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "ignored")]
     public class ExternalRequest
     {
         [JsonProperty("type")]
@@ -11,6 +14,8 @@ namespace Helper
         public ProcessResponse ProcessResponse { get; set; }
     }
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1402:File may only contain a single type", Justification = "ignored")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "ignored")]
     public class ProcessResponse
     {
         [JsonProperty("conviva", NullValueHandling = NullValueHandling.Ignore)]
@@ -26,16 +31,22 @@ namespace Helper
         public string EventName { get; set; }
     }
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1402:File may only contain a single type", Justification = "ignored")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "ignored")]
     public class ConvivaResponse
     {
         public string Status { get; set; }
     }
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1402:File may only contain a single type", Justification = "ignored")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "ignored")]
     public class TagResponse
     {
         public string Status { get; set; }
     }
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1402:File may only contain a single type", Justification = "ignored")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "ignored")]
     public class PeacockResponse
     {
         public string Status { get; set; }

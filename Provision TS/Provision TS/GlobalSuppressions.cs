@@ -5,4 +5,4 @@
 
 using System.Diagnostics.CodeAnalysis;
 
-[assembly: SuppressMessage("Major Code Smell", "S125:Sections of code should not be commented out", Justification = "<Pending>", Scope = "member", Target = "~M:Script.Run(Skyline.DataMiner.Automation.Engine)")]
+[assembly: SuppressMessage("Major Code Smell", "S125:Sections of code should not be commented out", Justification = "ignored", Scope = "member", Target = "~M:Script.Run(Skyline.DataMiner.Automation.Engine)")]

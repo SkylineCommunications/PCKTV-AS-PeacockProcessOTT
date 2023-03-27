@@ -30,3 +30,6 @@ dotnet_diagnostic.SA1201.severity = none
 
 # S1118: Utility classes should not have public constructors
 dotnet_diagnostic.S1118.severity = none
+
+# SA1633: File should have header
+dotnet_diagnostic.SA1633.severity = none

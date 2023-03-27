@@ -52,6 +52,7 @@
     <Compile Include="..\..\ExternalRequest.cs">
       <Link>ExternalRequest.cs</Link>
     </Compile>
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Waiting TAG Subprocess.cs" />
   </ItemGroup>

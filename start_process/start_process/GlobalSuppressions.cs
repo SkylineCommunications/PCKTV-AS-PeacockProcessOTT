@@ -5,4 +5,4 @@
 
 using System.Diagnostics.CodeAnalysis;
 
-[assembly: SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1101:Prefix local calls with this", Justification = "<Pending>", Scope = "member", Target = "~M:Script.Script.OnDomActionMethod(Skyline.DataMiner.Automation.IEngine,Skyline.DataMiner.Net.Apps.DataMinerObjectModel.Actions.ExecuteScriptDomActionContext)")]
+[assembly: SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1101:Prefix local calls with this", Justification = "ignored", Scope = "member", Target = "~M:Script.Script.OnDomActionMethod(Skyline.DataMiner.Automation.IEngine,Skyline.DataMiner.Net.Apps.DataMinerObjectModel.Actions.ExecuteScriptDomActionContext)")]

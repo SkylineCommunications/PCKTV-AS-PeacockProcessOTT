@@ -77,7 +77,7 @@ namespace Script
 
         private SectionDefinition SetSectionDefinitionById(SectionDefinitionID sectionDefinitionId)
         {
-            return innerDomHelper.SectionDefinitions.Read(SectionDefinitionExposers.ID.Equal(sectionDefinitionId)).First();
+            return this.innerDomHelper.SectionDefinitions.Read(SectionDefinitionExposers.ID.Equal(sectionDefinitionId)).First();
         }
     }
 }
