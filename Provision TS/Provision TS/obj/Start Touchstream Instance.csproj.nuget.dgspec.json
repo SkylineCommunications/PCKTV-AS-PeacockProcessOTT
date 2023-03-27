@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\GIT\\GITHUB\\PCKTV-AS-PeacockProcessActivities2\\Waiting TAG Subprocess\\Waiting TAG Subprocess\\Waiting TAG Subprocess.csproj": {}
+    "C:\\GIT\\GITHUB\\PCKTV-AS-PeacockProcessActivities2\\Provision TS\\Provision TS\\Start Touchstream Instance.csproj": {}
   },
   "projects": {
-    "C:\\GIT\\GITHUB\\PCKTV-AS-PeacockProcessActivities2\\Waiting TAG Subprocess\\Waiting TAG Subprocess\\Waiting TAG Subprocess.csproj": {
+    "C:\\GIT\\GITHUB\\PCKTV-AS-PeacockProcessActivities2\\Provision TS\\Provision TS\\Start Touchstream Instance.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\GIT\\GITHUB\\PCKTV-AS-PeacockProcessActivities2\\Waiting TAG Subprocess\\Waiting TAG Subprocess\\Waiting TAG Subprocess.csproj",
+        "projectUniqueName": "C:\\GIT\\GITHUB\\PCKTV-AS-PeacockProcessActivities2\\Provision TS\\Provision TS\\Start Touchstream Instance.csproj",
         "projectName": "Provision Touchstream_1",
-        "projectPath": "C:\\GIT\\GITHUB\\PCKTV-AS-PeacockProcessActivities2\\Waiting TAG Subprocess\\Waiting TAG Subprocess\\Waiting TAG Subprocess.csproj",
+        "projectPath": "C:\\GIT\\GITHUB\\PCKTV-AS-PeacockProcessActivities2\\Provision TS\\Provision TS\\Start Touchstream Instance.csproj",
         "packagesPath": "C:\\Users\\BlakeSM\\.nuget\\packages\\",
-        "outputPath": "C:\\GIT\\GITHUB\\PCKTV-AS-PeacockProcessActivities2\\Waiting TAG Subprocess\\Waiting TAG Subprocess\\obj\\",
+        "outputPath": "C:\\GIT\\GITHUB\\PCKTV-AS-PeacockProcessActivities2\\Provision TS\\Provision TS\\obj\\",
         "projectStyle": "PackageReference",
         "skipContentFileWrite": true,
         "fallbackFolders": [

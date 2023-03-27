@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "BVL0akvyxHDT0auX7bvp0ovchxvlRIxeA1bTHJIe5lYlBMo68CZzG6AKJdF3gJeOCrRn4GwW6Mr10svoo/nYdw==",
+  "dgSpecHash": "E+lhFj5FVzA7xhzAmZ7tQV0vsViO5DijsP0//gqEP+trqEgSCsxvZHXmLcuzvY/PLYX6OzH4ahJxiGAclg4lOA==",
   "success": true,
   "projectFilePath": "C:\\GIT\\GITHUB\\PCKTV-AS-PeacockProcessActivities2\\start_process\\start_process\\start_process.csproj",
   "expectedPackageFiles": [
@@ -15,8 +15,7 @@
     "C:\\Users\\BlakeSM\\.nuget\\packages\\skyline.dataminer.files.slmanagedautomation\\10.3.3.1\\skyline.dataminer.files.slmanagedautomation.10.3.3.1.nupkg.sha512",
     "C:\\Users\\BlakeSM\\.nuget\\packages\\skyline.dataminer.files.slnettypes\\10.3.3.1\\skyline.dataminer.files.slnettypes.10.3.3.1.nupkg.sha512",
     "C:\\Users\\BlakeSM\\.nuget\\packages\\skyline.dataminer.files.slprotobuflibrary\\10.3.3.1\\skyline.dataminer.files.slprotobuflibrary.10.3.3.1.nupkg.sha512",
-    "C:\\Users\\BlakeSM\\.nuget\\packages\\stylecop.analyzers\\1.2.0-beta.435\\stylecop.analyzers.1.2.0-beta.435.nupkg.sha512",
-    "C:\\Users\\BlakeSM\\.nuget\\packages\\stylecop.analyzers.unstable\\1.2.0.435\\stylecop.analyzers.unstable.1.2.0.435.nupkg.sha512"
+    "C:\\Users\\BlakeSM\\.nuget\\packages\\stylecop.analyzers\\1.1.118\\stylecop.analyzers.1.1.118.nupkg.sha512"
   ],
   "logs": []
 }
