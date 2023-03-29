@@ -115,9 +115,9 @@ public class Script
 
             section.Stitch(sectionDefinitionFunc);
             var fieldDescriptors = section.GetSectionDefinition().GetAllFieldDescriptors();
-            if (fieldDescriptors.Any(x => x.Name == "Action"))
+            if (fieldDescriptors.Any(x => x.Name.Contains("Action")))
             {
-                var fieldToUpdate = fieldDescriptors.First(x => x.Name == "Action");
+                var fieldToUpdate = fieldDescriptors.First(x => x.Name.Contains("Action"));
                 instance.AddOrUpdateFieldValue(section.GetSectionDefinition(), fieldToUpdate, action);
                 innerDomHelper.DomInstances.Update(instance);
 

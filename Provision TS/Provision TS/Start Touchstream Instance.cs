@@ -74,7 +74,7 @@ public class Script
         try
         {
             // var subdomInstance = helper.GetParameterValue<Guid>("Touchstream");
-            var maindomInstance = helper.GetParameterValue<string>("InstanceId");
+            var maindomInstance = helper.GetParameterValue<string>("InstanceId (Peacock)");
             var domHelper = new DomHelper(engine.SendSLNetMessages, "process_automation");
             var mainFilter = DomInstanceExposers.Id.Equal(new DomInstanceId(Guid.Parse(maindomInstance)));
             var mainInstance = domHelper.DomInstances.Read(mainFilter).First();

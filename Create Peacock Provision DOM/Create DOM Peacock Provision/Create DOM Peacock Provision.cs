@@ -333,13 +333,13 @@ public class Script
         {
             Dictionary<string, List<FieldDescriptorID>> fieldsList = GetFieldDescriptorDictionary(sections);
 
-            var draftStatusLinks = StatusSectionDefinitions.GetDraftSectionDefinitionLinks(sections, fieldsList, "draft", false);
-            var readyStatusLinks = StatusSectionDefinitions.GetSectionDefinitionLinks(sections, fieldsList, "ready", true);
-            var inprogressStatusLinks = StatusSectionDefinitions.GetSectionDefinitionLinks(sections, fieldsList, "in_progress", true);
-            var activeStatusLinks = StatusSectionDefinitions.GetSectionDefinitionLinks(sections, fieldsList, "active", true);
-            var deactivateStatusLinks = StatusSectionDefinitions.GetSectionDefinitionLinks(sections, fieldsList, "deactivate", true);
-            var reprovisionStatusLinks = StatusSectionDefinitions.GetSectionDefinitionLinks(sections, fieldsList, "reprovision", true);
-            var completeStatusLinks = StatusSectionDefinitions.GetSectionDefinitionLinks(sections, fieldsList, "complete", true);
+            var draftStatusLinks = StatusSectionDefinitions.GetDraftSectionDefinitionLinks(sections, fieldsList, "draft");
+            var readyStatusLinks = StatusSectionDefinitions.GetSectionDefinitionLinks(sections, fieldsList, "ready");
+            var inprogressStatusLinks = StatusSectionDefinitions.GetSectionDefinitionLinks(sections, fieldsList, "in_progress");
+            var activeStatusLinks = StatusSectionDefinitions.GetSectionDefinitionLinks(sections, fieldsList, "active");
+            var deactivateStatusLinks = StatusSectionDefinitions.GetSectionDefinitionLinks(sections, fieldsList, "deactivate");
+            var reprovisionStatusLinks = StatusSectionDefinitions.GetSectionDefinitionLinks(sections, fieldsList, "reprovision");
+            var completeStatusLinks = StatusSectionDefinitions.GetSectionDefinitionLinks(sections, fieldsList, "complete");
 
             return draftStatusLinks.Concat(readyStatusLinks).Concat(inprogressStatusLinks).Concat(activeStatusLinks).Concat(deactivateStatusLinks).Concat(reprovisionStatusLinks).Concat(completeStatusLinks).ToList();
         }
@@ -400,7 +400,7 @@ public class Script
                 ScriptOptions = new List<string>
                 {
                     $"PARAMETER:1:{processName}",
-                    "PARAMETER:2:active_to_complete",
+                    "PARAMETER:2:active_to_deactivate",
                     $"PARAMETER:3:{businessKeyField}",
                     "PARAMETER:4:deactivate",
                 },
@@ -459,12 +459,12 @@ public class Script
 
         public class StatusSectionDefinitions
         {
-            public static List<DomStatusSectionDefinitionLink> GetDraftSectionDefinitionLinks(List<SectionDefinition> sections, Dictionary<string, List<FieldDescriptorID>> fieldsList, string status, bool readOnly)
+            public static List<DomStatusSectionDefinitionLink> GetDraftSectionDefinitionLinks(List<SectionDefinition> sections, Dictionary<string, List<FieldDescriptorID>> fieldsList, string status)
             {
                 var sectionLinks = new List<DomStatusSectionDefinitionLink>();
 
-                var fieldDescriptors = sections.First(x => x.GetName().Equals("Provision Info")).GetAllFieldDescriptors().ToList();
-                var requiredFieldDescriptorIDs = fieldDescriptors.FindAll(x => x.Name.Equals("Provision Name") || x.Name.Equals("Event ID")).Select(x => x.ID).ToList();
+                var fieldDescriptors = sections.First(x => x.GetName().Contains("Provision Info")).GetAllFieldDescriptors().ToList();
+                var requiredFieldDescriptorIDs = fieldDescriptors.FindAll(x => x.Name.Contains("Provision Name") || x.Name.Contains("Event ID")).Select(x => x.ID).ToList();
 
                 foreach (var section in sections)
                 {
@@ -477,7 +477,7 @@ public class Script
                         statusLink.FieldDescriptorLinks.Add(new DomStatusFieldDescriptorLink(fieldId)
                         {
                             Visible = true,
-                            ReadOnly = readOnly,
+                            ReadOnly = false,
                             RequiredForStatus = requiredFieldDescriptorIDs.Contains(fieldId),
                         });
                     }
@@ -488,78 +488,12 @@ public class Script
                 return sectionLinks;
             }
 
-            public static List<DomStatusSectionDefinitionLink> GetDraftStatusSectionDefinitionLinks(SectionDefinition provisionInfoSectionDefinition, SectionDefinition domInstancesSectionDefinition, Dictionary<string, FieldDescriptorID> fieldsList)
-            {
-                var draftProvisionInfoStatusLink = new DomStatusSectionDefinitionLinkId("draft", provisionInfoSectionDefinition.GetID());
-                var draftDomInstanceStatusLink = new DomStatusSectionDefinitionLinkId("draft", domInstancesSectionDefinition.GetID());
-
-                var draftStatusLinkProvisionInfo = new DomStatusSectionDefinitionLink(draftProvisionInfoStatusLink)
-                {
-                    FieldDescriptorLinks = new List<DomStatusFieldDescriptorLink>
-                    {
-                        new DomStatusFieldDescriptorLink(fieldsList["Provision Name (Peacock)"])
-                        {
-                            Visible = true,
-                            ReadOnly = false,
-                            RequiredForStatus = true,
-                        },
-                        new DomStatusFieldDescriptorLink(fieldsList["Event ID (Peacock)"])
-                        {
-                            Visible = true,
-                            ReadOnly = false,
-                            RequiredForStatus = true,
-                        },
-                        new DomStatusFieldDescriptorLink(fieldsList["Source Element (Peacock)"])
-                        {
-                            Visible = true,
-                            ReadOnly = false,
-                            RequiredForStatus = false,
-                        },
-                        new DomStatusFieldDescriptorLink(fieldsList["InstanceId (Peacock)"])
-                        {
-                            Visible = true,
-                            ReadOnly = false,
-                            RequiredForStatus = false,
-                        },
-                        new DomStatusFieldDescriptorLink(fieldsList["Action (Peacock)"])
-                        {
-                            Visible = true,
-                            ReadOnly = false,
-                            RequiredForStatus = false,
-                        },
-                    },
-                };
-                var draftStatusLinkDomInstance = new DomStatusSectionDefinitionLink(draftDomInstanceStatusLink)
-                {
-                    FieldDescriptorLinks = new List<DomStatusFieldDescriptorLink>
-                    {
-                        new DomStatusFieldDescriptorLink(fieldsList["Conviva (Peacock)"])
-                        {
-                            Visible = true,
-                            ReadOnly = false,
-                            RequiredForStatus = false,
-                        },
-                        new DomStatusFieldDescriptorLink(fieldsList["TAG (Peacock)"])
-                        {
-                            Visible = true,
-                            ReadOnly = false,
-                            RequiredForStatus = false,
-                        },
-                        new DomStatusFieldDescriptorLink(fieldsList["Touchstream (Peacock)"])
-                        {
-                            Visible = true,
-                            ReadOnly = false,
-                            RequiredForStatus = false,
-                        },
-                    },
-                };
-
-                return new List<DomStatusSectionDefinitionLink>() { draftStatusLinkProvisionInfo, draftStatusLinkDomInstance };
-            }
-
-            public static List<DomStatusSectionDefinitionLink> GetSectionDefinitionLinks(List<SectionDefinition> sections, Dictionary<string, List<FieldDescriptorID>> fieldsList, string status, bool readOnly)
+            public static List<DomStatusSectionDefinitionLink> GetSectionDefinitionLinks(List<SectionDefinition> sections, Dictionary<string, List<FieldDescriptorID>> fieldsList, string status)
             {
                 var sectionLinks = new List<DomStatusSectionDefinitionLink>();
+                var fieldDescriptors = sections.First(x => x.GetName().Contains("Provision Info")).GetAllFieldDescriptors().ToList();
+                var writableFields = fieldDescriptors.FindAll(x => x.Name.Contains("InstanceId") || x.Name.Contains("Action")).Select(x => x.ID).ToList();
+
                 foreach (var section in sections)
                 {
                     var statusLinkId = new DomStatusSectionDefinitionLinkId(status, section.GetID());
@@ -571,7 +505,7 @@ public class Script
                         statusLink.FieldDescriptorLinks.Add(new DomStatusFieldDescriptorLink(fieldId)
                         {
                             Visible = true,
-                            ReadOnly = readOnly,
+                            ReadOnly = !writableFields.Contains(fieldId),
                             RequiredForStatus = false,
                         });
                     }
