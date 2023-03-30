@@ -346,7 +346,6 @@ C:\GIT\GITHUB\PCKTV-AS-PeacockProcessActivities2\Waiting TAG Subprocess\Waiting 
 C:\GIT\GITHUB\PCKTV-AS-PeacockProcessActivities2\Waiting TAG Subprocess\Waiting TAG Subprocess\bin\Debug\System.Xml.XPath.dll
 C:\GIT\GITHUB\PCKTV-AS-PeacockProcessActivities2\Waiting TAG Subprocess\Waiting TAG Subprocess\bin\Debug\System.Xml.XPath.XDocument.dll
 C:\GIT\GITHUB\PCKTV-AS-PeacockProcessActivities2\Waiting TAG Subprocess\Waiting TAG Subprocess\bin\Debug\ProcessAutomation.dll
-C:\GIT\GITHUB\PCKTV-AS-PeacockProcessActivities2\Waiting TAG Subprocess\Waiting TAG Subprocess\bin\Debug\SLSolutionCLCommon.dll
 C:\GIT\GITHUB\PCKTV-AS-PeacockProcessActivities2\Waiting TAG Subprocess\Waiting TAG Subprocess\obj\Debug\Waiting TAG Subprocess.csproj.AssemblyReference.cache
 C:\GIT\GITHUB\PCKTV-AS-PeacockProcessActivities2\Waiting TAG Subprocess\Waiting TAG Subprocess\obj\Debug\Waiting TAG Subprocess.csproj.CoreCompileInputs.cache
 C:\GIT\GITHUB\PCKTV-AS-PeacockProcessActivities2\Waiting TAG Subprocess\Waiting TAG Subprocess\obj\Debug\Waiting TAG Subprocess.csproj.CopyComplete

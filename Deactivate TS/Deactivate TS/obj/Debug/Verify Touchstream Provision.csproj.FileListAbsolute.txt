@@ -108,7 +108,6 @@ C:\GIT\GITHUB\PCKTV-AS-PeacockProcessActivities2\Deactivate TS\Deactivate TS\bin
 C:\GIT\GITHUB\PCKTV-AS-PeacockProcessActivities2\Deactivate TS\Deactivate TS\bin\Debug\System.Xml.XPath.dll
 C:\GIT\GITHUB\PCKTV-AS-PeacockProcessActivities2\Deactivate TS\Deactivate TS\bin\Debug\System.Xml.XPath.XDocument.dll
 C:\GIT\GITHUB\PCKTV-AS-PeacockProcessActivities2\Deactivate TS\Deactivate TS\bin\Debug\ProcessAutomation.dll
-C:\GIT\GITHUB\PCKTV-AS-PeacockProcessActivities2\Deactivate TS\Deactivate TS\bin\Debug\SLSolutionCLCommon.dll
 C:\GIT\GITHUB\PCKTV-AS-PeacockProcessActivities2\Deactivate TS\Deactivate TS\obj\Debug\Verify Touchstream Provision.csproj.AssemblyReference.cache
 C:\GIT\GITHUB\PCKTV-AS-PeacockProcessActivities2\Deactivate TS\Deactivate TS\obj\Debug\Verify Touchstream Provision.csproj.CoreCompileInputs.cache
 C:\GIT\GITHUB\PCKTV-AS-PeacockProcessActivities2\Deactivate TS\Deactivate TS\obj\Debug\Verify Touchstream Provision.csproj.CopyComplete
