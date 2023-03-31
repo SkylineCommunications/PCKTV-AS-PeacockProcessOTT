@@ -69,7 +69,7 @@ public class Script
     public void Run(Engine engine)
     {
         var helper = new PaProfileLoadDomHelper(engine);
-        engine.GenerateInformation("START Verify TS Provison");
+        engine.GenerateInformation("START Verify TS Provision");
 
         try
         {
@@ -84,7 +84,7 @@ public class Script
                 helper.TransitionState("ready_to_inprogress");
             }
 
-            // code
+            helper.Log("Finished Verify Touchstream Provision.", PaLogLevel.Debug);
             helper.ReturnSuccess();
         }
         catch (Exception ex)

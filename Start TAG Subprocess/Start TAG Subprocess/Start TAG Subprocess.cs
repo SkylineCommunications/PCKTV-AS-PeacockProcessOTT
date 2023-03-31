@@ -82,9 +82,16 @@ public class Script
             engine.Log("Starting TAG Subprocess");
 
             var tagFilter = DomInstanceExposers.Id.Equal(new DomInstanceId(tagInstanceId));
-            var tagInstance = innerDomHelper.DomInstances.Read(tagFilter).First();
+            var tagInstances = innerDomHelper.DomInstances.Read(tagFilter);
 
-            ExecuteActionOnInstance(action, tagInstance);
+            if (tagInstances.Any())
+            {
+                ExecuteActionOnInstance(action, tagInstances.First());
+            }
+            else
+            {
+                engine.GenerateInformation("No tag instances found to provision, skipping");
+            }
 
             if (action == "provision" && peacockInstance.StatusId == "ready")
             {

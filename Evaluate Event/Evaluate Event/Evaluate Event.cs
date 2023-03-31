@@ -141,6 +141,7 @@ namespace PA.ProfileLoadDomTemplate
                     eventManager.SetParameter(999, JsonConvert.SerializeObject(evtmgrUpdate));
                 }
 
+                helper.Log("Finished Evaluate Event.", PaLogLevel.Debug);
                 helper.SendFinishMessageToTokenHandler();
             }
             catch (Exception ex)

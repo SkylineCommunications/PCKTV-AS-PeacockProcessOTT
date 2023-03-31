@@ -300,6 +300,7 @@ public class Script
                 new DomStatus("deactivate", "Deactivate"),
                 new DomStatus("reprovision", "Reprovision"),
                 new DomStatus("complete", "Complete"),
+                new DomStatus("deactivating", "Deactivating"),
             };
 
             var transitions = new List<DomStatusTransition>
@@ -309,7 +310,8 @@ public class Script
                 new DomStatusTransition("inprogress_to_active", "in_progress", "active"),
                 new DomStatusTransition("active_to_deactivate", "active", "deactivate"),
                 new DomStatusTransition("active_to_reprovision", "active", "reprovision"),
-                new DomStatusTransition("deactivate_to_complete", "deactivate", "complete"),
+                new DomStatusTransition("deactivate_to_deactivating", "deactivate", "deactivating"),
+                new DomStatusTransition("deactivating_to_complete", "deactivating", "complete"),
                 new DomStatusTransition("reprovision_to_inprogress", "reprovision", "in_progress"),
                 new DomStatusTransition("complete_to_ready", "complete", "ready"),
             };
@@ -338,10 +340,11 @@ public class Script
             var inprogressStatusLinks = StatusSectionDefinitions.GetSectionDefinitionLinks(sections, fieldsList, "in_progress");
             var activeStatusLinks = StatusSectionDefinitions.GetSectionDefinitionLinks(sections, fieldsList, "active");
             var deactivateStatusLinks = StatusSectionDefinitions.GetSectionDefinitionLinks(sections, fieldsList, "deactivate");
+            var deactivatingStatusLinks = StatusSectionDefinitions.GetSectionDefinitionLinks(sections, fieldsList, "deactivating");
             var reprovisionStatusLinks = StatusSectionDefinitions.GetSectionDefinitionLinks(sections, fieldsList, "reprovision");
             var completeStatusLinks = StatusSectionDefinitions.GetSectionDefinitionLinks(sections, fieldsList, "complete");
 
-            return draftStatusLinks.Concat(readyStatusLinks).Concat(inprogressStatusLinks).Concat(activeStatusLinks).Concat(deactivateStatusLinks).Concat(reprovisionStatusLinks).Concat(completeStatusLinks).ToList();
+            return draftStatusLinks.Concat(readyStatusLinks).Concat(inprogressStatusLinks).Concat(activeStatusLinks).Concat(deactivateStatusLinks).Concat(deactivatingStatusLinks).Concat(reprovisionStatusLinks).Concat(completeStatusLinks).ToList();
         }
 
         private static List<IDomButtonDefinition> GetBehaviorButtons()

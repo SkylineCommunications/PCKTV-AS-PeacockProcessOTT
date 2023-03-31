@@ -56,6 +56,7 @@ using System.Threading;
 using Helper;
 using Newtonsoft.Json;
 using Skyline.DataMiner.Automation;
+using Skyline.DataMiner.DataMinerSolutions.ProcessAutomation.Helpers.Logging;
 using Skyline.DataMiner.DataMinerSolutions.ProcessAutomation.Manager;
 using Skyline.DataMiner.Net.Apps.DataMinerObjectModel;
 using Skyline.DataMiner.Net.Messages.SLDataGateway;
@@ -138,6 +139,7 @@ public class Script
                     eventManager.SetParameter(999, JsonConvert.SerializeObject(evtmgrUpdate));
                 }
 
+                helper.Log("Finished Waiting Conviva Subprocess.", PaLogLevel.Debug);
                 helper.ReturnSuccess();
             }
             else

@@ -79,12 +79,23 @@ public class Script
             var tagInstanceId = helper.GetParameterValue<Guid>("TAG (Peacock)");
             var domHelper = new DomHelper(engine.SendSLNetMessages, "process_automation");
 
+            var tagFilter = DomInstanceExposers.Id.Equal(new DomInstanceId(tagInstanceId));
+            var tagInstances = domHelper.DomInstances.Read(tagFilter);
+
+            if (!tagInstances.Any())
+            {
+                engine.GenerateInformation("No tag instances found to provision, skipping");
+                helper.Log("Finished Waiting TAG Subprocess.", PaLogLevel.Debug);
+                helper.ReturnSuccess();
+                return;
+            }
+
             bool CheckStateChange()
             {
                 try
                 {
                     var filter = DomInstanceExposers.Id.Equal(new DomInstanceId(tagInstanceId));
-                    var tagInstances = domHelper.DomInstances.Read(filter);
+                    tagInstances = domHelper.DomInstances.Read(filter);
                     if (tagInstances.Count == 0)
                     {
                         // returning success until conviva is ready
@@ -103,7 +114,7 @@ public class Script
                 }
                 catch (Exception e)
                 {
-                    engine.Log("Exception thrown while verifying the subprocess: " + e);
+                    engine.GenerateInformation("Exception thrown while verifying the subprocess: " + e);
                     throw;
                 }
             }
@@ -111,7 +122,7 @@ public class Script
             if (Retry(CheckStateChange, new TimeSpan(0, 10, 0)))
             {
                 var filter = DomInstanceExposers.Id.Equal(new DomInstanceId(tagInstanceId));
-                var tagInstances = domHelper.DomInstances.Read(filter);
+                tagInstances = domHelper.DomInstances.Read(filter);
                 var tagInstance = tagInstances.First();
 
                 // successfully created filter
@@ -119,33 +130,39 @@ public class Script
                 var sourceElement = helper.GetParameterValue<string>("Source Element (Peacock)");
                 var provisionName = helper.GetParameterValue<string>("Provision Name (Peacock)");
 
-                ExternalRequest evtmgrUpdate = new ExternalRequest
+                if (!string.IsNullOrWhiteSpace(sourceElement))
                 {
-                    Type = "Process Automation",
-                    ProcessResponse = new ProcessResponse
+                    ExternalRequest evtmgrUpdate = new ExternalRequest
                     {
-                        EventName = provisionName,
-                        Tag = new TagResponse
+                        Type = "Process Automation",
+                        ProcessResponse = new ProcessResponse
                         {
-                            Status = tagInstance.StatusId == "active" ? "Active" : "Complete",
+                            EventName = provisionName,
+                            Tag = new TagResponse
+                            {
+                                Status = tagInstance.StatusId == "active" ? "Active" : "Complete",
+                            },
                         },
-                    },
-                };
+                    };
 
-                var elementSplit = sourceElement.Split('/');
-                var eventManager = engine.FindElement(Convert.ToInt32(elementSplit[0]), Convert.ToInt32(elementSplit[1]));
-                eventManager.SetParameter(999, JsonConvert.SerializeObject(evtmgrUpdate));
+                    var elementSplit = sourceElement.Split('/');
+                    var eventManager = engine.FindElement(Convert.ToInt32(elementSplit[0]), Convert.ToInt32(elementSplit[1]));
+                    eventManager.SetParameter(999, JsonConvert.SerializeObject(evtmgrUpdate));
+                }
 
+                helper.Log("Finished Waiting TAG Subprocess.", PaLogLevel.Debug);
                 helper.ReturnSuccess();
             }
             else
             {
                 // failed to execute in time
+                engine.GenerateInformation("Verifying TAG subprocess took longer than expected and could not verify.");
+                helper.ReturnSuccess();
             }
         }
         catch (Exception ex)
         {
-            engine.Log("Error: " + ex);
+            engine.GenerateInformation("Exception occurred in Waiting TAG Subprocess: " + ex);
         }
     }
 
