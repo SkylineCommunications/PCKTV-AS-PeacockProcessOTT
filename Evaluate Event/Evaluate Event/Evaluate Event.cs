@@ -91,13 +91,18 @@ namespace PA.ProfileLoadDomTemplate
                 helper.TransitionState("ready_to_active");
             }
 
+            engine.GenerateInformation("main status: " + mainInstance.StatusId);
             if (mainInstance.StatusId == "in_progress")
             {
                 helper.TransitionState("inprogress_to_active");
             }
-            else if (mainInstance.StatusId == "deactivate")
+            else if (mainInstance.StatusId == "deactivating")
             {
-                helper.TransitionState("deactivate_to_complete");
+                helper.TransitionState("deactivating_to_complete");
+            }
+            else
+            {
+                engine.GenerateInformation("Unknown main instance status: " + mainInstance.StatusId);
             }
 
             try

@@ -27,6 +27,9 @@ namespace Helper
         [JsonProperty("tag", NullValueHandling = NullValueHandling.Ignore)]
         public TagResponse Tag { get; set; }
 
+        [JsonProperty("touchstream", NullValueHandling = NullValueHandling.Ignore)]
+        public TouchstreamResponse Touchstream { get; set; }
+
         [JsonProperty("eventName")]
         public string EventName { get; set; }
     }
@@ -41,6 +44,13 @@ namespace Helper
     [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1402:File may only contain a single type", Justification = "ignored")]
     [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "ignored")]
     public class TagResponse
+    {
+        public string Status { get; set; }
+    }
+
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1402:File may only contain a single type", Justification = "ignored")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "ignored")]
+    public class TouchstreamResponse
     {
         public string Status { get; set; }
     }

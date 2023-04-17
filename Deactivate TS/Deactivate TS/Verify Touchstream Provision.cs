@@ -52,6 +52,9 @@ dd/mm/2022  1.0.0.1     XXX, Skyline    Initial version
 using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
+using Helper;
+using Newtonsoft.Json;
 using Skyline.DataMiner.Automation;
 using Skyline.DataMiner.DataMinerSolutions.ProcessAutomation.Helpers.Logging;
 using Skyline.DataMiner.DataMinerSolutions.ProcessAutomation.Manager;
@@ -73,23 +76,113 @@ public class Script
 
         try
         {
-            // var subdomInstance = helper.GetParameterValue<Guid>("Touchstream");
-            var maindomInstance = helper.GetParameterValue<string>("InstanceId (Peacock)");
+            var touchstreamInstanceId = helper.GetParameterValue<Guid>("Touchstream (Peacock)");
             var domHelper = new DomHelper(engine.SendSLNetMessages, "process_automation");
-            var mainFilter = DomInstanceExposers.Id.Equal(new DomInstanceId(Guid.Parse(maindomInstance)));
-            var mainInstance = domHelper.DomInstances.Read(mainFilter).First();
 
-            if (mainInstance.StatusId == "ready")
+            var touchstreamFilter = DomInstanceExposers.Id.Equal(new DomInstanceId(touchstreamInstanceId));
+            var touchstreamInstances = domHelper.DomInstances.Read(touchstreamFilter);
+
+            if (!touchstreamInstances.Any())
             {
-                helper.TransitionState("ready_to_inprogress");
+                engine.GenerateInformation("No touchstream instances provisioned, skipping.");
+                helper.Log("Finished Waiting Touchstream Subprocess.", PaLogLevel.Debug);
+                helper.ReturnSuccess();
+                return;
             }
 
-            helper.Log("Finished Verify Touchstream Provision.", PaLogLevel.Debug);
-            helper.ReturnSuccess();
+            bool CheckStateChange()
+            {
+                try
+                {
+                    touchstreamInstances = domHelper.DomInstances.Read(touchstreamFilter);
+                    var touchstreamInstance = touchstreamInstances.First();
+
+                    engine.GenerateInformation(DateTime.Now + "|ts instance " + touchstreamInstance.ID.Id + " with status: " + touchstreamInstance.StatusId);
+                    if (touchstreamInstance.StatusId == "active" || touchstreamInstance.StatusId == "complete")
+                    {
+                        return true;
+                    }
+
+                    return false;
+                }
+                catch (Exception e)
+                {
+                    engine.GenerateInformation("Exception thrown while verifying the subprocess: " + e);
+                    throw;
+                }
+            }
+
+            if (Retry(CheckStateChange, new TimeSpan(0, 10, 0)))
+            {
+                var filter = DomInstanceExposers.Id.Equal(new DomInstanceId(touchstreamInstanceId));
+                touchstreamInstances = domHelper.DomInstances.Read(filter);
+                var tagInstance = touchstreamInstances.First();
+
+                // successfully created filter
+                engine.GenerateInformation("Touchstream process dom reports complete");
+                var sourceElement = helper.GetParameterValue<string>("Source Element (Peacock)");
+                var provisionName = helper.GetParameterValue<string>("Provision Name (Peacock)");
+
+                if (!string.IsNullOrWhiteSpace(sourceElement))
+                {
+                    ExternalRequest evtmgrUpdate = new ExternalRequest
+                    {
+                        Type = "Process Automation",
+                        ProcessResponse = new ProcessResponse
+                        {
+                            EventName = provisionName,
+                            Touchstream = new TouchstreamResponse
+                            {
+                                Status = tagInstance.StatusId == "active" ? "Active" : "Complete",
+                            },
+                        },
+                    };
+
+                    var elementSplit = sourceElement.Split('/');
+                    var eventManager = engine.FindElement(Convert.ToInt32(elementSplit[0]), Convert.ToInt32(elementSplit[1]));
+                    eventManager.SetParameter(999, JsonConvert.SerializeObject(evtmgrUpdate));
+                }
+
+                engine.GenerateInformation("Finished Verify Touchstream Provision.");
+                helper.Log("Finished Verify Touchstream Provision.", PaLogLevel.Debug);
+                helper.ReturnSuccess();
+            }
+            else
+            {
+                // failed to execute in time
+                engine.GenerateInformation("Verifying Touchstream provision took longer than expected and could not verify status.");
+                helper.ReturnSuccess();
+            }
         }
         catch (Exception ex)
         {
-            engine.Log("Error: " + ex);
+            engine.GenerateInformation("Exception occurred in Verify Touchstream Provision: " + ex);
         }
+    }
+
+    /// <summary>
+    /// Retry until success or until timeout.
+    /// </summary>
+    /// <param name="func">Operation to retry.</param>
+    /// <param name="timeout">Max TimeSpan during which the operation specified in <paramref name="func"/> can be retried.</param>
+    /// <returns><c>true</c> if one of the retries succeeded within the specified <paramref name="timeout"/>. Otherwise <c>false</c>.</returns>
+    public static bool Retry(Func<bool> func, TimeSpan timeout)
+    {
+        bool success;
+
+        Stopwatch sw = new Stopwatch();
+        sw.Start();
+
+        do
+        {
+            success = func();
+            if (!success)
+            {
+                Thread.Sleep(3000);
+            }
+        }
+        while (!success && sw.Elapsed <= timeout);
+
+        return success;
     }
 }

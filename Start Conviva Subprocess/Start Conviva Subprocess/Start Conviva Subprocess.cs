@@ -104,7 +104,7 @@ public class Script
             {
                 domHelper.DomInstances.ExecuteAction(subInstance.ID, "deactivate");
             }
-            else if (action == "complete-reprovision")
+            else if (action == "complete-provision")
             {
                 domHelper.DomInstances.ExecuteAction(subInstance.ID, "complete-provision");
             }

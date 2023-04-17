@@ -56,12 +56,15 @@ using Skyline.DataMiner.Automation;
 using Skyline.DataMiner.DataMinerSolutions.ProcessAutomation.Helpers.Logging;
 using Skyline.DataMiner.DataMinerSolutions.ProcessAutomation.Manager;
 using Skyline.DataMiner.Net.Apps.DataMinerObjectModel;
+using Skyline.DataMiner.Net.Sections;
 
 /// <summary>
 /// DataMiner Script Class.
 /// </summary>
 public class Script
 {
+    private DomHelper innerDomHelper;
+
     /// <summary>
     /// The Script entry point.
     /// </summary>
@@ -73,23 +76,49 @@ public class Script
 
         try
         {
-            // var subdomInstance = helper.GetParameterValue<Guid>("Touchstream");
-            var maindomInstance = helper.GetParameterValue<string>("InstanceId (Peacock)");
-            var domHelper = new DomHelper(engine.SendSLNetMessages, "process_automation");
-            var mainFilter = DomInstanceExposers.Id.Equal(new DomInstanceId(Guid.Parse(maindomInstance)));
-            var mainInstance = domHelper.DomInstances.Read(mainFilter).First();
+            var touchstreamInstance = helper.GetParameterValue<Guid>("Touchstream (Peacock)");
+            var peacockInstanceId = helper.GetParameterValue<string>("InstanceId (Peacock)");
+            var action = helper.GetParameterValue<string>("Action (Peacock)");
+            innerDomHelper = new DomHelper(engine.SendSLNetMessages, "process_automation");
+            var peacockFilter = DomInstanceExposers.Id.Equal(new DomInstanceId(Guid.Parse(peacockInstanceId)));
+            var peacockInstance = innerDomHelper.DomInstances.Read(peacockFilter).First();
+            engine.Log("Starting Touchstream Subprocess");
 
-            if (mainInstance.StatusId == "ready")
+            var tsfilter = DomInstanceExposers.Id.Equal(new DomInstanceId(touchstreamInstance));
+            var touchstreamInstances = innerDomHelper.DomInstances.Read(tsfilter);
+
+            if (touchstreamInstances.Any())
+            {
+                innerDomHelper.DomInstances.ExecuteAction(touchstreamInstances.First().ID, action);
+            }
+            else
+            {
+                engine.GenerateInformation("No touchstream instances found to provision, skipping");
+            }
+
+            if (action == "provision" && peacockInstance.StatusId == "ready")
             {
                 helper.TransitionState("ready_to_inprogress");
             }
+            else if (action == "deactivate" && peacockInstance.StatusId == "deactivate")
+            {
+                helper.TransitionState("deactivate_to_deactivating");
+            }
+            else if (action == "reprovision" && peacockInstance.StatusId == "reprovision")
+            {
+                helper.TransitionState("reprovision_to_inprogress");
+            }
 
-            // code
-            helper.ReturnSuccess();
+			helper.ReturnSuccess();
         }
         catch (Exception ex)
         {
             engine.Log("Error: " + ex);
         }
+    }
+
+    private SectionDefinition SetSectionDefinitionById(SectionDefinitionID sectionDefinitionId)
+    {
+        return innerDomHelper.SectionDefinitions.Read(SectionDefinitionExposers.ID.Equal(sectionDefinitionId)).First();
     }
 }
