@@ -114,35 +114,6 @@ public class Script
 
             if (Retry(CheckStateChange, new TimeSpan(0, 10, 0)))
             {
-                var filter = DomInstanceExposers.Id.Equal(new DomInstanceId(touchstreamInstanceId));
-                touchstreamInstances = domHelper.DomInstances.Read(filter);
-                var tagInstance = touchstreamInstances.First();
-
-                // successfully created filter
-                engine.GenerateInformation("Touchstream process dom reports complete");
-                var sourceElement = helper.GetParameterValue<string>("Source Element (Peacock)");
-                var provisionName = helper.GetParameterValue<string>("Provision Name (Peacock)");
-
-                if (!string.IsNullOrWhiteSpace(sourceElement))
-                {
-                    ExternalRequest evtmgrUpdate = new ExternalRequest
-                    {
-                        Type = "Process Automation",
-                        ProcessResponse = new ProcessResponse
-                        {
-                            EventName = provisionName,
-                            Touchstream = new TouchstreamResponse
-                            {
-                                Status = tagInstance.StatusId == "active" ? "Active" : "Complete",
-                            },
-                        },
-                    };
-
-                    var elementSplit = sourceElement.Split('/');
-                    var eventManager = engine.FindElement(Convert.ToInt32(elementSplit[0]), Convert.ToInt32(elementSplit[1]));
-                    eventManager.SetParameter(999, JsonConvert.SerializeObject(evtmgrUpdate));
-                }
-
                 engine.GenerateInformation("Finished Verify Touchstream Provision.");
                 helper.Log("Finished Verify Touchstream Provision.", PaLogLevel.Debug);
                 helper.ReturnSuccess();
