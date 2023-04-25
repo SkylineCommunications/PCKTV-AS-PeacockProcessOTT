@@ -41,7 +41,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ProcessAutomation">
-      <HintPath>..\..\..\..\..\..\..\..\Skyline DataMiner\ProtocolScripts\ProcessAutomation.dll</HintPath>
+      <HintPath>..\..\Dlls\ProcessAutomation.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <AdditionalFiles Include="stylecop.json" />
@@ -68,7 +68,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties DisLinkedXmlFile="..\Provision Touchstream.xml" DisProjectType="automationScriptProject" DisLinkId="1" />
+      <UserProperties DisLinkId="1" DisProjectType="automationScriptProject" DisLinkedXmlFile="..\Provision Touchstream.xml" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
