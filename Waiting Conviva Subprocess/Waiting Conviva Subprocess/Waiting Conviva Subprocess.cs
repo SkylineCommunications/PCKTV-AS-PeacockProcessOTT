@@ -75,22 +75,23 @@ public class Script
         var helper = new PaProfileLoadDomHelper(engine);
         try
         {
-            // gathering instance id from parent is the challenge
             var subdomInstance = helper.GetParameterValue<Guid>("Conviva (Peacock)");
             var domHelper = new DomHelper(engine.SendSLNetMessages, "process_automation");
+
+            var filter = DomInstanceExposers.Id.Equal(new DomInstanceId(subdomInstance));
+            var convivaInstances = domHelper.DomInstances.Read(filter);
+            if (convivaInstances.Count == 0)
+            {
+                helper.ReturnSuccess();
+                return;
+            }
 
             bool CheckStateChange()
             {
                 try
                 {
                     // data
-                    var filter = DomInstanceExposers.Id.Equal(new DomInstanceId(subdomInstance));
                     var subInstances = domHelper.DomInstances.Read(filter);
-                    if (subInstances.Count == 0)
-                    {
-                        // returning success until conviva is ready
-                        return true;
-                    }
 
                     var instance = subInstances.First();
 
@@ -111,45 +112,20 @@ public class Script
 
             if (Retry(CheckStateChange, new TimeSpan(0, 10, 0)))
             {
-                var filter = DomInstanceExposers.Id.Equal(new DomInstanceId(subdomInstance));
-                var subInstances = domHelper.DomInstances.Read(filter);
-                var instance = subInstances.First();
-
-                // successfully created filter
-                engine.GenerateInformation("Conviva process dom reports complete");
-                var sourceElement = helper.GetParameterValue<string>("Source Element (Peacock)");
-                var provisionName = helper.GetParameterValue<string>("Provision Name (Peacock)");
-                if (!string.IsNullOrWhiteSpace(sourceElement))
-                {
-                    ExternalRequest evtmgrUpdate = new ExternalRequest
-                    {
-                        Type = "Process Automation",
-                        ProcessResponse = new ProcessResponse
-                        {
-                            EventName = provisionName,
-                            Conviva = new ConvivaResponse
-                            {
-                                Status = instance.StatusId == "active" ? "Active" : "Complete",
-                            },
-                        },
-                    };
-
-                    var elementSplit = sourceElement.Split('/');
-                    var eventManager = engine.FindElement(Convert.ToInt32(elementSplit[0]), Convert.ToInt32(elementSplit[1]));
-                    eventManager.SetParameter(999, JsonConvert.SerializeObject(evtmgrUpdate));
-                }
-
+                engine.GenerateInformation("Conviva process DOM reports complete");
                 helper.Log("Finished Waiting Conviva Subprocess.", PaLogLevel.Debug);
                 helper.ReturnSuccess();
             }
             else
             {
                 // failed to execute in time
+                engine.GenerateInformation("Conviva took too long to complete");
             }
         }
         catch (Exception ex)
         {
             engine.Log("Error: " + ex);
+            engine.GenerateInformation("Exception waiting for conviva: " + ex);
         }
     }
 

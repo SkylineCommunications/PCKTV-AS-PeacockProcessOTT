@@ -82,7 +82,7 @@ public class Script
             var subInstances = domHelper.DomInstances.Read(subFilter);
             if (subInstances.Count == 0)
             {
-                // returning success until conviva is ready
+                engine.GenerateInformation("No Conviva Instance found, skipping");
                 helper.ReturnSuccess();
                 return;
             }
