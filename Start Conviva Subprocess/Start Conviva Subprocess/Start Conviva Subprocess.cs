@@ -30,15 +30,15 @@ Skyline Communications.
 
 Any inquiries can be addressed to:
 
-    Skyline Communications NV
-    Ambachtenstraat 33
-    B-8870 Izegem
-    Belgium
-    Tel.    : +32 51 31 35 69
-    Fax.    : +32 51 31 01 29
-    E-mail  : info@skyline.be
-    Web     : www.skyline.be
-    Contact : Ben Vandenberghe
+	Skyline Communications NV
+	Ambachtenstraat 33
+	B-8870 Izegem
+	Belgium
+	Tel.    : +32 51 31 35 69
+	Fax.    : +32 51 31 01 29
+	E-mail  : info@skyline.be
+	Web     : www.skyline.be
+	Contact : Ben Vandenberghe
 
 ****************************************************************************
 Revision History:
@@ -62,67 +62,67 @@ using Skyline.DataMiner.Net.Apps.DataMinerObjectModel;
 /// </summary>
 public class Script
 {
-    /// <summary>
-    /// The Script entry point.
-    /// </summary>
-    /// <param name="engine">Link with SLAutomation process.</param>
-    public void Run(Engine engine)
-    {
-        var helper = new PaProfileLoadDomHelper(engine);
+	/// <summary>
+	/// The Script entry point.
+	/// </summary>
+	/// <param name="engine">Link with SLAutomation process.</param>
+	public void Run(Engine engine)
+	{
+		var helper = new PaProfileLoadDomHelper(engine);
 
-        try
-        {
-            var subdomInstance = helper.GetParameterValue<Guid>("Conviva (Peacock)");
-            var maindomInstance = helper.GetParameterValue<string>("InstanceId (Peacock)");
-            var action = helper.GetParameterValue<string>("Action (Peacock)");
-            var domHelper = new DomHelper(engine.SendSLNetMessages, "process_automation");
-            engine.Log("Starting Conviva Subprocess");
+		try
+		{
+			var subdomInstance = helper.GetParameterValue<Guid>("Conviva (Peacock)");
+			var maindomInstance = helper.GetParameterValue<string>("InstanceId (Peacock)");
+			var action = helper.GetParameterValue<string>("Action (Peacock)");
+			var domHelper = new DomHelper(engine.SendSLNetMessages, "process_automation");
+			engine.Log("Starting Conviva Subprocess");
 
-            var subFilter = DomInstanceExposers.Id.Equal(new DomInstanceId(subdomInstance));
-            var subInstances = domHelper.DomInstances.Read(subFilter);
-            if (subInstances.Count == 0)
-            {
-                engine.GenerateInformation("No Conviva Instance found, skipping");
-                helper.ReturnSuccess();
-                return;
-            }
+			var subFilter = DomInstanceExposers.Id.Equal(new DomInstanceId(subdomInstance));
+			var subInstances = domHelper.DomInstances.Read(subFilter);
+			if (subInstances.Count == 0)
+			{
+				engine.GenerateInformation("No Conviva Instance found, skipping");
+				helper.ReturnSuccess();
+				return;
+			}
 
-            var subInstance = subInstances.First();
+			var subInstance = subInstances.First();
 
-            var mainFilter = DomInstanceExposers.Id.Equal(new DomInstanceId(Guid.Parse(maindomInstance)));
-            var mainInstance = domHelper.DomInstances.Read(mainFilter).First();
-            engine.GenerateInformation("status of main process: " + mainInstance.StatusId);
-            if (action == "provision")
-            {
-                domHelper.DomInstances.ExecuteAction(subInstance.ID, "provision");
-            }
-            else if (action == "reprovision")
-            {
-                domHelper.DomInstances.ExecuteAction(subInstance.ID, "reprovision");
-            }
-            else if (action == "deactivate")
-            {
-                domHelper.DomInstances.ExecuteAction(subInstance.ID, "deactivate");
-            }
-            else if (action == "complete-provision")
-            {
-                domHelper.DomInstances.ExecuteAction(subInstance.ID, "complete-provision");
-            }
+			var mainFilter = DomInstanceExposers.Id.Equal(new DomInstanceId(Guid.Parse(maindomInstance)));
+			var mainInstance = domHelper.DomInstances.Read(mainFilter).First();
+			engine.GenerateInformation("status of main process: " + mainInstance.StatusId);
+			if (action == "provision")
+			{
+				domHelper.DomInstances.ExecuteAction(subInstance.ID, "provision");
+			}
+			else if (action == "reprovision")
+			{
+				domHelper.DomInstances.ExecuteAction(subInstance.ID, "reprovision");
+			}
+			else if (action == "deactivate")
+			{
+				domHelper.DomInstances.ExecuteAction(subInstance.ID, "deactivate");
+			}
+			else if (action == "complete-provision")
+			{
+				domHelper.DomInstances.ExecuteAction(subInstance.ID, "complete-provision");
+			}
 
-            if (mainInstance.StatusId == "ready")
-            {
-                helper.TransitionState("ready_to_inprogress");
-            }
-            else if (mainInstance.StatusId == "reprovision")
-            {
-                helper.TransitionState("reprovision_to_inprogress");
-            }
+			if (mainInstance.StatusId == "ready")
+			{
+				helper.TransitionState("ready_to_inprogress");
+			}
+			else if (mainInstance.StatusId == "reprovision")
+			{
+				helper.TransitionState("reprovision_to_inprogress");
+			}
 
-            helper.ReturnSuccess();
-        }
-        catch (Exception ex)
-        {
-            engine.Log("Error: " + ex);
-        }
-    }
+			helper.ReturnSuccess();
+		}
+		catch (Exception ex)
+		{
+			engine.Log("Error: " + ex);
+		}
+	}
 }
