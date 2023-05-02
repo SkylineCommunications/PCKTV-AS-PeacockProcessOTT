@@ -53,7 +53,6 @@ using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
-using Helper;
 using Newtonsoft.Json;
 using Skyline.DataMiner.Automation;
 using Skyline.DataMiner.DataMinerSolutions.ProcessAutomation.Helpers.Logging;
@@ -121,34 +120,8 @@ public class Script
 
             if (Retry(CheckStateChange, new TimeSpan(0, 10, 0)))
             {
-                var filter = DomInstanceExposers.Id.Equal(new DomInstanceId(tagInstanceId));
-                tagInstances = domHelper.DomInstances.Read(filter);
-                var tagInstance = tagInstances.First();
-
                 // successfully created filter
                 engine.GenerateInformation("TAG process dom reports complete");
-                var sourceElement = helper.GetParameterValue<string>("Source Element (Peacock)");
-                var provisionName = helper.GetParameterValue<string>("Provision Name (Peacock)");
-
-                if (!string.IsNullOrWhiteSpace(sourceElement))
-                {
-                    ExternalRequest evtmgrUpdate = new ExternalRequest
-                    {
-                        Type = "Process Automation",
-                        ProcessResponse = new ProcessResponse
-                        {
-                            EventName = provisionName,
-                            Tag = new TagResponse
-                            {
-                                Status = tagInstance.StatusId == "active" ? "Active" : "Complete",
-                            },
-                        },
-                    };
-
-                    var elementSplit = sourceElement.Split('/');
-                    var eventManager = engine.FindElement(Convert.ToInt32(elementSplit[0]), Convert.ToInt32(elementSplit[1]));
-                    eventManager.SetParameter(999, JsonConvert.SerializeObject(evtmgrUpdate));
-                }
 
                 helper.Log("Finished Waiting TAG Subprocess.", PaLogLevel.Debug);
                 helper.ReturnSuccess();

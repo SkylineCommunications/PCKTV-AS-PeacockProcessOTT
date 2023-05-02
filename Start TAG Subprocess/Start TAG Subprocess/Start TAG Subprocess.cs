@@ -77,8 +77,6 @@ public class Script
             var peacockInstanceId = helper.GetParameterValue<string>("InstanceId (Peacock)");
             var action = helper.GetParameterValue<string>("Action (Peacock)");
             innerDomHelper = new DomHelper(engine.SendSLNetMessages, "process_automation");
-            var peacockFilter = DomInstanceExposers.Id.Equal(new DomInstanceId(Guid.Parse(peacockInstanceId)));
-            var peacockInstance = innerDomHelper.DomInstances.Read(peacockFilter).First();
             engine.Log("Starting TAG Subprocess");
 
             var tagFilter = DomInstanceExposers.Id.Equal(new DomInstanceId(tagInstanceId));
@@ -93,17 +91,26 @@ public class Script
                 engine.GenerateInformation("No tag instances found to provision, skipping");
             }
 
-            if (action == "provision" && peacockInstance.StatusId == "ready")
+            var peacockFilter = DomInstanceExposers.Id.Equal(new DomInstanceId(Guid.Parse(peacockInstanceId)));
+            var peacockInstance = innerDomHelper.DomInstances.Read(peacockFilter).First();
+            try
             {
-                helper.TransitionState("ready_to_inprogress");
+                if (action == "provision" && peacockInstance.StatusId == "ready")
+                {
+                    helper.TransitionState("ready_to_inprogress");
+                }
+                else if (action == "deactivate" && peacockInstance.StatusId == "deactivate")
+                {
+                    helper.TransitionState("deactivate_to_deactivating");
+                }
+                else if (action == "reprovision" && peacockInstance.StatusId == "reprovision")
+                {
+                    helper.TransitionState("reprovision_to_inprogress");
+                }
             }
-            else if (action == "deactivate" && peacockInstance.StatusId == "deactivate")
+            catch (Exception ex)
             {
-                helper.TransitionState("deactivate_to_deactivating");
-            }
-            else if (action == "reprovision" && peacockInstance.StatusId == "reprovision")
-            {
-                helper.TransitionState("reprovision_to_inprogress");
+                engine.Log("Failed to transition main state in Start TAG Subprocess" + ex);
             }
 
             helper.ReturnSuccess();
