@@ -30,15 +30,15 @@ Skyline Communications.
 
 Any inquiries can be addressed to:
 
-	Skyline Communications NV
-	Ambachtenstraat 33
-	B-8870 Izegem
-	Belgium
-	Tel.    : +32 51 31 35 69
-	Fax.    : +32 51 31 01 29
-	E-mail  : info@skyline.be
-	Web     : www.skyline.be
-	Contact : Ben Vandenberghe
+    Skyline Communications NV
+    Ambachtenstraat 33
+    B-8870 Izegem
+    Belgium
+    Tel.    : +32 51 31 35 69
+    Fax.    : +32 51 31 01 29
+    E-mail  : info@skyline.be
+    Web     : www.skyline.be
+    Contact : Ben Vandenberghe
 
 ****************************************************************************
 Revision History:
@@ -53,109 +53,125 @@ DATE        VERSION     AUTHOR          COMMENTS
 
 namespace PA.ProfileLoadDomTemplate
 {
-	using System;
-	using System.Diagnostics;
-	using System.Linq;
-	using System.Threading;
-	using Helper;
-	using Newtonsoft.Json;
-	using Skyline.DataMiner.Automation;
-	using Skyline.DataMiner.DataMinerSolutions.ProcessAutomation.Helpers.Logging;
-	using Skyline.DataMiner.DataMinerSolutions.ProcessAutomation.Manager;
-	using Skyline.DataMiner.Net.Apps.DataMinerObjectModel;
+    using System;
+    using System.Diagnostics;
+    using System.Linq;
+    using System.Threading;
+    using Helper;
+    using Newtonsoft.Json;
+    using Skyline.DataMiner.Automation;
+    using Skyline.DataMiner.DataMinerSolutions.ProcessAutomation.Helpers.Logging;
+    using Skyline.DataMiner.DataMinerSolutions.ProcessAutomation.Manager;
+    using Skyline.DataMiner.ExceptionHelper;
+    using Skyline.DataMiner.Net.Apps.DataMinerObjectModel;
 
-	internal class Script
-	{
-		/// <summary>
-		/// The Script entry point.
-		/// </summary>
-		/// <param name="engine">The <see cref="Engine" /> instance used to communicate with DataMiner.</param>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S125:Sections of code should not be commented out", Justification = "Ignored")]
-		public void Run(Engine engine)
-		{
-			var scriptName = "Evaluate Event";
-			var helper = new PaProfileLoadDomHelper(engine);
+    internal class Script
+    {
+        /// <summary>
+        /// The Script entry point.
+        /// </summary>
+        /// <param name="engine">The <see cref="Engine" /> instance used to communicate with DataMiner.</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S125:Sections of code should not be commented out", Justification = "Ignored")]
+        public void Run(Engine engine)
+        {
+            var scriptName = "Evaluate Event";
+            var helper = new PaProfileLoadDomHelper(engine);
+            var domHelper = new DomHelper(engine.SendSLNetMessages, "process_automation");
+            var exceptionHelper = new ExceptionHelper(engine, domHelper);
 
-			var domHelper = new DomHelper(engine.SendSLNetMessages, "process_automation");
+            var maindomInstance = helper.GetParameterValue<string>("InstanceId (Peacock)");
+            var mainFilter = DomInstanceExposers.Id.Equal(new DomInstanceId(Guid.Parse(maindomInstance)));
+            var mainInstance = domHelper.DomInstances.Read(mainFilter).First();
 
-			var maindomInstance = helper.GetParameterValue<string>("InstanceId (Peacock)");
+            engine.GenerateInformation("START " + scriptName);
+            helper.Log("START " + scriptName, PaLogLevel.Information);
 
-			var mainFilter = DomInstanceExposers.Id.Equal(new DomInstanceId(Guid.Parse(maindomInstance)));
-			var mainInstance = domHelper.DomInstances.Read(mainFilter).First();
+            if (mainInstance.StatusId == "ready")
+            {
+                helper.TransitionState("ready_to_active");
+            }
 
-			engine.GenerateInformation("START " + scriptName);
-			helper.Log("START " + scriptName, PaLogLevel.Information);
+            engine.GenerateInformation("main status: " + mainInstance.StatusId);
+            if (mainInstance.StatusId == "in_progress")
+            {
+                helper.TransitionState("inprogress_to_active");
+            }
+            else if (mainInstance.StatusId == "deactivating")
+            {
+                helper.TransitionState("deactivating_to_complete");
+            }
+            else
+            {
+                engine.GenerateInformation("Unknown main instance status: " + mainInstance.StatusId);
+            }
 
-			if (mainInstance.StatusId == "ready")
-			{
-				helper.TransitionState("ready_to_active");
-			}
+            try
+            {
+                // var touchstreamId = helper.GetParameterValue<Guid>("Touchstream");
+                // var tagId = helper.GetParameterValue<Guid>("TAG");
 
-			engine.GenerateInformation("main status: " + mainInstance.StatusId);
-			if (mainInstance.StatusId == "in_progress")
-			{
-				helper.TransitionState("inprogress_to_active");
-			}
-			else if (mainInstance.StatusId == "deactivating")
-			{
-				helper.TransitionState("deactivating_to_complete");
-			}
-			else
-			{
-				engine.GenerateInformation("Unknown main instance status: " + mainInstance.StatusId);
-			}
+                // var mainFilter = DomInstanceExposers.Id.Equal(new DomInstanceId(maindomInstance));
+                // var mainInstance = domHelper.DomInstances.Read(filter).First();
 
-			try
-			{
-				// var touchstreamId = helper.GetParameterValue<Guid>("Touchstream");
-				// var tagId = helper.GetParameterValue<Guid>("TAG");
+                // var convivaFilter = DomInstanceExposers.Id.Equal(new DomInstanceId(convivaId));
+                // var convivaInstance = domHelper.DomInstances.Read(convivaFilter).First();
 
-				// var mainFilter = DomInstanceExposers.Id.Equal(new DomInstanceId(maindomInstance));
-				// var mainInstance = domHelper.DomInstances.Read(filter).First();
+                // var touchstreamFilter = DomInstanceExposers.Id.Equal(new DomInstanceId(touchstreamId));
+                // var touchstreamInstance = domHelper.DomInstances.Read(touchstreamFilter).First();
 
-				// var convivaFilter = DomInstanceExposers.Id.Equal(new DomInstanceId(convivaId));
-				// var convivaInstance = domHelper.DomInstances.Read(convivaFilter).First();
+                // var tagFilter = DomInstanceExposers.Id.Equal(new DomInstanceId(tagId));
+                // var tagInstance = domHelper.DomInstances.Read(tagFilter).First();
 
-				// var touchstreamFilter = DomInstanceExposers.Id.Equal(new DomInstanceId(touchstreamId));
-				// var touchstreamInstance = domHelper.DomInstances.Read(touchstreamFilter).First();
+                // check statuses via tagInstance.StatusId == "complete" etc
+                // Thread.Sleep(5000);
+                var sourceElement = helper.GetParameterValue<string>("Source Element (Peacock)");
+                var provisionName = helper.GetParameterValue<string>("Provision Name (Peacock)");
+                if (!string.IsNullOrWhiteSpace(sourceElement))
+                {
+                    ExternalRequest evtmgrUpdate = new ExternalRequest
+                    {
+                        Type = "Process Automation",
+                        ProcessResponse = new ProcessResponse
+                        {
+                            EventName = provisionName,
+                            Peacock = new PeacockResponse
+                            {
+                                Status = mainInstance.StatusId == "in_progress" ? "Active" : "Complete",
+                            },
+                        },
+                    };
 
-				// var tagFilter = DomInstanceExposers.Id.Equal(new DomInstanceId(tagId));
-				// var tagInstance = domHelper.DomInstances.Read(tagFilter).First();
+                    var elementSplit = sourceElement.Split('/');
+                    var eventManager = engine.FindElement(Convert.ToInt32(elementSplit[0]), Convert.ToInt32(elementSplit[1]));
+                    eventManager.SetParameter(999, JsonConvert.SerializeObject(evtmgrUpdate));
+                }
 
-				// check statuses via tagInstance.StatusId == "complete" etc
-				// Thread.Sleep(5000);
-				var sourceElement = helper.GetParameterValue<string>("Source Element (Peacock)");
-				var provisionName = helper.GetParameterValue<string>("Provision Name (Peacock)");
-				if (!string.IsNullOrWhiteSpace(sourceElement))
-				{
-					ExternalRequest evtmgrUpdate = new ExternalRequest
-					{
-						Type = "Process Automation",
-						ProcessResponse = new ProcessResponse
-						{
-							EventName = provisionName,
-							Peacock = new PeacockResponse
-							{
-								Status = mainInstance.StatusId == "in_progress" ? "Active" : "Complete",
-							},
-						},
-					};
+                helper.Log("Finished Evaluate Event.", PaLogLevel.Debug);
+                helper.SendFinishMessageToTokenHandler();
+            }
+            catch (Exception ex)
+            {
+                helper.Log($"An issue occurred while evaluating the event: {ex}", PaLogLevel.Error);
+                engine.GenerateInformation("exception in evaluate event: " + ex);
 
-					var elementSplit = sourceElement.Split('/');
-					var eventManager = engine.FindElement(Convert.ToInt32(elementSplit[0]), Convert.ToInt32(elementSplit[1]));
-					eventManager.SetParameter(999, JsonConvert.SerializeObject(evtmgrUpdate));
-				}
+                var log = new Log
+                {
+                    AffectedItem = "SLE Event Manager - LEM",
+                    AffectedService = "Peacock Main Process",
+                    Timestamp = DateTime.Now,
+                    ErrorCode = new ErrorCode
+                    {
+                        ConfigurationItem = scriptName + " Script",
+                        ConfigurationType = ErrorCode.ConfigType.Automation,
+                        Severity = ErrorCode.SeverityType.Major,
+                        Source = "Run() method - exception",
+                    },
+                };
+                exceptionHelper.ProcessException(ex, log);
 
-				helper.Log("Finished Evaluate Event.", PaLogLevel.Debug);
-				helper.SendFinishMessageToTokenHandler();
-			}
-			catch (Exception ex)
-			{
-				helper.Log($"An issue occurred while evaluating the event: {ex}", PaLogLevel.Error);
-				engine.GenerateInformation("exception in evaluate event: " + ex);
-				// helper.SendErrorMessageToTokenHandler();
-				helper.SendFinishMessageToTokenHandler();
-			}
-		}
-	}
+                // helper.SendErrorMessageToTokenHandler();
+                helper.SendFinishMessageToTokenHandler();
+            }
+        }
+    }
 }

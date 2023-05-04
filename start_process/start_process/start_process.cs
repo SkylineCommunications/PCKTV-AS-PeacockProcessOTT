@@ -1,111 +1,113 @@
 namespace Script
 {
-	using System;
-	using System.Linq;
-	using Skyline.DataMiner.Automation;
-	using Skyline.DataMiner.DataMinerSolutions.ProcessAutomation.MessageHandler;
-	using Skyline.DataMiner.Net.Apps.DataMinerObjectModel;
-	using Skyline.DataMiner.Net.Apps.DataMinerObjectModel.Actions;
-	using Skyline.DataMiner.Net.Messages.SLDataGateway;
-	using Skyline.DataMiner.Net.Sections;
+    using System;
+    using System.Linq;
+    using Skyline.DataMiner.Automation;
+    using Skyline.DataMiner.DataMinerSolutions.ProcessAutomation.MessageHandler;
+    using Skyline.DataMiner.Net.Apps.DataMinerObjectModel;
+    using Skyline.DataMiner.Net.Apps.DataMinerObjectModel.Actions;
+    using Skyline.DataMiner.Net.LogHelpers;
+    using Skyline.DataMiner.Net.Messages.SLDataGateway;
+    using Skyline.DataMiner.Net.Sections;
 
-	public class Script
-	{
-		private DomHelper innerDomHelper;
+    public class Script
+    {
+        private DomHelper innerDomHelper;
 
-		/// <summary>
-		/// The Script entry point.
-		/// </summary>
-		/// <param name="engine">Link with SLAutomation process.</param>
-		public void Run(Engine engine)
-		{
-			engine.ExitFail("This script should be executed using the 'OnDomAction' entry point");
-		}
+        /// <summary>
+        /// The Script entry point.
+        /// </summary>
+        /// <param name="engine">Link with SLAutomation process.</param>
+        public void Run(Engine engine)
+        {
+            engine.ExitFail("This script should be executed using the 'OnDomAction' entry point");
+        }
 
-		[AutomationEntryPoint(AutomationEntryPointType.Types.OnDomAction)]
-		public void OnDomActionMethod(IEngine engine, ExecuteScriptDomActionContext context)
-		{
-			try
-			{
-				var process = engine.GetScriptParam("process").Value;
-				var transition = engine.GetScriptParam("transition").Value;
-				var keyField = engine.GetScriptParam("key").Value;
+        [AutomationEntryPoint(AutomationEntryPointType.Types.OnDomAction)]
+        public void OnDomActionMethod(IEngine engine, ExecuteScriptDomActionContext context)
+        {
+            var instanceId = context.ContextId as DomInstanceId;
+            innerDomHelper = new DomHelper(engine.SendSLNetMessages, instanceId.ModuleId);
 
-				var instanceId = context.ContextId as DomInstanceId;
-				innerDomHelper = new DomHelper(engine.SendSLNetMessages, instanceId.ModuleId);
-				string businessKey = GetBusinessKey(engine, keyField, instanceId);
+            try
+            {
+                var process = engine.GetScriptParam("process").Value;
+                var transition = engine.GetScriptParam("transition").Value;
+                var keyField = engine.GetScriptParam("key").Value;
 
-				if (!String.IsNullOrWhiteSpace(businessKey))
-				{
-					innerDomHelper.DomInstances.DoStatusTransition(instanceId, transition);
-					ProcessHelper.PushToken(process, businessKey, instanceId);
-				}
-			}
-			catch (Exception ex)
-			{
-				engine.GenerateInformation("Exception starting process: " + ex);
-			}
-		}
+                string businessKey = GetBusinessKey(engine, keyField, instanceId);
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1101:Prefix local calls with this", Justification = "Ignored")]
-		private string GetBusinessKey(IEngine engine, string keyField, DomInstanceId instanceId)
-		{
-			string businessKey = "default";
-			var dominstance = DomInstanceExposers.Id.Equal(instanceId);
-			var instance = innerDomHelper.DomInstances.Read(dominstance).First();
-			var instanceSet = false;
-			var keyFound = false;
+                if (!String.IsNullOrWhiteSpace(businessKey))
+                {
+                    innerDomHelper.DomInstances.DoStatusTransition(instanceId, transition);
+                    ProcessHelper.PushToken(process, businessKey, instanceId);
+                }
+            }
+            catch (Exception ex)
+            {
+                engine.GenerateInformation("Exception starting process: " + ex);
+            }
+        }
 
-			SectionDefinition sectionToUpdate = null;
-			FieldDescriptor fieldToUpdate = null;
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1101:Prefix local calls with this", Justification = "Ignored")]
+        private string GetBusinessKey(IEngine engine, string keyField, DomInstanceId instanceId)
+        {
+            string businessKey = "default";
+            var dominstance = DomInstanceExposers.Id.Equal(instanceId);
+            var instance = innerDomHelper.DomInstances.Read(dominstance).First();
+            var instanceSet = false;
+            var keyFound = false;
 
-			foreach (var section in instance.Sections)
-			{
-				Func<SectionDefinitionID, SectionDefinition> sectionDefinitionFunc = SetSectionDefinitionById;
-				section.Stitch(sectionDefinitionFunc);
+            SectionDefinition sectionToUpdate = null;
+            FieldDescriptor fieldToUpdate = null;
 
-				foreach (var field in section.FieldValues)
-				{
-					if (field.GetFieldDescriptor().Name.Contains("InstanceId"))
-					{
-						sectionToUpdate = section.GetSectionDefinition();
-						fieldToUpdate = field.GetFieldDescriptor();
-						instanceSet = true;
-					}
+            foreach (var section in instance.Sections)
+            {
+                Func<SectionDefinitionID, SectionDefinition> sectionDefinitionFunc = SetSectionDefinitionById;
+                section.Stitch(sectionDefinitionFunc);
 
-					if (field.GetFieldDescriptor().Name.Contains(keyField))
-					{
-						businessKey = field.Value.ToString();
-						keyFound = true;
-					}
+                foreach (var field in section.FieldValues)
+                {
+                    if (field.GetFieldDescriptor().Name.Contains("InstanceId"))
+                    {
+                        sectionToUpdate = section.GetSectionDefinition();
+                        fieldToUpdate = field.GetFieldDescriptor();
+                        instanceSet = true;
+                    }
 
-					if (keyFound && instanceSet)
-					{
-						break;
-					}
-				}
+                    if (field.GetFieldDescriptor().Name.Contains(keyField))
+                    {
+                        businessKey = field.Value.ToString();
+                        keyFound = true;
+                    }
 
-				if (keyFound && instanceSet)
-				{
-					break;
-				}
-			}
+                    if (keyFound && instanceSet)
+                    {
+                        break;
+                    }
+                }
 
-			if (sectionToUpdate == null || fieldToUpdate == null)
-			{
-				engine.GenerateInformation("Failed to find section/field for updating InstanceId");
-				return null;
-			}
+                if (keyFound && instanceSet)
+                {
+                    break;
+                }
+            }
 
-			instance.AddOrUpdateFieldValue(sectionToUpdate, fieldToUpdate, instanceId.Id.ToString());
-			innerDomHelper.DomInstances.Update(instance);
+            if (sectionToUpdate == null || fieldToUpdate == null)
+            {
+                engine.GenerateInformation("Failed to find section/field for updating InstanceId");
+                return null;
+            }
 
-			return businessKey;
-		}
+            instance.AddOrUpdateFieldValue(sectionToUpdate, fieldToUpdate, instanceId.Id.ToString());
+            innerDomHelper.DomInstances.Update(instance);
 
-		private SectionDefinition SetSectionDefinitionById(SectionDefinitionID sectionDefinitionId)
-		{
-			return this.innerDomHelper.SectionDefinitions.Read(SectionDefinitionExposers.ID.Equal(sectionDefinitionId)).First();
-		}
-	}
+            return businessKey;
+        }
+
+        private SectionDefinition SetSectionDefinitionById(SectionDefinitionID sectionDefinitionId)
+        {
+            return this.innerDomHelper.SectionDefinitions.Read(SectionDefinitionExposers.ID.Equal(sectionDefinitionId)).First();
+        }
+    }
 }
