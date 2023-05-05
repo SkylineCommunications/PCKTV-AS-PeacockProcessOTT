@@ -74,7 +74,7 @@ public class Script
     {
         var scriptName = "Start Touchstream Instance";
         var helper = new PaProfileLoadDomHelper(engine);
-		innerDomHelper = new DomHelper(engine.SendSLNetMessages, "process_automation");
+        innerDomHelper = new DomHelper(engine.SendSLNetMessages, "process_automation");
         var exceptionHelper = new ExceptionHelper(engine, innerDomHelper);
         engine.GenerateInformation($"START {scriptName}");
 
@@ -99,19 +99,27 @@ public class Script
                 engine.GenerateInformation("No touchstream instances found to provision, skipping");
             }
 
-            if (action == "provision" && peacockInstance.StatusId == "ready")
+            try
             {
-                helper.TransitionState("ready_to_inprogress");
+                if (action == "provision" && peacockInstance.StatusId == "ready")
+                {
+                    helper.TransitionState("ready_to_inprogress");
+                }
+                else if (action == "deactivate" && peacockInstance.StatusId == "deactivate")
+                {
+                    helper.TransitionState("deactivate_to_deactivating");
+                }
+                else if (action == "reprovision" && peacockInstance.StatusId == "reprovision")
+                {
+                    helper.TransitionState("reprovision_to_inprogress");
+                }
             }
-            else if (action == "deactivate" && peacockInstance.StatusId == "deactivate")
+            catch (Exception ex)
             {
-                helper.TransitionState("deactivate_to_deactivating");
-            }
-            else if (action == "reprovision" && peacockInstance.StatusId == "reprovision")
-            {
-                helper.TransitionState("reprovision_to_inprogress");
+                engine.GenerateInformation("Faile to transition state of main process: " + ex);
             }
 
+            engine.GenerateInformation("End of Starting Touchstream Process");
             helper.ReturnSuccess();
         }
         catch (Exception ex)
