@@ -72,7 +72,8 @@ public class Script
     /// <param name="engine">Link with SLAutomation process.</param>
     public void Run(Engine engine)
     {
-        var scriptName = "Verify Touchstream Instance";
+        var scriptName = "VPA_PCK_Verify Touchstream Provision";
+        var provisionName = String.Empty;
         var helper = new PaProfileLoadDomHelper(engine);
         var domHelper = new DomHelper(engine.SendSLNetMessages, "process_automation");
         var exceptionHelper = new ExceptionHelper(engine, domHelper);
@@ -81,6 +82,7 @@ public class Script
         try
         {
             var touchstreamInstanceId = helper.GetParameterValue<Guid>("Touchstream (Peacock)");
+            provisionName = helper.GetParameterValue<string>("Provision Name (Peacock)");
 
             var touchstreamFilter = DomInstanceExposers.Id.Equal(new DomInstanceId(touchstreamInstanceId));
             var touchstreamInstances = domHelper.DomInstances.Read(touchstreamFilter);
@@ -128,8 +130,8 @@ public class Script
 
                 var log = new Log
                 {
-                    AffectedItem = "SLE Event Manager - LEM",
-                    AffectedService = "Peacock Main Process",
+                    AffectedItem = scriptName,
+                    AffectedService = provisionName,
                     Timestamp = DateTime.Now,
                     ErrorCode = new ErrorCode
                     {
@@ -152,15 +154,15 @@ public class Script
 
             var log = new Log
             {
-                AffectedItem = "SLE Event Manager - LEM",
-                AffectedService = "Peacock Main Process",
+                AffectedItem = scriptName,
+                AffectedService = provisionName,
                 Timestamp = DateTime.Now,
                 ErrorCode = new ErrorCode
                 {
                     ConfigurationItem = scriptName + " Script",
                     ConfigurationType = ErrorCode.ConfigType.Automation,
                     Severity = ErrorCode.SeverityType.Major,
-                    Source = "Run() method - exception",
+                    Source = "Run()",
                 },
             };
             exceptionHelper.ProcessException(ex, log);

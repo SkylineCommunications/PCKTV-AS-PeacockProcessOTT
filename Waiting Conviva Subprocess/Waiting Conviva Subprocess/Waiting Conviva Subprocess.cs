@@ -71,7 +71,8 @@ public class Script
     /// <param name="engine">Link with SLAutomation process.</param>
     public void Run(Engine engine)
     {
-        var scriptName = "Waiting Conviva Subprocess";
+        var scriptName = "PA_PCK_Waiting Conviva Subprocess";
+        var provisionName = String.Empty;
         var helper = new PaProfileLoadDomHelper(engine);
         var domHelper = new DomHelper(engine.SendSLNetMessages, "process_automation");
         var exceptionHelper = new ExceptionHelper(engine, domHelper);
@@ -79,6 +80,7 @@ public class Script
         try
         {
             var subdomInstance = helper.GetParameterValue<Guid>("Conviva (Peacock)");
+            provisionName = helper.GetParameterValue<string>("Provision Name (Peacock)");
 
             var filter = DomInstanceExposers.Id.Equal(new DomInstanceId(subdomInstance));
             var convivaInstances = domHelper.DomInstances.Read(filter);
@@ -124,8 +126,8 @@ public class Script
                 engine.GenerateInformation("Conviva took too long to complete");
                 var log = new Log
                 {
-                    AffectedItem = "SLE Event Manager - LEM",
-                    AffectedService = "Peacock Main Process",
+                    AffectedItem = scriptName,
+                    AffectedService = provisionName,
                     Timestamp = DateTime.Now,
                     ErrorCode = new ErrorCode
                     {
@@ -147,15 +149,15 @@ public class Script
 
             var log = new Log
             {
-                AffectedItem = "SLE Event Manager - LEM",
-                AffectedService = "Peacock Main Process",
+                AffectedItem = scriptName,
+                AffectedService = provisionName,
                 Timestamp = DateTime.Now,
                 ErrorCode = new ErrorCode
                 {
                     ConfigurationItem = scriptName + " Script",
                     ConfigurationType = ErrorCode.ConfigType.Automation,
                     Severity = ErrorCode.SeverityType.Major,
-                    Source = "Run() method - exception",
+                    Source = "Run()",
                 },
             };
             exceptionHelper.ProcessException(ex, log);

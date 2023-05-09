@@ -71,7 +71,8 @@ public class Script
     /// <param name="engine">Link with SLAutomation process.</param>
     public void Run(Engine engine)
     {
-        var scriptName = "Start TAG Subprocess";
+        var scriptName = "PA_PCK_Start TAG Subprocess";
+        var provisionName = String.Empty;
         var helper = new PaProfileLoadDomHelper(engine);
         innerDomHelper = new DomHelper(engine.SendSLNetMessages, "process_automation");
         var exceptionHelper = new ExceptionHelper(engine, innerDomHelper);
@@ -81,6 +82,7 @@ public class Script
             var tagInstanceId = helper.GetParameterValue<Guid>("TAG (Peacock)");
             var peacockInstanceId = helper.GetParameterValue<string>("InstanceId (Peacock)");
             var action = helper.GetParameterValue<string>("Action (Peacock)");
+            provisionName = helper.GetParameterValue<string>("Provision Name (Peacock)");
             engine.Log("Starting TAG Subprocess");
 
             var tagFilter = DomInstanceExposers.Id.Equal(new DomInstanceId(tagInstanceId));
@@ -119,15 +121,15 @@ public class Script
 
                 var log = new Log
                 {
-                    AffectedItem = "SLE Event Manager - LEM",
-                    AffectedService = "Peacock Main Process",
+                    AffectedItem = scriptName,
+                    AffectedService = provisionName,
                     Timestamp = DateTime.Now,
                     ErrorCode = new ErrorCode
                     {
                         ConfigurationItem = scriptName + " Script",
                         ConfigurationType = ErrorCode.ConfigType.Automation,
                         Severity = ErrorCode.SeverityType.Major,
-                        Source = "Run() method - inner exception",
+                        Source = "Run() - inner exception",
                     },
                 };
                 exceptionHelper.ProcessException(ex, log);
@@ -141,15 +143,15 @@ public class Script
 
             var log = new Log
             {
-                AffectedItem = "SLE Event Manager - LEM",
-                AffectedService = "Peacock Main Process",
+                AffectedItem = scriptName,
+                AffectedService = provisionName,
                 Timestamp = DateTime.Now,
                 ErrorCode = new ErrorCode
                 {
                     ConfigurationItem = scriptName + " Script",
                     ConfigurationType = ErrorCode.ConfigType.Automation,
                     Severity = ErrorCode.SeverityType.Major,
-                    Source = "Run() method - exception",
+                    Source = "Run()",
                 },
             };
             exceptionHelper.ProcessException(ex, log);

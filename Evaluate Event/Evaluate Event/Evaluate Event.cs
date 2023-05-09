@@ -74,7 +74,8 @@ namespace PA.ProfileLoadDomTemplate
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S125:Sections of code should not be commented out", Justification = "Ignored")]
         public void Run(Engine engine)
         {
-            var scriptName = "Evaluate Event";
+            var scriptName = "PA_PCK_Evaluate Event";
+			var provisionName = String.Empty;
             var helper = new PaProfileLoadDomHelper(engine);
             var domHelper = new DomHelper(engine.SendSLNetMessages, "process_automation");
             var exceptionHelper = new ExceptionHelper(engine, domHelper);
@@ -125,7 +126,7 @@ namespace PA.ProfileLoadDomTemplate
                 // check statuses via tagInstance.StatusId == "complete" etc
                 // Thread.Sleep(5000);
                 var sourceElement = helper.GetParameterValue<string>("Source Element (Peacock)");
-                var provisionName = helper.GetParameterValue<string>("Provision Name (Peacock)");
+                provisionName = helper.GetParameterValue<string>("Provision Name (Peacock)");
                 if (!string.IsNullOrWhiteSpace(sourceElement))
                 {
                     ExternalRequest evtmgrUpdate = new ExternalRequest
@@ -156,15 +157,15 @@ namespace PA.ProfileLoadDomTemplate
 
                 var log = new Log
                 {
-                    AffectedItem = "SLE Event Manager - LEM",
-                    AffectedService = "Peacock Main Process",
+                    AffectedItem = scriptName,
+                    AffectedService = provisionName,
                     Timestamp = DateTime.Now,
                     ErrorCode = new ErrorCode
                     {
                         ConfigurationItem = scriptName + " Script",
                         ConfigurationType = ErrorCode.ConfigType.Automation,
                         Severity = ErrorCode.SeverityType.Major,
-                        Source = "Run() method - exception",
+                        Source = "Run()",
                     },
                 };
                 exceptionHelper.ProcessException(ex, log);

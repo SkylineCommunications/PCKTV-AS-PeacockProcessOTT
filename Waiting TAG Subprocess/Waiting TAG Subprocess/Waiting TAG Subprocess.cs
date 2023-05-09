@@ -72,7 +72,8 @@ public class Script
     /// <param name="engine">Link with SLAutomation process.</param>
     public void Run(Engine engine)
     {
-        var scriptName = "Waiting TAG Subprocess";
+        var scriptName = "PA_PCK_Waiting TAG Subprocess";
+        var provisionName = String.Empty;
         var helper = new PaProfileLoadDomHelper(engine);
         var domHelper = new DomHelper(engine.SendSLNetMessages, "process_automation");
         var exceptionHelper = new ExceptionHelper(engine, domHelper);
@@ -81,6 +82,7 @@ public class Script
         {
             // gathering instance id from parent is the challenge
             var tagInstanceId = helper.GetParameterValue<Guid>("TAG (Peacock)");
+            provisionName = helper.GetParameterValue<string>("Provision Name (Peacock)");
             var tagFilter = DomInstanceExposers.Id.Equal(new DomInstanceId(tagInstanceId));
             var tagInstances = domHelper.DomInstances.Read(tagFilter);
 
@@ -135,8 +137,8 @@ public class Script
                 engine.GenerateInformation("Verifying TAG subprocess took longer than expected and could not verify.");
                 var log = new Log
                 {
-                    AffectedItem = "SLE Event Manager - LEM",
-                    AffectedService = "Peacock Main Process",
+                    AffectedItem = scriptName,
+                    AffectedService = provisionName,
                     Timestamp = DateTime.Now,
                     ErrorCode = new ErrorCode
                     {
@@ -158,15 +160,15 @@ public class Script
 
             var log = new Log
             {
-                AffectedItem = "SLE Event Manager - LEM",
-                AffectedService = "Peacock Main Process",
+                AffectedItem = scriptName,
+                AffectedService = provisionName,
                 Timestamp = DateTime.Now,
                 ErrorCode = new ErrorCode
                 {
                     ConfigurationItem = scriptName + " Script",
                     ConfigurationType = ErrorCode.ConfigType.Automation,
                     Severity = ErrorCode.SeverityType.Major,
-                    Source = "Run() method - exception",
+                    Source = "Run()",
                 },
             };
             exceptionHelper.ProcessException(ex, log);

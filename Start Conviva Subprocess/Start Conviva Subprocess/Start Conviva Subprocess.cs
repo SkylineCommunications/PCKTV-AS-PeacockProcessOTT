@@ -69,7 +69,8 @@ public class Script
     /// <param name="engine">Link with SLAutomation process.</param>
     public void Run(Engine engine)
     {
-        var scriptName = "Start Conviva Subprocess";
+        var scriptName = "PA_PCK_Start Conviva Subprocess";
+        var provisionName = String.Empty;
         var helper = new PaProfileLoadDomHelper(engine);
         var domHelper = new DomHelper(engine.SendSLNetMessages, "process_automation");
         var exceptionHelper = new ExceptionHelper(engine, domHelper);
@@ -79,6 +80,7 @@ public class Script
             var subdomInstance = helper.GetParameterValue<Guid>("Conviva (Peacock)");
             var maindomInstance = helper.GetParameterValue<string>("InstanceId (Peacock)");
             var action = helper.GetParameterValue<string>("Action (Peacock)");
+            provisionName = helper.GetParameterValue<string>("Provision Name (Peacock)");
             engine.Log("Starting Conviva Subprocess");
 
             var subFilter = DomInstanceExposers.Id.Equal(new DomInstanceId(subdomInstance));
@@ -130,15 +132,15 @@ public class Script
 
             var log = new Log
             {
-                AffectedItem = "SLE Event Manager - LEM",
-                AffectedService = "Peacock Main Process",
+                AffectedItem = scriptName,
+                AffectedService = provisionName,
                 Timestamp = DateTime.Now,
                 ErrorCode = new ErrorCode
                 {
                     ConfigurationItem = scriptName + " Script",
                     ConfigurationType = ErrorCode.ConfigType.Automation,
                     Severity = ErrorCode.SeverityType.Major,
-                    Source = "Run() method - exception",
+                    Source = "Run()",
                 },
             };
             exceptionHelper.ProcessException(ex, log);

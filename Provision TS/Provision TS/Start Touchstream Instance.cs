@@ -72,9 +72,10 @@ public class Script
     /// <param name="engine">Link with SLAutomation process.</param>
     public void Run(Engine engine)
     {
-        var scriptName = "Start Touchstream Instance";
+        var scriptName = "PA_PCK_Start Touchstream Instance";
+        var provisionName = String.Empty;
         var helper = new PaProfileLoadDomHelper(engine);
-		innerDomHelper = new DomHelper(engine.SendSLNetMessages, "process_automation");
+        innerDomHelper = new DomHelper(engine.SendSLNetMessages, "process_automation");
         var exceptionHelper = new ExceptionHelper(engine, innerDomHelper);
         engine.GenerateInformation($"START {scriptName}");
 
@@ -83,6 +84,7 @@ public class Script
             var touchstreamInstance = helper.GetParameterValue<Guid>("Touchstream (Peacock)");
             var peacockInstanceId = helper.GetParameterValue<string>("InstanceId (Peacock)");
             var action = helper.GetParameterValue<string>("Action (Peacock)");
+            provisionName = helper.GetParameterValue<string>("Provision Name (Peacock)");
             var peacockFilter = DomInstanceExposers.Id.Equal(new DomInstanceId(Guid.Parse(peacockInstanceId)));
             var peacockInstance = innerDomHelper.DomInstances.Read(peacockFilter).First();
             engine.Log("Starting Touchstream Subprocess");
@@ -120,15 +122,15 @@ public class Script
 
             var log = new Log
             {
-                AffectedItem = "SLE Event Manager - LEM",
-                AffectedService = "Peacock Main Process",
+                AffectedItem = scriptName,
+                AffectedService = provisionName,
                 Timestamp = DateTime.Now,
                 ErrorCode = new ErrorCode
                 {
                     ConfigurationItem = scriptName + " Script",
                     ConfigurationType = ErrorCode.ConfigType.Automation,
                     Severity = ErrorCode.SeverityType.Major,
-                    Source = "Run() method - exception",
+                    Source = "Run()",
                 },
             };
             exceptionHelper.ProcessException(ex, log);
