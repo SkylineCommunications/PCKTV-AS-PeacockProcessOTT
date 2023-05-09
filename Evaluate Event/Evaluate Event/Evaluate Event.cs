@@ -125,7 +125,7 @@ namespace PA.ProfileLoadDomTemplate
                 // check statuses via tagInstance.StatusId == "complete" etc
                 // Thread.Sleep(5000);
                 var sourceElement = helper.GetParameterValue<string>("Source Element (Peacock)");
-                var provisionName = helper.GetParameterValue<string>("Provision Name (Peacock)");
+                var provisionName = helper.GetParameterValue<string>("Event ID (Peacock)");
                 if (!string.IsNullOrWhiteSpace(sourceElement))
                 {
                     ExternalRequest evtmgrUpdate = new ExternalRequest
