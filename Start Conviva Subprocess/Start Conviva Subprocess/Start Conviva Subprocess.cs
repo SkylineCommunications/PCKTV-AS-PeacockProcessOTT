@@ -78,7 +78,6 @@ public class Script
         try
         {
             var subdomInstance = helper.GetParameterValue<Guid>("Conviva (Peacock)");
-            var maindomInstance = helper.GetParameterValue<string>("InstanceId (Peacock)");
             var action = helper.GetParameterValue<string>("Action (Peacock)");
             provisionName = helper.GetParameterValue<string>("Provision Name (Peacock)");
             engine.Log("Starting Conviva Subprocess");
@@ -94,9 +93,6 @@ public class Script
 
             var subInstance = subInstances.First();
 
-            var mainFilter = DomInstanceExposers.Id.Equal(new DomInstanceId(Guid.Parse(maindomInstance)));
-            var mainInstance = domHelper.DomInstances.Read(mainFilter).First();
-            engine.GenerateInformation("status of main process: " + mainInstance.StatusId);
             if (action == "provision")
             {
                 domHelper.DomInstances.ExecuteAction(subInstance.ID, "provision");
@@ -114,15 +110,7 @@ public class Script
                 domHelper.DomInstances.ExecuteAction(subInstance.ID, "complete-provision");
             }
 
-            if (mainInstance.StatusId == "ready")
-            {
-                helper.TransitionState("ready_to_inprogress");
-            }
-            else if (mainInstance.StatusId == "reprovision")
-            {
-                helper.TransitionState("reprovision_to_inprogress");
-            }
-
+			engine.GenerateInformation("Started Conviva Instance");
             helper.ReturnSuccess();
         }
         catch (Exception ex)

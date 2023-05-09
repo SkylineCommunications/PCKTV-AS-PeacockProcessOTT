@@ -101,19 +101,7 @@ public class Script
                 engine.GenerateInformation("No touchstream instances found to provision, skipping");
             }
 
-            if (action == "provision" && peacockInstance.StatusId == "ready")
-            {
-                helper.TransitionState("ready_to_inprogress");
-            }
-            else if (action == "deactivate" && peacockInstance.StatusId == "deactivate")
-            {
-                helper.TransitionState("deactivate_to_deactivating");
-            }
-            else if (action == "reprovision" && peacockInstance.StatusId == "reprovision")
-            {
-                helper.TransitionState("reprovision_to_inprogress");
-            }
-
+            engine.GenerateInformation("End of Starting Touchstream Process");
             helper.ReturnSuccess();
         }
         catch (Exception ex)
