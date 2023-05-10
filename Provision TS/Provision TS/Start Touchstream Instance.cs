@@ -82,11 +82,8 @@ public class Script
         try
         {
             var touchstreamInstance = helper.GetParameterValue<Guid>("Touchstream (Peacock)");
-            var peacockInstanceId = helper.GetParameterValue<string>("InstanceId (Peacock)");
             var action = helper.GetParameterValue<string>("Action (Peacock)");
             provisionName = helper.GetParameterValue<string>("Provision Name (Peacock)");
-            var peacockFilter = DomInstanceExposers.Id.Equal(new DomInstanceId(Guid.Parse(peacockInstanceId)));
-            var peacockInstance = innerDomHelper.DomInstances.Read(peacockFilter).First();
             engine.Log("Starting Touchstream Subprocess");
 
             var tsfilter = DomInstanceExposers.Id.Equal(new DomInstanceId(touchstreamInstance));

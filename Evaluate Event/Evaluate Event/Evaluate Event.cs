@@ -75,12 +75,12 @@ namespace PA.ProfileLoadDomTemplate
         public void Run(Engine engine)
         {
             var scriptName = "PA_PCK_Evaluate Event";
-			var provisionName = String.Empty;
-            var helper = new PaProfileLoadDomHelper(engine);
+			
+			var helper = new PaProfileLoadDomHelper(engine);
             var domHelper = new DomHelper(engine.SendSLNetMessages, "process_automation");
             var exceptionHelper = new ExceptionHelper(engine, domHelper);
-
-            var maindomInstance = helper.GetParameterValue<string>("InstanceId (Peacock)");
+			var provisionName = helper.GetParameterValue<string>("Provision Name (Peacock)");
+			var maindomInstance = helper.GetParameterValue<string>("InstanceId (Peacock)");
             var mainFilter = DomInstanceExposers.Id.Equal(new DomInstanceId(Guid.Parse(maindomInstance)));
             var mainInstance = domHelper.DomInstances.Read(mainFilter).First();
 
@@ -126,7 +126,7 @@ namespace PA.ProfileLoadDomTemplate
                 // check statuses via tagInstance.StatusId == "complete" etc
                 // Thread.Sleep(5000);
                 var sourceElement = helper.GetParameterValue<string>("Source Element (Peacock)");
-                provisionName = helper.GetParameterValue<string>("Provision Name (Peacock)");
+                var eventId = helper.GetParameterValue<string>("Event ID (Peacock)");
                 if (!string.IsNullOrWhiteSpace(sourceElement))
                 {
                     ExternalRequest evtmgrUpdate = new ExternalRequest
@@ -134,7 +134,7 @@ namespace PA.ProfileLoadDomTemplate
                         Type = "Process Automation",
                         ProcessResponse = new ProcessResponse
                         {
-                            EventName = provisionName,
+                            EventName = eventId,
                             Peacock = new PeacockResponse
                             {
                                 Status = mainInstance.StatusId == "in_progress" ? "Active" : "Complete",
