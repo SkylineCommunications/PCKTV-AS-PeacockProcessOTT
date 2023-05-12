@@ -64,59 +64,59 @@ using Skyline.DataMiner.Net.Sections;
 /// </summary>
 public class Script
 {
-    /// <summary>
-    /// The Script entry point.
-    /// </summary>
-    /// <param name="engine">Link with SLAutomation process.</param>
-    public void Run(Engine engine)
-    {
-        var scriptName = "PA_PCK_Start Touchstream Instance";
-        var provisionName = String.Empty;
-        var helper = new PaProfileLoadDomHelper(engine);
-        var domHelper = new DomHelper(engine.SendSLNetMessages, "process_automation");
-        var exceptionHelper = new ExceptionHelper(engine, domHelper);
-        engine.GenerateInformation($"START {scriptName}");
+	/// <summary>
+	/// The Script entry point.
+	/// </summary>
+	/// <param name="engine">Link with SLAutomation process.</param>
+	public void Run(Engine engine)
+	{
+		var scriptName = "PA_PCK_Start Touchstream Instance";
+		var provisionName = String.Empty;
+		var helper = new PaProfileLoadDomHelper(engine);
+		var domHelper = new DomHelper(engine.SendSLNetMessages, "process_automation");
+		var exceptionHelper = new ExceptionHelper(engine, domHelper);
+		engine.GenerateInformation($"START {scriptName}");
 
-        try
-        {
-            var touchstreamInstance = helper.GetParameterValue<Guid>("Touchstream (Peacock)");
-            var action = helper.GetParameterValue<string>("Action (Peacock)");
-            provisionName = helper.GetParameterValue<string>("Provision Name (Peacock)");
-            engine.Log("Starting Touchstream Subprocess");
+		try
+		{
+			var touchstreamInstance = helper.GetParameterValue<Guid>("Touchstream (Peacock)");
+			var action = helper.GetParameterValue<string>("Action (Peacock)");
+			provisionName = helper.GetParameterValue<string>("Provision Name (Peacock)");
+			engine.Log("Starting Touchstream Subprocess");
 
-            var tsfilter = DomInstanceExposers.Id.Equal(new DomInstanceId(touchstreamInstance));
-            var touchstreamInstances = domHelper.DomInstances.Read(tsfilter);
+			var tsfilter = DomInstanceExposers.Id.Equal(new DomInstanceId(touchstreamInstance));
+			var touchstreamInstances = domHelper.DomInstances.Read(tsfilter);
 
-            if (touchstreamInstances.Any())
-            {
-                domHelper.DomInstances.ExecuteAction(touchstreamInstances.First().ID, action);
-            }
-            else
-            {
-                engine.GenerateInformation("No touchstream instances found to provision, skipping");
-            }
+			if (touchstreamInstances.Any())
+			{
+				domHelper.DomInstances.ExecuteAction(touchstreamInstances.First().ID, action);
+			}
+			else
+			{
+				engine.GenerateInformation("No touchstream instances found to provision, skipping");
+			}
 
-            engine.GenerateInformation("End of Starting Touchstream Process");
-            helper.ReturnSuccess();
-        }
-        catch (Exception ex)
-        {
-            engine.Log("Error: " + ex);
+			engine.GenerateInformation("End of Starting Touchstream Process");
+			helper.ReturnSuccess();
+		}
+		catch (Exception ex)
+		{
+			engine.Log("Error: " + ex);
 
-            var log = new Log
-            {
-                AffectedItem = scriptName,
-                AffectedService = provisionName,
-                Timestamp = DateTime.Now,
-                ErrorCode = new ErrorCode
-                {
-                    ConfigurationItem = scriptName + " Script",
-                    ConfigurationType = ErrorCode.ConfigType.Automation,
-                    Severity = ErrorCode.SeverityType.Major,
-                    Source = "Run()",
-                },
-            };
-            exceptionHelper.ProcessException(ex, log);
-        }
-    }
+			var log = new Log
+			{
+				AffectedItem = scriptName,
+				AffectedService = provisionName,
+				Timestamp = DateTime.Now,
+				ErrorCode = new ErrorCode
+				{
+					ConfigurationItem = scriptName + " Script",
+					ConfigurationType = ErrorCode.ConfigType.Automation,
+					Severity = ErrorCode.SeverityType.Major,
+					Source = "Run()",
+				},
+			};
+			exceptionHelper.ProcessException(ex, log);
+		}
+	}
 }

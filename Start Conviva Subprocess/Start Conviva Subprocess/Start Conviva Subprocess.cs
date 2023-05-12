@@ -63,75 +63,75 @@ using Skyline.DataMiner.Net.Apps.DataMinerObjectModel;
 /// </summary>
 public class Script
 {
-    /// <summary>
-    /// The Script entry point.
-    /// </summary>
-    /// <param name="engine">Link with SLAutomation process.</param>
-    public void Run(Engine engine)
-    {
-        var scriptName = "PA_PCK_Start Conviva Subprocess";
-        var provisionName = String.Empty;
-        var helper = new PaProfileLoadDomHelper(engine);
-        var domHelper = new DomHelper(engine.SendSLNetMessages, "process_automation");
-        var exceptionHelper = new ExceptionHelper(engine, domHelper);
+	/// <summary>
+	/// The Script entry point.
+	/// </summary>
+	/// <param name="engine">Link with SLAutomation process.</param>
+	public void Run(Engine engine)
+	{
+		var scriptName = "PA_PCK_Start Conviva Subprocess";
+		var provisionName = String.Empty;
+		var helper = new PaProfileLoadDomHelper(engine);
+		var domHelper = new DomHelper(engine.SendSLNetMessages, "process_automation");
+		var exceptionHelper = new ExceptionHelper(engine, domHelper);
 
-        try
-        {
-            var subdomInstance = helper.GetParameterValue<Guid>("Conviva (Peacock)");
-            var action = helper.GetParameterValue<string>("Action (Peacock)");
-            provisionName = helper.GetParameterValue<string>("Provision Name (Peacock)");
-            engine.Log("Starting Conviva Subprocess");
+		try
+		{
+			var subdomInstance = helper.GetParameterValue<Guid>("Conviva (Peacock)");
+			var action = helper.GetParameterValue<string>("Action (Peacock)");
+			provisionName = helper.GetParameterValue<string>("Provision Name (Peacock)");
+			engine.Log("Starting Conviva Subprocess");
 
-            var subFilter = DomInstanceExposers.Id.Equal(new DomInstanceId(subdomInstance));
-            var subInstances = domHelper.DomInstances.Read(subFilter);
-            if (subInstances.Count == 0)
-            {
-                engine.GenerateInformation("No Conviva Instance found, skipping");
-                helper.ReturnSuccess();
-                return;
-            }
+			var subFilter = DomInstanceExposers.Id.Equal(new DomInstanceId(subdomInstance));
+			var subInstances = domHelper.DomInstances.Read(subFilter);
+			if (subInstances.Count == 0)
+			{
+				engine.GenerateInformation("No Conviva Instance found, skipping");
+				helper.ReturnSuccess();
+				return;
+			}
 
-            var subInstance = subInstances.First();
+			var subInstance = subInstances.First();
 
-            if (action == "provision")
-            {
-                domHelper.DomInstances.ExecuteAction(subInstance.ID, "provision");
-            }
-            else if (action == "reprovision")
-            {
-                domHelper.DomInstances.ExecuteAction(subInstance.ID, "reprovision");
-            }
-            else if (action == "deactivate")
-            {
-                domHelper.DomInstances.ExecuteAction(subInstance.ID, "deactivate");
-            }
-            else if (action == "complete-provision")
-            {
-                domHelper.DomInstances.ExecuteAction(subInstance.ID, "complete-provision");
-            }
+			if (action == "provision")
+			{
+				domHelper.DomInstances.ExecuteAction(subInstance.ID, "provision");
+			}
+			else if (action == "reprovision")
+			{
+				domHelper.DomInstances.ExecuteAction(subInstance.ID, "reprovision");
+			}
+			else if (action == "deactivate")
+			{
+				domHelper.DomInstances.ExecuteAction(subInstance.ID, "deactivate");
+			}
+			else if (action == "complete-provision")
+			{
+				domHelper.DomInstances.ExecuteAction(subInstance.ID, "complete-provision");
+			}
 
-            engine.GenerateInformation("Started Conviva Instance");
-            helper.ReturnSuccess();
-        }
-        catch (Exception ex)
-        {
-            engine.Log("Error: " + ex);
-            helper.Log($"Exception while running script {scriptName}: {ex}", PaLogLevel.Error);
+			engine.GenerateInformation("Started Conviva Instance");
+			helper.ReturnSuccess();
+		}
+		catch (Exception ex)
+		{
+			engine.Log("Error: " + ex);
+			helper.Log($"Exception while running script {scriptName}: {ex}", PaLogLevel.Error);
 
-            var log = new Log
-            {
-                AffectedItem = scriptName,
-                AffectedService = provisionName,
-                Timestamp = DateTime.Now,
-                ErrorCode = new ErrorCode
-                {
-                    ConfigurationItem = scriptName + " Script",
-                    ConfigurationType = ErrorCode.ConfigType.Automation,
-                    Severity = ErrorCode.SeverityType.Major,
-                    Source = "Run()",
-                },
-            };
-            exceptionHelper.ProcessException(ex, log);
-        }
-    }
+			var log = new Log
+			{
+				AffectedItem = scriptName,
+				AffectedService = provisionName,
+				Timestamp = DateTime.Now,
+				ErrorCode = new ErrorCode
+				{
+					ConfigurationItem = scriptName + " Script",
+					ConfigurationType = ErrorCode.ConfigType.Automation,
+					Severity = ErrorCode.SeverityType.Major,
+					Source = "Run()",
+				},
+			};
+			exceptionHelper.ProcessException(ex, log);
+		}
+	}
 }

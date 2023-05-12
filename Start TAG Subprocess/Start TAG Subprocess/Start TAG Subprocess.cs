@@ -63,124 +63,124 @@ using Skyline.DataMiner.Net.Sections;
 /// </summary>
 public class Script
 {
-    private DomHelper innerDomHelper;
+	private DomHelper innerDomHelper;
 
-    /// <summary>
-    /// The Script entry point.
-    /// </summary>
-    /// <param name="engine">Link with SLAutomation process.</param>
-    public void Run(Engine engine)
-    {
-        var scriptName = "PA_PCK_Start TAG Subprocess";
-        var provisionName = String.Empty;
-        var helper = new PaProfileLoadDomHelper(engine);
-        innerDomHelper = new DomHelper(engine.SendSLNetMessages, "process_automation");
-        var exceptionHelper = new ExceptionHelper(engine, innerDomHelper);
+	/// <summary>
+	/// The Script entry point.
+	/// </summary>
+	/// <param name="engine">Link with SLAutomation process.</param>
+	public void Run(Engine engine)
+	{
+		var scriptName = "PA_PCK_Start TAG Subprocess";
+		var provisionName = String.Empty;
+		var helper = new PaProfileLoadDomHelper(engine);
+		innerDomHelper = new DomHelper(engine.SendSLNetMessages, "process_automation");
+		var exceptionHelper = new ExceptionHelper(engine, innerDomHelper);
 
-        try
-        {
-            var tagInstanceId = helper.GetParameterValue<Guid>("TAG (Peacock)");
-            var peacockInstanceId = helper.GetParameterValue<string>("InstanceId (Peacock)");
-            var action = helper.GetParameterValue<string>("Action (Peacock)");
-            provisionName = helper.GetParameterValue<string>("Provision Name (Peacock)");
-            engine.Log("Starting TAG Subprocess");
+		try
+		{
+			var tagInstanceId = helper.GetParameterValue<Guid>("TAG (Peacock)");
+			var peacockInstanceId = helper.GetParameterValue<string>("InstanceId (Peacock)");
+			var action = helper.GetParameterValue<string>("Action (Peacock)");
+			provisionName = helper.GetParameterValue<string>("Provision Name (Peacock)");
+			engine.Log("Starting TAG Subprocess");
 
-            var tagFilter = DomInstanceExposers.Id.Equal(new DomInstanceId(tagInstanceId));
-            var tagInstances = innerDomHelper.DomInstances.Read(tagFilter);
+			var tagFilter = DomInstanceExposers.Id.Equal(new DomInstanceId(tagInstanceId));
+			var tagInstances = innerDomHelper.DomInstances.Read(tagFilter);
 
-            if (tagInstances.Any())
-            {
-                ExecuteActionOnInstance(action, tagInstances.First());
-            }
-            else
-            {
-                engine.GenerateInformation("No tag instances found to provision, skipping");
-            }
+			if (tagInstances.Any())
+			{
+				ExecuteActionOnInstance(action, tagInstances.First());
+			}
+			else
+			{
+				engine.GenerateInformation("No tag instances found to provision, skipping");
+			}
 
-            var peacockFilter = DomInstanceExposers.Id.Equal(new DomInstanceId(Guid.Parse(peacockInstanceId)));
-            var peacockInstance = innerDomHelper.DomInstances.Read(peacockFilter).First();
-            try
-            {
-                if (action == "provision" && peacockInstance.StatusId == "ready")
-                {
-                    helper.TransitionState("ready_to_inprogress");
-                }
-                else if (action == "deactivate" && peacockInstance.StatusId == "deactivate")
-                {
-                    helper.TransitionState("deactivate_to_deactivating");
-                }
-                else if (action == "reprovision" && peacockInstance.StatusId == "reprovision")
-                {
-                    helper.TransitionState("reprovision_to_inprogress");
-                }
-            }
-            catch (Exception ex)
-            {
-                engine.GenerateInformation("Failed to transition main state in Start TAG Subprocess: " + ex);
-                helper.Log("Failed to transition main state in Start TAG Subprocess: " + ex, PaLogLevel.Error);
+			var peacockFilter = DomInstanceExposers.Id.Equal(new DomInstanceId(Guid.Parse(peacockInstanceId)));
+			var peacockInstance = innerDomHelper.DomInstances.Read(peacockFilter).First();
+			try
+			{
+				if (action == "provision" && peacockInstance.StatusId == "ready")
+				{
+					helper.TransitionState("ready_to_inprogress");
+				}
+				else if (action == "deactivate" && peacockInstance.StatusId == "deactivate")
+				{
+					helper.TransitionState("deactivate_to_deactivating");
+				}
+				else if (action == "reprovision" && peacockInstance.StatusId == "reprovision")
+				{
+					helper.TransitionState("reprovision_to_inprogress");
+				}
+			}
+			catch (Exception ex)
+			{
+				engine.GenerateInformation("Failed to transition main state in Start TAG Subprocess: " + ex);
+				helper.Log("Failed to transition main state in Start TAG Subprocess: " + ex, PaLogLevel.Error);
 
-                var log = new Log
-                {
-                    AffectedItem = scriptName,
-                    AffectedService = provisionName,
-                    Timestamp = DateTime.Now,
-                    ErrorCode = new ErrorCode
-                    {
-                        ConfigurationItem = scriptName + " Script",
-                        ConfigurationType = ErrorCode.ConfigType.Automation,
-                        Severity = ErrorCode.SeverityType.Major,
-                        Source = "Run() - inner exception",
-                    },
-                };
-                exceptionHelper.ProcessException(ex, log);
-            }
+				var log = new Log
+				{
+					AffectedItem = scriptName,
+					AffectedService = provisionName,
+					Timestamp = DateTime.Now,
+					ErrorCode = new ErrorCode
+					{
+						ConfigurationItem = scriptName + " Script",
+						ConfigurationType = ErrorCode.ConfigType.Automation,
+						Severity = ErrorCode.SeverityType.Major,
+						Source = "Run() - inner exception",
+					},
+				};
+				exceptionHelper.ProcessException(ex, log);
+			}
 
-            helper.ReturnSuccess();
-        }
-        catch (Exception ex)
-        {
-            engine.GenerateInformation("Error starting TAG process: " + ex);
+			helper.ReturnSuccess();
+		}
+		catch (Exception ex)
+		{
+			engine.GenerateInformation("Error starting TAG process: " + ex);
 
-            var log = new Log
-            {
-                AffectedItem = scriptName,
-                AffectedService = provisionName,
-                Timestamp = DateTime.Now,
-                ErrorCode = new ErrorCode
-                {
-                    ConfigurationItem = scriptName + " Script",
-                    ConfigurationType = ErrorCode.ConfigType.Automation,
-                    Severity = ErrorCode.SeverityType.Major,
-                    Source = "Run()",
-                },
-            };
-            exceptionHelper.ProcessException(ex, log);
-        }
-    }
+			var log = new Log
+			{
+				AffectedItem = scriptName,
+				AffectedService = provisionName,
+				Timestamp = DateTime.Now,
+				ErrorCode = new ErrorCode
+				{
+					ConfigurationItem = scriptName + " Script",
+					ConfigurationType = ErrorCode.ConfigType.Automation,
+					Severity = ErrorCode.SeverityType.Major,
+					Source = "Run()",
+				},
+			};
+			exceptionHelper.ProcessException(ex, log);
+		}
+	}
 
-    private void ExecuteActionOnInstance(string action, DomInstance instance)
-    {
-        foreach (var section in instance.Sections)
-        {
-            Func<SectionDefinitionID, SectionDefinition> sectionDefinitionFunc = SetSectionDefinitionById;
+	private void ExecuteActionOnInstance(string action, DomInstance instance)
+	{
+		foreach (var section in instance.Sections)
+		{
+			Func<SectionDefinitionID, SectionDefinition> sectionDefinitionFunc = SetSectionDefinitionById;
 
-            section.Stitch(sectionDefinitionFunc);
-            var fieldDescriptors = section.GetSectionDefinition().GetAllFieldDescriptors();
-            if (fieldDescriptors.Any(x => x.Name.Contains("Action")))
-            {
-                var fieldToUpdate = fieldDescriptors.First(x => x.Name.Contains("Action"));
-                instance.AddOrUpdateFieldValue(section.GetSectionDefinition(), fieldToUpdate, action);
-                innerDomHelper.DomInstances.Update(instance);
+			section.Stitch(sectionDefinitionFunc);
+			var fieldDescriptors = section.GetSectionDefinition().GetAllFieldDescriptors();
+			if (fieldDescriptors.Any(x => x.Name.Contains("Action")))
+			{
+				var fieldToUpdate = fieldDescriptors.First(x => x.Name.Contains("Action"));
+				instance.AddOrUpdateFieldValue(section.GetSectionDefinition(), fieldToUpdate, action);
+				innerDomHelper.DomInstances.Update(instance);
 
-                innerDomHelper.DomInstances.ExecuteAction(instance.ID, action);
+				innerDomHelper.DomInstances.ExecuteAction(instance.ID, action);
 
-                break;
-            }
-        }
-    }
+				break;
+			}
+		}
+	}
 
-    private SectionDefinition SetSectionDefinitionById(SectionDefinitionID sectionDefinitionId)
-    {
-        return innerDomHelper.SectionDefinitions.Read(SectionDefinitionExposers.ID.Equal(sectionDefinitionId)).First();
-    }
+	private SectionDefinition SetSectionDefinitionById(SectionDefinitionID sectionDefinitionId)
+	{
+		return innerDomHelper.SectionDefinitions.Read(SectionDefinitionExposers.ID.Equal(sectionDefinitionId)).First();
+	}
 }

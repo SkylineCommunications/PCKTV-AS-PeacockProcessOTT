@@ -27,3 +27,6 @@ dotnet_diagnostic.SA1121.severity = none
 
 # S3903: Types should be defined in named namespaces
 dotnet_diagnostic.S3903.severity = none
+
+# SA1027: Use tabs correctly
+dotnet_diagnostic.SA1027.severity = none

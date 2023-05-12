@@ -27,3 +27,6 @@ dotnet_diagnostic.SA1121.severity = none
 
 # SA1633: File should have header
 dotnet_diagnostic.SA1633.severity = none
+
+# Default severity for analyzer diagnostics with category 'StyleCop.CSharp.SpacingRules'
+dotnet_analyzer_diagnostic.category-StyleCop.CSharp.SpacingRules.severity = none

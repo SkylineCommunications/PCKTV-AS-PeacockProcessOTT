@@ -66,132 +66,132 @@ using Skyline.DataMiner.Net.Apps.DataMinerObjectModel;
 /// </summary>
 public class Script
 {
-    /// <summary>
-    /// The Script entry point.
-    /// </summary>
-    /// <param name="engine">Link with SLAutomation process.</param>
-    public void Run(Engine engine)
-    {
-        var scriptName = "VPA_PCK_Verify Touchstream Provision";
-        var provisionName = String.Empty;
-        var helper = new PaProfileLoadDomHelper(engine);
-        var domHelper = new DomHelper(engine.SendSLNetMessages, "process_automation");
-        var exceptionHelper = new ExceptionHelper(engine, domHelper);
-        engine.GenerateInformation($"START {scriptName}");
+	/// <summary>
+	/// The Script entry point.
+	/// </summary>
+	/// <param name="engine">Link with SLAutomation process.</param>
+	public void Run(Engine engine)
+	{
+		var scriptName = "VPA_PCK_Verify Touchstream Provision";
+		var provisionName = String.Empty;
+		var helper = new PaProfileLoadDomHelper(engine);
+		var domHelper = new DomHelper(engine.SendSLNetMessages, "process_automation");
+		var exceptionHelper = new ExceptionHelper(engine, domHelper);
+		engine.GenerateInformation($"START {scriptName}");
 
-        try
-        {
-            var touchstreamInstanceId = helper.GetParameterValue<Guid>("Touchstream (Peacock)");
-            provisionName = helper.GetParameterValue<string>("Provision Name (Peacock)");
+		try
+		{
+			var touchstreamInstanceId = helper.GetParameterValue<Guid>("Touchstream (Peacock)");
+			provisionName = helper.GetParameterValue<string>("Provision Name (Peacock)");
 
-            var touchstreamFilter = DomInstanceExposers.Id.Equal(new DomInstanceId(touchstreamInstanceId));
-            var touchstreamInstances = domHelper.DomInstances.Read(touchstreamFilter);
+			var touchstreamFilter = DomInstanceExposers.Id.Equal(new DomInstanceId(touchstreamInstanceId));
+			var touchstreamInstances = domHelper.DomInstances.Read(touchstreamFilter);
 
-            if (!touchstreamInstances.Any())
-            {
-                engine.GenerateInformation("No touchstream instances provisioned, skipping.");
-                helper.Log("Finished Waiting Touchstream Subprocess.", PaLogLevel.Debug);
-                helper.ReturnSuccess();
-                return;
-            }
+			if (!touchstreamInstances.Any())
+			{
+				engine.GenerateInformation("No touchstream instances provisioned, skipping.");
+				helper.Log("Finished Waiting Touchstream Subprocess.", PaLogLevel.Debug);
+				helper.ReturnSuccess();
+				return;
+			}
 
-            bool CheckStateChange()
-            {
-                try
-                {
-                    touchstreamInstances = domHelper.DomInstances.Read(touchstreamFilter);
-                    var touchstreamInstance = touchstreamInstances.First();
+			bool CheckStateChange()
+			{
+				try
+				{
+					touchstreamInstances = domHelper.DomInstances.Read(touchstreamFilter);
+					var touchstreamInstance = touchstreamInstances.First();
 
-                    engine.GenerateInformation(DateTime.Now + "|ts instance " + touchstreamInstance.ID.Id + " with status: " + touchstreamInstance.StatusId);
-                    if (touchstreamInstance.StatusId == "active" || touchstreamInstance.StatusId == "complete")
-                    {
-                        return true;
-                    }
+					engine.GenerateInformation(DateTime.Now + "|ts instance " + touchstreamInstance.ID.Id + " with status: " + touchstreamInstance.StatusId);
+					if (touchstreamInstance.StatusId == "active" || touchstreamInstance.StatusId == "complete")
+					{
+						return true;
+					}
 
-                    return false;
-                }
-                catch (Exception e)
-                {
-                    engine.GenerateInformation("Exception thrown while verifying the subprocess: " + e);
-                    throw;
-                }
-            }
+					return false;
+				}
+				catch (Exception e)
+				{
+					engine.GenerateInformation("Exception thrown while verifying the subprocess: " + e);
+					throw;
+				}
+			}
 
-            if (Retry(CheckStateChange, new TimeSpan(0, 10, 0)))
-            {
-                engine.GenerateInformation("Finished Verify Touchstream Provision.");
-                helper.Log("Finished Verify Touchstream Provision.", PaLogLevel.Debug);
-                helper.ReturnSuccess();
-            }
-            else
-            {
-                // failed to execute in time
-                engine.GenerateInformation("Verifying Touchstream provision took longer than expected and could not verify status.");
+			if (Retry(CheckStateChange, new TimeSpan(0, 10, 0)))
+			{
+				engine.GenerateInformation("Finished Verify Touchstream Provision.");
+				helper.Log("Finished Verify Touchstream Provision.", PaLogLevel.Debug);
+				helper.ReturnSuccess();
+			}
+			else
+			{
+				// failed to execute in time
+				engine.GenerateInformation("Verifying Touchstream provision took longer than expected and could not verify status.");
 
-                var log = new Log
-                {
-                    AffectedItem = scriptName,
-                    AffectedService = provisionName,
-                    Timestamp = DateTime.Now,
-                    ErrorCode = new ErrorCode
-                    {
-                        ConfigurationItem = scriptName + " Script",
-                        ConfigurationType = ErrorCode.ConfigType.Automation,
-                        Severity = ErrorCode.SeverityType.Warning,
-                        Source = "Retry condition",
-                        Description = "Verifying Touchstream provision took longer than expected and could not verify status.",
-                    },
-                };
-                exceptionHelper.GenerateLog(log);
+				var log = new Log
+				{
+					AffectedItem = scriptName,
+					AffectedService = provisionName,
+					Timestamp = DateTime.Now,
+					ErrorCode = new ErrorCode
+					{
+						ConfigurationItem = scriptName + " Script",
+						ConfigurationType = ErrorCode.ConfigType.Automation,
+						Severity = ErrorCode.SeverityType.Warning,
+						Source = "Retry condition",
+						Description = "Verifying Touchstream provision took longer than expected and could not verify status.",
+					},
+				};
+				exceptionHelper.GenerateLog(log);
 
-                helper.ReturnSuccess();
-            }
-        }
-        catch (Exception ex)
-        {
-            engine.GenerateInformation("Exception occurred in Verify Touchstream Provision: " + ex);
-            helper.Log("Exception occurred in Verify Touchstream Provision: " + ex, PaLogLevel.Error);
+				helper.ReturnSuccess();
+			}
+		}
+		catch (Exception ex)
+		{
+			engine.GenerateInformation("Exception occurred in Verify Touchstream Provision: " + ex);
+			helper.Log("Exception occurred in Verify Touchstream Provision: " + ex, PaLogLevel.Error);
 
-            var log = new Log
-            {
-                AffectedItem = scriptName,
-                AffectedService = provisionName,
-                Timestamp = DateTime.Now,
-                ErrorCode = new ErrorCode
-                {
-                    ConfigurationItem = scriptName + " Script",
-                    ConfigurationType = ErrorCode.ConfigType.Automation,
-                    Severity = ErrorCode.SeverityType.Major,
-                    Source = "Run()",
-                },
-            };
-            exceptionHelper.ProcessException(ex, log);
-        }
-    }
+			var log = new Log
+			{
+				AffectedItem = scriptName,
+				AffectedService = provisionName,
+				Timestamp = DateTime.Now,
+				ErrorCode = new ErrorCode
+				{
+					ConfigurationItem = scriptName + " Script",
+					ConfigurationType = ErrorCode.ConfigType.Automation,
+					Severity = ErrorCode.SeverityType.Major,
+					Source = "Run()",
+				},
+			};
+			exceptionHelper.ProcessException(ex, log);
+		}
+	}
 
-    /// <summary>
-    /// Retry until success or until timeout.
-    /// </summary>
-    /// <param name="func">Operation to retry.</param>
-    /// <param name="timeout">Max TimeSpan during which the operation specified in <paramref name="func"/> can be retried.</param>
-    /// <returns><c>true</c> if one of the retries succeeded within the specified <paramref name="timeout"/>. Otherwise <c>false</c>.</returns>
-    private static bool Retry(Func<bool> func, TimeSpan timeout)
-    {
-        bool success;
+	/// <summary>
+	/// Retry until success or until timeout.
+	/// </summary>
+	/// <param name="func">Operation to retry.</param>
+	/// <param name="timeout">Max TimeSpan during which the operation specified in <paramref name="func"/> can be retried.</param>
+	/// <returns><c>true</c> if one of the retries succeeded within the specified <paramref name="timeout"/>. Otherwise <c>false</c>.</returns>
+	private static bool Retry(Func<bool> func, TimeSpan timeout)
+	{
+		bool success;
 
-        Stopwatch sw = new Stopwatch();
-        sw.Start();
+		Stopwatch sw = new Stopwatch();
+		sw.Start();
 
-        do
-        {
-            success = func();
-            if (!success)
-            {
-                Thread.Sleep(3000);
-            }
-        }
-        while (!success && sw.Elapsed <= timeout);
+		do
+		{
+			success = func();
+			if (!success)
+			{
+				Thread.Sleep(3000);
+			}
+		}
+		while (!success && sw.Elapsed <= timeout);
 
-        return success;
-    }
+		return success;
+	}
 }
