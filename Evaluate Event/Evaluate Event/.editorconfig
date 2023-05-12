@@ -15,3 +15,9 @@ dotnet_diagnostic.SA1600.severity = none
 
 # SA1649: File name should match first type name
 dotnet_diagnostic.SA1649.severity = none
+
+# SA1633: File should have header
+dotnet_diagnostic.SA1633.severity = none
+
+# SA1027: Use tabs correctly
+dotnet_diagnostic.SA1027.severity = none

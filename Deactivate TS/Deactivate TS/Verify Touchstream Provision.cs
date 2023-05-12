@@ -175,7 +175,7 @@ public class Script
     /// <param name="func">Operation to retry.</param>
     /// <param name="timeout">Max TimeSpan during which the operation specified in <paramref name="func"/> can be retried.</param>
     /// <returns><c>true</c> if one of the retries succeeded within the specified <paramref name="timeout"/>. Otherwise <c>false</c>.</returns>
-    public static bool Retry(Func<bool> func, TimeSpan timeout)
+    private static bool Retry(Func<bool> func, TimeSpan timeout)
     {
         bool success;
 

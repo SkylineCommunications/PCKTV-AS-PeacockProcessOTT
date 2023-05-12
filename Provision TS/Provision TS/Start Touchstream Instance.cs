@@ -64,8 +64,6 @@ using Skyline.DataMiner.Net.Sections;
 /// </summary>
 public class Script
 {
-    private DomHelper innerDomHelper;
-
     /// <summary>
     /// The Script entry point.
     /// </summary>
@@ -75,8 +73,8 @@ public class Script
         var scriptName = "PA_PCK_Start Touchstream Instance";
         var provisionName = String.Empty;
         var helper = new PaProfileLoadDomHelper(engine);
-        innerDomHelper = new DomHelper(engine.SendSLNetMessages, "process_automation");
-        var exceptionHelper = new ExceptionHelper(engine, innerDomHelper);
+        var domHelper = new DomHelper(engine.SendSLNetMessages, "process_automation");
+        var exceptionHelper = new ExceptionHelper(engine, domHelper);
         engine.GenerateInformation($"START {scriptName}");
 
         try
@@ -87,11 +85,11 @@ public class Script
             engine.Log("Starting Touchstream Subprocess");
 
             var tsfilter = DomInstanceExposers.Id.Equal(new DomInstanceId(touchstreamInstance));
-            var touchstreamInstances = innerDomHelper.DomInstances.Read(tsfilter);
+            var touchstreamInstances = domHelper.DomInstances.Read(tsfilter);
 
             if (touchstreamInstances.Any())
             {
-                innerDomHelper.DomInstances.ExecuteAction(touchstreamInstances.First().ID, action);
+                domHelper.DomInstances.ExecuteAction(touchstreamInstances.First().ID, action);
             }
             else
             {
@@ -120,10 +118,5 @@ public class Script
             };
             exceptionHelper.ProcessException(ex, log);
         }
-    }
-
-    private SectionDefinition SetSectionDefinitionById(SectionDefinitionID sectionDefinitionId)
-    {
-        return innerDomHelper.SectionDefinitions.Read(SectionDefinitionExposers.ID.Equal(sectionDefinitionId)).First();
     }
 }

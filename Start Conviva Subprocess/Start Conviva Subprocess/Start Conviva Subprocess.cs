@@ -110,7 +110,7 @@ public class Script
                 domHelper.DomInstances.ExecuteAction(subInstance.ID, "complete-provision");
             }
 
-			engine.GenerateInformation("Started Conviva Instance");
+            engine.GenerateInformation("Started Conviva Instance");
             helper.ReturnSuccess();
         }
         catch (Exception ex)

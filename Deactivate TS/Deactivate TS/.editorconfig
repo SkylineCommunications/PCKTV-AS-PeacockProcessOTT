@@ -18,3 +18,6 @@ dotnet_diagnostic.S3903.severity = none
 
 # SA1633: File should have header
 dotnet_diagnostic.SA1633.severity = none
+
+# SA1121: Use built-in type alias
+dotnet_diagnostic.SA1121.severity = none
