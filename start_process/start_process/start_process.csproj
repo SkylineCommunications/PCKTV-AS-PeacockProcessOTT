@@ -57,16 +57,16 @@
       <Version>13.0.3</Version>
     </PackageReference>
     <PackageReference Include="Skyline.DataMiner.Core.DataMinerSystem.Automation">
-      <Version>1.1.0.3</Version>
+      <Version>1.1.0.5</Version>
     </PackageReference>
     <PackageReference Include="Skyline.DataMiner.Core.DataMinerSystem.Common">
-      <Version>1.1.0.3</Version>
+      <Version>1.1.0.5</Version>
     </PackageReference>
     <PackageReference Include="Skyline.DataMiner.Dev.Automation">
       <Version>10.3.5</Version>
     </PackageReference>
     <PackageReference Include="StyleCop.Analyzers">
-      <Version>1.1.118</Version>
+      <Version>1.2.0-beta.435</Version>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
@@ -74,7 +74,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties DisLinkedXmlFile="..\Provision Touchstream.xml" DisProjectType="automationScriptProject" DisLinkId="1" />
+      <UserProperties DisLinkId="1" DisProjectType="automationScriptProject" DisLinkedXmlFile="..\Provision Touchstream.xml" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
