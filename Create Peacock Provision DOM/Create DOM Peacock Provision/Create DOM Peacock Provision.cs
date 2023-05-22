@@ -174,7 +174,7 @@ public class Script
 			var sourceElementFieldDescriptor = CreateFieldDescriptorObject<string>("Source Element (Peacock)", "A DMAID/ELEMID/PID that has been configured to receive process updates (if configured).");
 			var instanceFieldDescriptor = CreateFieldDescriptorObject<string>("InstanceId (Peacock)", "The id of the DOM instance.");
 			var actionFieldDescriptor = CreateFieldDescriptorObject<string>("Action (Peacock)", "The action to be executed on this provision.");
-			var provisioningTypeFieldDescriptor = CreateFieldDescriptorObject<string>("Action (Peacock)", "The type of this provision");
+			var provisioningTypeFieldDescriptor = CreateFieldDescriptorObject<string>("Provisioning Type (Peacock)", "The type of this provision");
 
 			nameDescriptor = provisionNameFieldDescriptor.ID;
 
