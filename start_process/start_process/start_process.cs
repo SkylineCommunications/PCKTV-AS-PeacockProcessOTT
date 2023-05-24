@@ -1,7 +1,9 @@
 namespace Script
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
+    using System.Security.Permissions;
     using Skyline.DataMiner.Automation;
     using Skyline.DataMiner.DataMinerSolutions.ProcessAutomation.MessageHandler;
     using Skyline.DataMiner.Net.Apps.DataMinerObjectModel;
@@ -9,10 +11,13 @@ namespace Script
     using Skyline.DataMiner.Net.LogHelpers;
     using Skyline.DataMiner.Net.Messages.SLDataGateway;
     using Skyline.DataMiner.Net.Sections;
+    using Skyline.DataMiner.Net.Topology;
+    using static Skyline.DataMiner.DataMinerSolutions.ProcessAutomation.Manager.PaManagers;
 
     public class Script
     {
         private DomHelper innerDomHelper;
+        private Field actionField;
 
         /// <summary>
         /// The Script entry point.
@@ -34,12 +39,14 @@ namespace Script
                 var process = engine.GetScriptParam("process").Value;
                 var transition = engine.GetScriptParam("transition").Value;
                 var keyField = engine.GetScriptParam("key").Value;
+                var actionValue = engine.GetScriptParam("action").Value;
 
-                string businessKey = GetBusinessKey(engine, keyField, instanceId);
+                string businessKey = GetBusinessKey(engine, keyField, instanceId, actionValue);
 
                 if (!String.IsNullOrWhiteSpace(businessKey))
                 {
                     innerDomHelper.DomInstances.DoStatusTransition(instanceId, transition);
+                    UpdateAction(instanceId);
                     ProcessHelper.PushToken(process, businessKey, instanceId);
                 }
             }
@@ -49,8 +56,21 @@ namespace Script
             }
         }
 
+        private void UpdateAction(DomInstanceId instanceId)
+        {
+            if (this.actionField == null)
+            {
+                return;
+            }
+
+            var dominstance = DomInstanceExposers.Id.Equal(instanceId);
+            var instance = this.innerDomHelper.DomInstances.Read(dominstance).First();
+            instance.AddOrUpdateFieldValue(this.actionField.SectionDefinition, this.actionField.FieldDescriptor, this.actionField.Value);
+            this.innerDomHelper.DomInstances.Update(instance);
+        }
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1101:Prefix local calls with this", Justification = "Ignored")]
-        private string GetBusinessKey(IEngine engine, string keyField, DomInstanceId instanceId)
+        private string GetBusinessKey(IEngine engine, string keyField, DomInstanceId instanceId, string actionValue)
         {
             string businessKey = "default";
             var dominstance = DomInstanceExposers.Id.Equal(instanceId);
@@ -73,6 +93,16 @@ namespace Script
                         sectionToUpdate = section.GetSectionDefinition();
                         fieldToUpdate = field.GetFieldDescriptor();
                         instanceSet = true;
+                    }
+
+                    if (field.GetFieldDescriptor().Name.Contains("Action"))
+                    {
+                        this.actionField = new Field
+                        {
+                            SectionDefinition = section.GetSectionDefinition(),
+                            FieldDescriptor = field.GetFieldDescriptor(),
+                            Value = actionValue,
+                        };
                     }
 
                     if (field.GetFieldDescriptor().Name.Contains(keyField))
@@ -108,6 +138,15 @@ namespace Script
         private SectionDefinition SetSectionDefinitionById(SectionDefinitionID sectionDefinitionId)
         {
             return this.innerDomHelper.SectionDefinitions.Read(SectionDefinitionExposers.ID.Equal(sectionDefinitionId)).First();
+        }
+
+        public class Field
+        {
+            public SectionDefinition SectionDefinition { get; set; }
+
+            public FieldDescriptor FieldDescriptor { get; set; }
+
+            public string Value { get; set; }
         }
     }
 }
