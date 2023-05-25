@@ -1,18 +1,13 @@
 namespace Script
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
-    using System.Security.Permissions;
     using Skyline.DataMiner.Automation;
     using Skyline.DataMiner.DataMinerSolutions.ProcessAutomation.MessageHandler;
     using Skyline.DataMiner.Net.Apps.DataMinerObjectModel;
     using Skyline.DataMiner.Net.Apps.DataMinerObjectModel.Actions;
-    using Skyline.DataMiner.Net.LogHelpers;
     using Skyline.DataMiner.Net.Messages.SLDataGateway;
     using Skyline.DataMiner.Net.Sections;
-    using Skyline.DataMiner.Net.Topology;
-    using static Skyline.DataMiner.DataMinerSolutions.ProcessAutomation.Manager.PaManagers;
 
     public class Script
     {
