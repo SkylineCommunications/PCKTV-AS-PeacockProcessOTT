@@ -41,12 +41,12 @@ namespace Script
                 var keyField = engine.GetScriptParam("key").Value;
                 var actionValue = engine.GetScriptParam("action").Value;
 
-                string businessKey = GetBusinessKey(engine, keyField, instanceId, actionValue);
+                string businessKey = GetBusinessKey(engine, keyField, instanceId);
 
                 if (!String.IsNullOrWhiteSpace(businessKey))
                 {
                     innerDomHelper.DomInstances.DoStatusTransition(instanceId, transition);
-                    UpdateAction(instanceId);
+                    UpdateAction(instanceId, actionValue);
                     ProcessHelper.PushToken(process, businessKey, instanceId);
                 }
             }
@@ -56,7 +56,7 @@ namespace Script
             }
         }
 
-        private void UpdateAction(DomInstanceId instanceId)
+        private void UpdateAction(DomInstanceId instanceId, string actionValue)
         {
             if (this.actionField == null)
             {
@@ -65,12 +65,12 @@ namespace Script
 
             var dominstance = DomInstanceExposers.Id.Equal(instanceId);
             var instance = this.innerDomHelper.DomInstances.Read(dominstance).First();
-            instance.AddOrUpdateFieldValue(this.actionField.SectionDefinition, this.actionField.FieldDescriptor, this.actionField.Value);
+            instance.AddOrUpdateFieldValue(this.actionField.SectionDefinition, this.actionField.FieldDescriptor, actionValue);
             this.innerDomHelper.DomInstances.Update(instance);
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1101:Prefix local calls with this", Justification = "Ignored")]
-        private string GetBusinessKey(IEngine engine, string keyField, DomInstanceId instanceId, string actionValue)
+        private string GetBusinessKey(IEngine engine, string keyField, DomInstanceId instanceId)
         {
             string businessKey = "default";
             var dominstance = DomInstanceExposers.Id.Equal(instanceId);
@@ -86,28 +86,30 @@ namespace Script
                 Func<SectionDefinitionID, SectionDefinition> sectionDefinitionFunc = SetSectionDefinitionById;
                 section.Stitch(sectionDefinitionFunc);
 
-                foreach (var field in section.FieldValues)
+                var sectionDefinition = section.GetSectionDefinition();
+                var fields = sectionDefinition.GetAllFieldDescriptors();
+
+                foreach (var field in fields)
                 {
-                    if (field.GetFieldDescriptor().Name.Contains("InstanceId"))
+                    if (field.Name.Contains("InstanceId"))
                     {
-                        sectionToUpdate = section.GetSectionDefinition();
-                        fieldToUpdate = field.GetFieldDescriptor();
+                        sectionToUpdate = sectionDefinition;
+                        fieldToUpdate = field;
                         instanceSet = true;
                     }
 
-                    if (field.GetFieldDescriptor().Name.Contains("Action"))
+                    if (field.Name.Contains("Action"))
                     {
                         this.actionField = new Field
                         {
                             SectionDefinition = section.GetSectionDefinition(),
-                            FieldDescriptor = field.GetFieldDescriptor(),
-                            Value = actionValue,
+                            FieldDescriptor = field,
                         };
                     }
 
-                    if (field.GetFieldDescriptor().Name.Contains(keyField))
+                    if (field.Name.Contains(keyField))
                     {
-                        businessKey = field.Value.ToString();
+                        businessKey = Convert.ToString(section.GetFieldValueById(field.ID).Value.Value);
                         keyFound = true;
                     }
 
@@ -145,8 +147,6 @@ namespace Script
             public SectionDefinition SectionDefinition { get; set; }
 
             public FieldDescriptor FieldDescriptor { get; set; }
-
-            public string Value { get; set; }
         }
     }
 }
