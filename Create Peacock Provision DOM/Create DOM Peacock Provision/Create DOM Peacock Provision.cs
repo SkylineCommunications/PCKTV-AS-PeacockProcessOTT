@@ -624,7 +624,7 @@ public class Script
             {
                 var sectionLinks = new List<DomStatusSectionDefinitionLink>();
                 var fieldDescriptors = sections.First(x => x.GetName().Contains("Provision Info")).GetAllFieldDescriptors().ToList();
-                var visibleFields = fieldDescriptors.FindAll(x => x.Name.Contains("InstanceId") || x.Name.Contains("Action")).Select(x => x.ID).ToList();
+                var instanceAndAction = fieldDescriptors.FindAll(x => x.Name.Contains("InstanceId") || x.Name.Contains("Action")).Select(x => x.ID).ToList();
 
                 foreach (var section in sections)
                 {
@@ -636,8 +636,8 @@ public class Script
                     {
                         statusLink.FieldDescriptorLinks.Add(new DomStatusFieldDescriptorLink(fieldId)
                         {
-                            Visible = !visibleFields.Contains(fieldId),
-                            ReadOnly = true,
+                            Visible = !instanceAndAction.Contains(fieldId),
+                            ReadOnly = !instanceAndAction.Contains(fieldId),
                             RequiredForStatus = false,
                         });
                     }
