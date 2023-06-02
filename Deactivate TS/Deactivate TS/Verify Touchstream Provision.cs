@@ -103,7 +103,7 @@ public class Script
 					var touchstreamInstance = touchstreamInstances.First();
 
 					engine.GenerateInformation(DateTime.Now + "|ts instance " + touchstreamInstance.ID.Id + " with status: " + touchstreamInstance.StatusId);
-					if (touchstreamInstance.StatusId == "active" || touchstreamInstance.StatusId == "complete")
+					if (touchstreamInstance.StatusId == "active" || touchstreamInstance.StatusId == "complete" || touchstreamInstance.StatusId == "active_with_errors" || touchstreamInstance.StatusId == "error")
 					{
 						return true;
 					}

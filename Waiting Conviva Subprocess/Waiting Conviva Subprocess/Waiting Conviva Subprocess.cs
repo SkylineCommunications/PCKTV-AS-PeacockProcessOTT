@@ -100,7 +100,7 @@ public class Script
 					var instance = subInstances.First();
 
 					engine.GenerateInformation(DateTime.Now + "|instance " + instance.ID.Id + " with status: " + instance.StatusId);
-					if (instance.StatusId == "active" || instance.StatusId == "complete")
+					if (instance.StatusId == "active" || instance.StatusId == "complete" || instance.StatusId == "error")
 					{
 						return true;
 					}

@@ -109,7 +109,7 @@ public class Script
 					var tagInstance = tagInstances.First();
 
 					engine.GenerateInformation(DateTime.Now + "|tag instance " + tagInstance.ID.Id + " with status: " + tagInstance.StatusId);
-					if (tagInstance.StatusId == "active" || tagInstance.StatusId == "complete")
+					if (tagInstance.StatusId == "active" || tagInstance.StatusId == "complete" || tagInstance.StatusId == "active_with_errors" || tagInstance.StatusId == "error")
 					{
 						return true;
 					}
