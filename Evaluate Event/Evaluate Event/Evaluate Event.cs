@@ -56,6 +56,7 @@ namespace PA.ProfileLoadDomTemplate
 	using System;
 	using System.Diagnostics;
 	using System.Linq;
+	using System.Runtime.Remoting.Messaging;
 	using System.Threading;
 	using Helper;
 	using Newtonsoft.Json;
@@ -64,7 +65,14 @@ namespace PA.ProfileLoadDomTemplate
 	using Skyline.DataMiner.DataMinerSolutions.ProcessAutomation.Manager;
 	using Skyline.DataMiner.ExceptionHelper;
 	using Skyline.DataMiner.Net.Apps.DataMinerObjectModel;
+	using Skyline.DataMiner.Net.LogHelpers;
 
+	public static class Status
+	{
+		public static readonly string isError = "Error";
+		public static readonly string isActive = "Active";
+		public static readonly string isActiveWithErrors = "Active with Errors";
+	}
 	internal class Script
 	{
 		/// <summary>
@@ -75,7 +83,6 @@ namespace PA.ProfileLoadDomTemplate
 		public void Run(Engine engine)
 		{
 			var scriptName = "PA_PCK_Evaluate Event";
-
 			var helper = new PaProfileLoadDomHelper(engine);
 			var domHelper = new DomHelper(engine.SendSLNetMessages, "process_automation");
 			var exceptionHelper = new ExceptionHelper(engine, domHelper);
@@ -83,7 +90,6 @@ namespace PA.ProfileLoadDomTemplate
 			var maindomInstance = helper.GetParameterValue<string>("InstanceId (Peacock)");
 			var mainFilter = DomInstanceExposers.Id.Equal(new DomInstanceId(Guid.Parse(maindomInstance)));
 			var mainInstance = domHelper.DomInstances.Read(mainFilter).First();
-
 			engine.GenerateInformation("START " + scriptName);
 			helper.Log("START " + scriptName, PaLogLevel.Information);
 
@@ -92,19 +98,7 @@ namespace PA.ProfileLoadDomTemplate
 				helper.TransitionState("ready_to_active");
 			}
 
-			engine.GenerateInformation("main status: " + mainInstance.StatusId);
-			if (mainInstance.StatusId == "in_progress")
-			{
-				helper.TransitionState("inprogress_to_active");
-			}
-			else if (mainInstance.StatusId == "deactivating")
-			{
-				helper.TransitionState("deactivating_to_complete");
-			}
-			else
-			{
-				engine.GenerateInformation("Unknown main instance status: " + mainInstance.StatusId);
-			}
+			CheckChildStatus(engine, helper, domHelper, mainInstance, exceptionHelper, provisionName);
 
 			try
 			{
@@ -172,6 +166,142 @@ namespace PA.ProfileLoadDomTemplate
 
 				// helper.SendErrorMessageToTokenHandler();
 				helper.SendFinishMessageToTokenHandler();
+			}
+		}
+
+		private void CheckChildStatus(
+			Engine engine,
+			PaProfileLoadDomHelper helper,
+			DomHelper domHelper,
+			DomInstance mainInstance,
+			ExceptionHelper exceptionHelper,
+			string provisionName)
+		{
+			var scriptName = "PA_PCK_Evaluate Event";
+
+			var tagId = helper.GetParameterValue<Guid>("TAG");
+			var touchstreamId = helper.GetParameterValue<Guid>("Touchstream");
+			var convivaId = helper.GetParameterValue<Guid>("Conviva");
+
+			var tagFilter = DomInstanceExposers.Id.Equal(new DomInstanceId(tagId));
+			var tagInstance = domHelper.DomInstances.Read(tagFilter).First();
+
+			var touchstreamFilter = DomInstanceExposers.Id.Equal(new DomInstanceId(touchstreamId));
+			var touchstreamInstance = domHelper.DomInstances.Read(touchstreamFilter).First();
+
+			var convivaFilter = DomInstanceExposers.Id.Equal(new DomInstanceId(convivaId));
+			var convivaInstance = domHelper.DomInstances.Read(convivaFilter).First();
+
+			var tagStatus = tagInstance.StatusId;
+			var touchstreamStatus = touchstreamInstance.StatusId;
+			var convivaStatus = convivaInstance.StatusId;
+
+			engine.GenerateInformation("main status: " + mainInstance.StatusId);
+			if (mainInstance.StatusId == "in_progress")
+			{
+				if (tagStatus == Status.isError && touchstreamStatus == Status.isError && convivaStatus == Status.isError)
+				{
+					helper.TransitionState("inprogress_to_error");
+
+					var log = new Log
+					{
+						AffectedItem = scriptName,
+						AffectedService = provisionName,
+						Timestamp = DateTime.Now,
+						ErrorCode = new ErrorCode
+						{
+							ConfigurationItem = scriptName + " Script",
+							ConfigurationType = ErrorCode.ConfigType.Automation,
+							Source = "CheckChildStatus() method",
+							Code = "ChildStatusInErrorState",
+							Severity = ErrorCode.SeverityType.Major,
+							Description = $"Child Status In Error State | TAG Status: {tagStatus} | Conviva Status: {convivaStatus} | Touchstream Status: {touchstreamStatus}",
+						},
+						SummaryFlag = true,
+					};
+					exceptionHelper.GenerateLog(log);
+				}
+				else if (tagStatus != Status.isActive || touchstreamStatus != Status.isActive || convivaStatus != Status.isActive)
+				{
+					helper.TransitionState("inprogress_to_activewitherrors");
+
+					var log = new Log
+					{
+						AffectedItem = scriptName,
+						AffectedService = provisionName,
+						Timestamp = DateTime.Now,
+						ErrorCode = new ErrorCode
+						{
+							ConfigurationItem = scriptName + " Script",
+							ConfigurationType = ErrorCode.ConfigType.Automation,
+							Source = "CheckChildStatus() method",
+							Code = "ChildFailedProvisioning",
+							Severity = ErrorCode.SeverityType.Major,
+							Description = $"At least one child failed provisioning | TAG Status: {tagStatus} | Conviva Status: {convivaStatus} | Touchstream Status: {touchstreamStatus}",
+						},
+						SummaryFlag = true,
+					};
+					exceptionHelper.GenerateLog(log);
+				}
+				else
+				{
+					helper.TransitionState("inprogress_to_active");
+				}
+			}
+			else if (mainInstance.StatusId == "deactivating")
+			{
+				if (tagStatus == Status.isError && touchstreamStatus == Status.isError && convivaStatus == Status.isError)
+				{
+					helper.TransitionState("deactivating_to_error");
+
+					var log = new Log
+					{
+						AffectedItem = scriptName,
+						AffectedService = provisionName,
+						Timestamp = DateTime.Now,
+						ErrorCode = new ErrorCode
+						{
+							ConfigurationItem = scriptName + " Script",
+							ConfigurationType = ErrorCode.ConfigType.Automation,
+							Source = "CheckChildStatus() method",
+							Code = "PAActivityFailed",
+							Severity = ErrorCode.SeverityType.Major,
+							Description = $"Failed to Deactivate | Child Status In Error State | TAG Status: {tagStatus} | Conviva Status: {convivaStatus} | Touchstream Status: {touchstreamStatus}",
+						},
+						SummaryFlag = true,
+					};
+					exceptionHelper.GenerateLog(log);
+				}
+				else if (tagStatus != Status.isActive || touchstreamStatus != Status.isActive || convivaStatus != Status.isActive)
+				{
+					helper.TransitionState("deactivating_to_activewitherros");
+
+					var log = new Log
+					{
+						AffectedItem = scriptName,
+						AffectedService = provisionName,
+						Timestamp = DateTime.Now,
+						ErrorCode = new ErrorCode
+						{
+							ConfigurationItem = scriptName + " Script",
+							ConfigurationType = ErrorCode.ConfigType.Automation,
+							Source = "CheckChildStatus() method",
+							Code = "ChildFailedDeactivating",
+							Severity = ErrorCode.SeverityType.Major,
+							Description = $"At least one child failed deactivating | TAG Status: {tagStatus} | Conviva Status: {convivaStatus} | Touchstream Status: {touchstreamStatus}",
+						},
+						SummaryFlag = true,
+					};
+					exceptionHelper.GenerateLog(log);
+				}
+				else
+				{
+					helper.TransitionState("deactivating_to_complete");
+				}
+			}
+			else
+			{
+				engine.GenerateInformation("Unknown main instance status: " + mainInstance.StatusId);
 			}
 		}
 	}
