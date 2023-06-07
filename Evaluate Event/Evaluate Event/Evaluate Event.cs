@@ -212,7 +212,7 @@ namespace PA.ProfileLoadDomTemplate
 						{
 							ConfigurationItem = scriptName + " Script",
 							ConfigurationType = ErrorCode.ConfigType.Automation,
-							Source = "CheckChildStatus() method",
+							Source = "CheckChildStatus()",
 							Code = "ChildStatusInErrorState",
 							Severity = ErrorCode.SeverityType.Major,
 							Description = $"Child Status In Error State | TAG Status: {tagStatus} | Conviva Status: {convivaStatus} | Touchstream Status: {touchstreamStatus}",
@@ -234,7 +234,7 @@ namespace PA.ProfileLoadDomTemplate
 						{
 							ConfigurationItem = scriptName + " Script",
 							ConfigurationType = ErrorCode.ConfigType.Automation,
-							Source = "CheckChildStatus() method",
+							Source = "CheckChildStatus()",
 							Code = "ChildFailedProvisioning",
 							Severity = ErrorCode.SeverityType.Major,
 							Description = $"At least one child failed provisioning | TAG Status: {tagStatus} | Conviva Status: {convivaStatus} | Touchstream Status: {touchstreamStatus}",
