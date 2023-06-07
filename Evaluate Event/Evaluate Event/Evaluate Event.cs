@@ -179,9 +179,9 @@ namespace PA.ProfileLoadDomTemplate
 		{
 			var scriptName = "PA_PCK_Evaluate Event";
 
-			var tagId = helper.GetParameterValue<Guid>("TAG");
-			var touchstreamId = helper.GetParameterValue<Guid>("Touchstream");
-			var convivaId = helper.GetParameterValue<Guid>("Conviva");
+			var tagId = helper.GetParameterValue<Guid>("TAG (Peacock)");
+			var touchstreamId = helper.GetParameterValue<Guid>("Touchstream (Peacock)");
+			var convivaId = helper.GetParameterValue<Guid>("Conviva (Peacock)");
 
 			var tagFilter = DomInstanceExposers.Id.Equal(new DomInstanceId(tagId));
 			var tagInstance = domHelper.DomInstances.Read(tagFilter).First();
@@ -263,8 +263,8 @@ namespace PA.ProfileLoadDomTemplate
 						{
 							ConfigurationItem = scriptName + " Script",
 							ConfigurationType = ErrorCode.ConfigType.Automation,
-							Source = "CheckChildStatus() method",
-							Code = "PAActivityFailed",
+							Source = "CheckChildStatus()",
+							Code = "PeacockDeactivatingFailed",
 							Severity = ErrorCode.SeverityType.Major,
 							Description = $"Failed to Deactivate | Child Status In Error State | TAG Status: {tagStatus} | Conviva Status: {convivaStatus} | Touchstream Status: {touchstreamStatus}",
 						},
@@ -285,7 +285,7 @@ namespace PA.ProfileLoadDomTemplate
 						{
 							ConfigurationItem = scriptName + " Script",
 							ConfigurationType = ErrorCode.ConfigType.Automation,
-							Source = "CheckChildStatus() method",
+							Source = "CheckChildStatus()",
 							Code = "ChildFailedDeactivating",
 							Severity = ErrorCode.SeverityType.Major,
 							Description = $"At least one child failed deactivating | TAG Status: {tagStatus} | Conviva Status: {convivaStatus} | Touchstream Status: {touchstreamStatus}",
