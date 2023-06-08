@@ -145,7 +145,8 @@ public class Script
 						ConfigurationItem = scriptName + " Script",
 						ConfigurationType = ErrorCode.ConfigType.Automation,
 						Severity = ErrorCode.SeverityType.Warning,
-						Source = "Retry condition",
+						Source = "Retry()",
+						Code = "RetryTimeout",
 						Description = "Verifying TAG subprocess took longer than expected and could not verify.",
 					},
 				};

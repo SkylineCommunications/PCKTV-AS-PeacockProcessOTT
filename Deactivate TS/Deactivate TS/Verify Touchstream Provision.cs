@@ -138,7 +138,8 @@ public class Script
 						ConfigurationItem = scriptName + " Script",
 						ConfigurationType = ErrorCode.ConfigType.Automation,
 						Severity = ErrorCode.SeverityType.Warning,
-						Source = "Retry condition",
+						Source = "Retry()",
+						Code = "RetryTimeout",
 						Description = "Verifying Touchstream provision took longer than expected and could not verify status.",
 					},
 				};

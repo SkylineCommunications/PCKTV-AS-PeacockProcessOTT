@@ -134,7 +134,8 @@ public class Script
 						ConfigurationItem = scriptName + " Script",
 						ConfigurationType = ErrorCode.ConfigType.Automation,
 						Severity = ErrorCode.SeverityType.Warning,
-						Source = "Retry condition",
+						Source = "Retry()",
+						Code = "RetryTimeout",
 						Description = "Conviva took too long to complete",
 					},
 				};
