@@ -57,6 +57,7 @@ using Skyline.DataMiner.DataMinerSolutions.ProcessAutomation.Manager;
 using Skyline.DataMiner.ExceptionHelper;
 using Skyline.DataMiner.Net.Apps.DataMinerObjectModel;
 using Skyline.DataMiner.Net.Sections;
+using static Skyline.DataMiner.DataMinerSolutions.ProcessAutomation.Manager.PaManagers;
 
 /// <summary>
 /// DataMiner Script Class.
@@ -90,7 +91,19 @@ public class Script
 
 			if (tagInstances.Any())
 			{
-				ExecuteActionOnInstance(action, tagInstances.First());
+				//ExecuteActionOnInstance(action, tagInstances.First());
+				if (action == "active" || action == "complete" || action == "deactivate" || action == "complete-provision")
+				{
+					innerDomHelper.DomInstances.ExecuteAction(tagInstances.First().ID, action);
+				}
+				else if (action.StartsWith("error"))
+				{
+					innerDomHelper.DomInstances.ExecuteAction(tagInstances.First().ID, "error-" + action);
+				}
+				else
+				{
+					innerDomHelper.DomInstances.ExecuteAction(tagInstances.First().ID, "activewitherrors-" + action);
+				}
 			}
 			else
 			{
