@@ -87,9 +87,22 @@ public class Script
 			var tsfilter = DomInstanceExposers.Id.Equal(new DomInstanceId(touchstreamInstance));
 			var touchstreamInstances = domHelper.DomInstances.Read(tsfilter);
 
+			engine.GenerateInformation($"TS action: {action}");
+
 			if (touchstreamInstances.Any())
 			{
-				domHelper.DomInstances.ExecuteAction(touchstreamInstances.First().ID, action);
+				if (action == "active" || action == "complete" || action == "deactivate" || action == "complete-provision")
+				{
+					domHelper.DomInstances.ExecuteAction(touchstreamInstances.First().ID, action);
+				}
+				else if (action.StartsWith("error"))
+				{
+					domHelper.DomInstances.ExecuteAction(touchstreamInstances.First().ID, $"error-{action}");
+				}
+				else
+				{
+					domHelper.DomInstances.ExecuteAction(touchstreamInstances.First().ID, $"activewitherrors-{action}");
+				}
 			}
 			else
 			{

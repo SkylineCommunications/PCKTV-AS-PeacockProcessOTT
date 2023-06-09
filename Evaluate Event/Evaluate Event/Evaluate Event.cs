@@ -100,7 +100,13 @@ namespace PA.ProfileLoadDomTemplate
 
 			if (mainInstance.StatusId == "ready")
 			{
-				helper.TransitionState("ready_to_active");
+				helper.TransitionState("ready_to_inprogress");
+			}
+
+			if (mainInstance.StatusId == "deactivate")
+			{
+				helper.TransitionState("deactivate_to_deactivating");
+				mainInstance = domHelper.DomInstances.Read(mainFilter).First();
 			}
 
 			CheckChildStatus(engine, helper, domHelper, mainInstance, exceptionHelper, provisionName);
@@ -292,7 +298,7 @@ namespace PA.ProfileLoadDomTemplate
 						//SummaryFlag = true,
 					};
 					exceptionHelper.GenerateLog(log);
-					helper.TransitionState("deactivating_to_activewitherros");
+					helper.TransitionState("deactivating_to_error");
 				}
 			}
 			else

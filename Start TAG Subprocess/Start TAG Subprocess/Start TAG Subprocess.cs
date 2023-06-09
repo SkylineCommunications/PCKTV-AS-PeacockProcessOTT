@@ -90,7 +90,20 @@ public class Script
 
 			if (tagInstances.Any())
 			{
-				ExecuteActionOnInstance(action, tagInstances.First());
+				engine.GenerateInformation(action);
+				//ExecuteActionOnInstance(action, tagInstances.First());
+				if (action == "active" || action == "complete" || action == "deactivate" || action == "complete-provision")
+				{
+					innerDomHelper.DomInstances.ExecuteAction(tagInstances.First().ID, action);
+				}
+				else if (action.StartsWith("error"))
+				{
+					innerDomHelper.DomInstances.ExecuteAction(tagInstances.First().ID, "error-" + action);
+				}
+				else
+				{
+					innerDomHelper.DomInstances.ExecuteAction(tagInstances.First().ID, "activewitherrors-" + action);
+				}
 			}
 			else
 			{
@@ -101,7 +114,8 @@ public class Script
 			var peacockInstance = innerDomHelper.DomInstances.Read(peacockFilter).First();
 			try
 			{
-				if (action == "provision" && peacockInstance.StatusId == "ready")
+
+				if ((action == "provision" || action == "complete-provision") && peacockInstance.StatusId == "ready")
 				{
 					helper.TransitionState("ready_to_inprogress");
 				}

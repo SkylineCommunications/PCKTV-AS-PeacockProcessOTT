@@ -325,7 +325,7 @@ public class Script
 				new DomStatusTransition("error_to_reprovision", "error", "reprovision"),
 				new DomStatusTransition("activewitherrors_to_reprovision", "active_with_errors", "reprovision"),
 				new DomStatusTransition("error_to_deactivate", "error", "deactivate"),
-				new DomStatusTransition("activewitherrors_to_deactivating", "active_with_errors", "deactivate"),
+				new DomStatusTransition("activewitherrors_to_deactivate", "active_with_errors", "deactivate"),
 			};
 
 			var behaviorActions = GetBehaviorActions("Peacock Process", "Provision Name");
