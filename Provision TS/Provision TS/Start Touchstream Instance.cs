@@ -90,6 +90,8 @@ public class Script
 			var tsinstance = touchstreamInstances.First();
 			var tsstatus = tsinstance.StatusId;
 
+			engine.GenerateInformation($"TS action: {action}");
+
 			if (touchstreamInstances.Any())
 			{
 				if (tsstatus == "active" || tsstatus == "completed" || tsstatus == "draft")
