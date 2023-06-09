@@ -93,22 +93,31 @@ public class Script
 
 			var subInstance = subInstances.First();
 
-			if (action == "provision")
+			if (action.StartsWith("error"))
 			{
-				domHelper.DomInstances.ExecuteAction(subInstance.ID, "provision");
+				domHelper.DomInstances.ExecuteAction(subInstance.ID, "error-" + action);
 			}
-			else if (action == "reprovision")
+			else
 			{
-				domHelper.DomInstances.ExecuteAction(subInstance.ID, "reprovision");
+				domHelper.DomInstances.ExecuteAction(subInstance.ID, action);
 			}
-			else if (action == "deactivate")
-			{
-				domHelper.DomInstances.ExecuteAction(subInstance.ID, "deactivate");
-			}
-			else if (action == "complete-provision")
-			{
-				domHelper.DomInstances.ExecuteAction(subInstance.ID, "complete-provision");
-			}
+
+			//if (action == "provision")
+			//{
+			//	domHelper.DomInstances.ExecuteAction(subInstance.ID, "provision");
+			//}
+			//else if (action == "reprovision")
+			//{
+			//	domHelper.DomInstances.ExecuteAction(subInstance.ID, "reprovision");
+			//}
+			//else if (action == "deactivate")
+			//{
+			//	domHelper.DomInstances.ExecuteAction(subInstance.ID, "deactivate");
+			//}
+			//else if (action == "complete-provision")
+			//{
+			//	domHelper.DomInstances.ExecuteAction(subInstance.ID, "complete-provision");
+			//}
 
 			engine.GenerateInformation("Started Conviva Instance");
 			helper.ReturnSuccess();

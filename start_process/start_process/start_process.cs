@@ -6,7 +6,6 @@ namespace Script
 	using Skyline.DataMiner.DataMinerSolutions.ProcessAutomation.MessageHandler;
 	using Skyline.DataMiner.Net.Apps.DataMinerObjectModel;
 	using Skyline.DataMiner.Net.Apps.DataMinerObjectModel.Actions;
-	using Skyline.DataMiner.Net.Apps.DataMinerObjectModel.Settings;
 	using Skyline.DataMiner.Net.Messages.SLDataGateway;
 	using Skyline.DataMiner.Net.Sections;
 
@@ -40,8 +39,8 @@ namespace Script
 
 				if (!String.IsNullOrWhiteSpace(businessKey))
 				{
-					UpdateAction(instanceId, actionValue);
 					innerDomHelper.DomInstances.DoStatusTransition(instanceId, transition);
+					UpdateAction(instanceId, actionValue);
 					ProcessHelper.PushToken(process, businessKey, instanceId);
 				}
 			}

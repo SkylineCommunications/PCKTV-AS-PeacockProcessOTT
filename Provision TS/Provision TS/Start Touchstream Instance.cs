@@ -91,17 +91,18 @@ public class Script
 
 			if (touchstreamInstances.Any())
 			{
-				if (action == "active" || action == "complete" || action == "deactivate" || action == "complete-provision")
+				//domHelper.DomInstances.ExecuteAction(touchstreamInstances.First().ID, action);
+				if (action == "provision" || action == "deactivate" || action == "reprovision" || action == "complete-provision")
 				{
 					domHelper.DomInstances.ExecuteAction(touchstreamInstances.First().ID, action);
 				}
 				else if (action.StartsWith("error"))
 				{
-					domHelper.DomInstances.ExecuteAction(touchstreamInstances.First().ID, $"error-{action}");
+					domHelper.DomInstances.ExecuteAction(touchstreamInstances.First().ID, "error-" + action);
 				}
 				else
 				{
-					domHelper.DomInstances.ExecuteAction(touchstreamInstances.First().ID, $"activewitherrors-{action}");
+					domHelper.DomInstances.ExecuteAction(touchstreamInstances.First().ID, "activewitherrors-" + action);
 				}
 			}
 			else

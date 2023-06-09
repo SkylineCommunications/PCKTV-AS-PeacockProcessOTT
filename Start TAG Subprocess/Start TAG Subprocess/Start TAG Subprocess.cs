@@ -57,6 +57,7 @@ using Skyline.DataMiner.DataMinerSolutions.ProcessAutomation.Manager;
 using Skyline.DataMiner.ExceptionHelper;
 using Skyline.DataMiner.Net.Apps.DataMinerObjectModel;
 using Skyline.DataMiner.Net.Sections;
+using static Skyline.DataMiner.DataMinerSolutions.ProcessAutomation.Manager.PaManagers;
 
 /// <summary>
 /// DataMiner Script Class.
@@ -83,7 +84,7 @@ public class Script
 			var peacockInstanceId = helper.GetParameterValue<string>("InstanceId (Peacock)");
 			var action = helper.GetParameterValue<string>("Action (Peacock)");
 			provisionName = helper.GetParameterValue<string>("Provision Name (Peacock)");
-			engine.Log("Starting TAG Subprocess");
+			engine.GenerateInformation("Starting TAG Subprocess");
 
 			var tagFilter = DomInstanceExposers.Id.Equal(new DomInstanceId(tagInstanceId));
 			var tagInstances = innerDomHelper.DomInstances.Read(tagFilter);
@@ -114,7 +115,6 @@ public class Script
 			var peacockInstance = innerDomHelper.DomInstances.Read(peacockFilter).First();
 			try
 			{
-
 				if ((action == "provision" || action == "complete-provision") && peacockInstance.StatusId == "ready")
 				{
 					helper.TransitionState("ready_to_inprogress");
@@ -186,7 +186,19 @@ public class Script
 				instance.AddOrUpdateFieldValue(section.GetSectionDefinition(), fieldToUpdate, action);
 				innerDomHelper.DomInstances.Update(instance);
 
-				innerDomHelper.DomInstances.ExecuteAction(instance.ID, action);
+				//innerDomHelper.DomInstances.ExecuteAction(instance.ID, action);
+				if (action == "provision" || action == "deactivate" || action == "reprovision" || action == "complete-provision")
+				{
+					innerDomHelper.DomInstances.ExecuteAction(instance.ID, action);
+				}
+				else if (action.StartsWith("error"))
+				{
+					innerDomHelper.DomInstances.ExecuteAction(instance.ID, "error-" + action);
+				}
+				else
+				{
+					innerDomHelper.DomInstances.ExecuteAction(instance.ID, "activewitherrors-" + action);
+				}
 
 				break;
 			}
