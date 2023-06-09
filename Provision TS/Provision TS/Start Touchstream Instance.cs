@@ -90,7 +90,7 @@ public class Script
 			if (touchstreamInstances.Any())
 			{
 				//domHelper.DomInstances.ExecuteAction(touchstreamInstances.First().ID, action);
-				if (action == "active" || action == "complete" || action == "deactivate" || action == "complete-provision")
+				if (action == "provision" || action == "deactivate" || action == "reprovision" || action == "complete-provision")
 				{
 					domHelper.DomInstances.ExecuteAction(touchstreamInstances.First().ID, action);
 				}

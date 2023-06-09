@@ -84,26 +84,14 @@ public class Script
 			var peacockInstanceId = helper.GetParameterValue<string>("InstanceId (Peacock)");
 			var action = helper.GetParameterValue<string>("Action (Peacock)");
 			provisionName = helper.GetParameterValue<string>("Provision Name (Peacock)");
-			engine.Log("Starting TAG Subprocess");
+			engine.GenerateInformation("Starting TAG Subprocess");
 
 			var tagFilter = DomInstanceExposers.Id.Equal(new DomInstanceId(tagInstanceId));
 			var tagInstances = innerDomHelper.DomInstances.Read(tagFilter);
 
 			if (tagInstances.Any())
 			{
-				//ExecuteActionOnInstance(action, tagInstances.First());
-				if (action == "active" || action == "complete" || action == "deactivate" || action == "complete-provision")
-				{
-					innerDomHelper.DomInstances.ExecuteAction(tagInstances.First().ID, action);
-				}
-				else if (action.StartsWith("error"))
-				{
-					innerDomHelper.DomInstances.ExecuteAction(tagInstances.First().ID, "error-" + action);
-				}
-				else
-				{
-					innerDomHelper.DomInstances.ExecuteAction(tagInstances.First().ID, "activewitherrors-" + action);
-				}
+				ExecuteActionOnInstance(action, tagInstances.First());
 			}
 			else
 			{
@@ -114,7 +102,7 @@ public class Script
 			var peacockInstance = innerDomHelper.DomInstances.Read(peacockFilter).First();
 			try
 			{
-				if (action == "provision" && peacockInstance.StatusId == "ready")
+				if ((action == "provision" || action == "complete-provision") && peacockInstance.StatusId == "ready")
 				{
 					helper.TransitionState("ready_to_inprogress");
 				}
@@ -185,7 +173,19 @@ public class Script
 				instance.AddOrUpdateFieldValue(section.GetSectionDefinition(), fieldToUpdate, action);
 				innerDomHelper.DomInstances.Update(instance);
 
-				innerDomHelper.DomInstances.ExecuteAction(instance.ID, action);
+				//innerDomHelper.DomInstances.ExecuteAction(instance.ID, action);
+				if (action == "provision" || action == "deactivate" || action == "reprovision" || action == "complete-provision")
+				{
+					innerDomHelper.DomInstances.ExecuteAction(instance.ID, action);
+				}
+				else if (action.StartsWith("error"))
+				{
+					innerDomHelper.DomInstances.ExecuteAction(instance.ID, "error-" + action);
+				}
+				else
+				{
+					innerDomHelper.DomInstances.ExecuteAction(instance.ID, "activewitherrors-" + action);
+				}
 
 				break;
 			}
