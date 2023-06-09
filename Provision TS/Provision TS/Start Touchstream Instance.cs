@@ -58,6 +58,7 @@ using Skyline.DataMiner.DataMinerSolutions.ProcessAutomation.Manager;
 using Skyline.DataMiner.ExceptionHelper;
 using Skyline.DataMiner.Net.Apps.DataMinerObjectModel;
 using Skyline.DataMiner.Net.Sections;
+using static Skyline.DataMiner.DataMinerSolutions.ProcessAutomation.Manager.PaManagers;
 
 /// <summary>
 /// DataMiner Script Class.
@@ -86,21 +87,22 @@ public class Script
 
 			var tsfilter = DomInstanceExposers.Id.Equal(new DomInstanceId(touchstreamInstance));
 			var touchstreamInstances = domHelper.DomInstances.Read(tsfilter);
+			var tsinstance = touchstreamInstances.First();
+			var tsstatus = tsinstance.StatusId;
 
 			if (touchstreamInstances.Any())
 			{
-				//domHelper.DomInstances.ExecuteAction(touchstreamInstances.First().ID, action);
-				if (action == "provision" || action == "deactivate" || action == "reprovision" || action == "complete-provision")
+				if (tsstatus == "active" || tsstatus == "completed" || tsstatus == "draft")
 				{
-					domHelper.DomInstances.ExecuteAction(touchstreamInstances.First().ID, action);
+					domHelper.DomInstances.ExecuteAction(tsinstance.ID, action);
 				}
-				else if (action.StartsWith("error"))
+				else if (tsstatus.StartsWith("error"))
 				{
-					domHelper.DomInstances.ExecuteAction(touchstreamInstances.First().ID, "error-" + action);
+					domHelper.DomInstances.ExecuteAction(tsinstance.ID, "error-" + action);
 				}
 				else
 				{
-					domHelper.DomInstances.ExecuteAction(touchstreamInstances.First().ID, "activewitherrors-" + action);
+					domHelper.DomInstances.ExecuteAction(tsinstance.ID, "activewitherrors-" + action);
 				}
 			}
 			else

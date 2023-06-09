@@ -92,8 +92,9 @@ public class Script
 			}
 
 			var subInstance = subInstances.First();
+			var convivaStatus = subInstance.StatusId;
 
-			if (action.StartsWith("error"))
+			if (convivaStatus.StartsWith("error"))
 			{
 				domHelper.DomInstances.ExecuteAction(subInstance.ID, "error-" + action);
 			}
@@ -101,23 +102,6 @@ public class Script
 			{
 				domHelper.DomInstances.ExecuteAction(subInstance.ID, action);
 			}
-
-			//if (action == "provision")
-			//{
-			//	domHelper.DomInstances.ExecuteAction(subInstance.ID, "provision");
-			//}
-			//else if (action == "reprovision")
-			//{
-			//	domHelper.DomInstances.ExecuteAction(subInstance.ID, "reprovision");
-			//}
-			//else if (action == "deactivate")
-			//{
-			//	domHelper.DomInstances.ExecuteAction(subInstance.ID, "deactivate");
-			//}
-			//else if (action == "complete-provision")
-			//{
-			//	domHelper.DomInstances.ExecuteAction(subInstance.ID, "complete-provision");
-			//}
 
 			engine.GenerateInformation("Started Conviva Instance");
 			helper.ReturnSuccess();

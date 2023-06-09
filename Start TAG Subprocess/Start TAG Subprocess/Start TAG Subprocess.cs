@@ -91,7 +91,7 @@ public class Script
 
 			if (tagInstances.Any())
 			{
-				ExecuteActionOnInstance(action, tagInstances.First());
+				ExecuteActionOnInstance(engine, action, tagInstances.First());
 			}
 			else
 			{
@@ -159,7 +159,7 @@ public class Script
 		}
 	}
 
-	private void ExecuteActionOnInstance(string action, DomInstance instance)
+	private void ExecuteActionOnInstance(Engine engine, string action, DomInstance instance)
 	{
 		foreach (var section in instance.Sections)
 		{
@@ -172,13 +172,13 @@ public class Script
 				var fieldToUpdate = fieldDescriptors.First(x => x.Name.Contains("Action"));
 				instance.AddOrUpdateFieldValue(section.GetSectionDefinition(), fieldToUpdate, action);
 				innerDomHelper.DomInstances.Update(instance);
+				var status = instance.StatusId;
 
-				//innerDomHelper.DomInstances.ExecuteAction(instance.ID, action);
-				if (action == "provision" || action == "deactivate" || action == "reprovision" || action == "complete-provision")
+				if (status == "active" || status == "completed" || status == "draft")
 				{
 					innerDomHelper.DomInstances.ExecuteAction(instance.ID, action);
 				}
-				else if (action.StartsWith("error"))
+				else if (status.StartsWith("error"))
 				{
 					innerDomHelper.DomInstances.ExecuteAction(instance.ID, "error-" + action);
 				}
