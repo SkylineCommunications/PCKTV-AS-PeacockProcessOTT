@@ -114,6 +114,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Generic", "Generic", "{0746F307-C289-4B8C-A8CC-F1CC384EA82F}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Library", "Library\Library.shproj", "{EBED8E9A-00A9-4B86-99B6-45FCAE6915ED}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -190,8 +194,16 @@ Global
 		{F34FE5FE-EA63-48A8-A714-5B019B5318A3} = {C5A26408-58B7-412C-BC02-7F0ACB422267}
 		{0F7EBC3E-F703-42D6-997C-30C41F7DC7D8} = {F34FE5FE-EA63-48A8-A714-5B019B5318A3}
 		{F1DFE073-51DF-4BE5-8420-2775169296EB} = {0F7EBC3E-F703-42D6-997C-30C41F7DC7D8}
+		{EBED8E9A-00A9-4B86-99B6-45FCAE6915ED} = {0746F307-C289-4B8C-A8CC-F1CC384EA82F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CFC078A0-8FA4-4C4A-B73C-14E985F4C3EC}
+	EndGlobalSection
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Library\Library.projitems*{1dfb4a78-f060-4e50-912d-1633511db1bb}*SharedItemsImports = 4
+		Library\Library.projitems*{c3caac3a-edce-44b8-aac1-c1a3222f8a3c}*SharedItemsImports = 4
+		Library\Library.projitems*{d0c704b0-83d4-4709-8cfa-1cd4b7f54ba3}*SharedItemsImports = 4
+		Library\Library.projitems*{ebed8e9a-00a9-4b86-99b6-45fcae6915ed}*SharedItemsImports = 13
+		Library\Library.projitems*{fa0f26fe-5ba1-4695-a749-1d0cf21f921b}*SharedItemsImports = 4
 	EndGlobalSection
 EndGlobal

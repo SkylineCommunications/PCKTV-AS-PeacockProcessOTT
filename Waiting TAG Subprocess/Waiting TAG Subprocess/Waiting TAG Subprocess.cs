@@ -54,6 +54,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using Newtonsoft.Json;
+using Library;
 using Skyline.DataMiner.Automation;
 using Skyline.DataMiner.DataMinerSolutions.ProcessAutomation.Helpers.Logging;
 using Skyline.DataMiner.DataMinerSolutions.ProcessAutomation.Manager;
@@ -98,27 +99,12 @@ public class Script
 			{
 				try
 				{
-					var filter = DomInstanceExposers.Id.Equal(new DomInstanceId(tagInstanceId));
-					tagInstances = domHelper.DomInstances.Read(filter);
-					if (tagInstances.Count == 0)
-					{
-						// returning success until conviva is ready
-						throw new NullReferenceException("No TAG DOM instance found with id: " + tagInstanceId);
-					}
-
-					var tagInstance = tagInstances.First();
-
-					engine.GenerateInformation(DateTime.Now + "|tag instance " + tagInstance.ID.Id + " with status: " + tagInstance.StatusId);
-					if (tagInstance.StatusId == "active" || tagInstance.StatusId == "complete" || tagInstance.StatusId == "active_with_errors" || tagInstance.StatusId == "error")
-					{
-						return true;
-					}
-
-					return false;
+					return SharedMethods.CheckStateChange(engine, tagInstances);
 				}
 				catch (Exception e)
 				{
 					engine.GenerateInformation("Exception thrown while verifying the subprocess: " + e);
+					helper.ReturnSuccess();
 					throw;
 				}
 			}
@@ -173,6 +159,7 @@ public class Script
 				},
 			};
 			exceptionHelper.ProcessException(ex, log);
+			helper.ReturnSuccess();
 		}
 	}
 

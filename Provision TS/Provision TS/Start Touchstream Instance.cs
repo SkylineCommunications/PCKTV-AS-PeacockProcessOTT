@@ -90,7 +90,10 @@ public class Script
 			var tsinstance = touchstreamInstances.First();
 			var tsstatus = tsinstance.StatusId;
 
-			engine.GenerateInformation($"TS action: {action}");
+			if (action.Equals("reprovision"))
+			{
+				action = "deactivate";
+			}
 
 			if (touchstreamInstances.Any())
 			{
@@ -133,6 +136,7 @@ public class Script
 				},
 			};
 			exceptionHelper.ProcessException(ex, log);
+			helper.ReturnSuccess();
 		}
 	}
 }

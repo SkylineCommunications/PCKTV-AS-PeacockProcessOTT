@@ -53,6 +53,7 @@ using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
+using Library;
 using Skyline.DataMiner.Automation;
 using Skyline.DataMiner.DataMinerSolutions.ProcessAutomation.Helpers.Logging;
 using Skyline.DataMiner.DataMinerSolutions.ProcessAutomation.Manager;
@@ -94,22 +95,12 @@ public class Script
 			{
 				try
 				{
-					// data
-					var subInstances = domHelper.DomInstances.Read(filter);
-
-					var instance = subInstances.First();
-
-					engine.GenerateInformation(DateTime.Now + "|instance " + instance.ID.Id + " with status: " + instance.StatusId);
-					if (instance.StatusId == "active" || instance.StatusId == "complete" || instance.StatusId == "error")
-					{
-						return true;
-					}
-
-					return false;
+					return SharedMethods.CheckStateChange(engine, convivaInstances);
 				}
 				catch (Exception e)
 				{
 					engine.Log("Exception thrown while verifying the subprocess: " + e);
+					helper.ReturnSuccess();
 					throw;
 				}
 			}
@@ -140,6 +131,7 @@ public class Script
 					},
 				};
 				exceptionHelper.GenerateLog(log);
+				helper.ReturnSuccess();
 			}
 		}
 		catch (Exception ex)
@@ -162,6 +154,7 @@ public class Script
 				},
 			};
 			exceptionHelper.ProcessException(ex, log);
+			helper.ReturnSuccess();
 		}
 	}
 

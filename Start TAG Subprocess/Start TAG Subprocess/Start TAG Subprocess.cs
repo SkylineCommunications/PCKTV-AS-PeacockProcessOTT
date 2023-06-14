@@ -86,6 +86,12 @@ public class Script
 			provisionName = helper.GetParameterValue<string>("Provision Name (Peacock)");
 			engine.GenerateInformation("Starting TAG Subprocess");
 
+			if (action.Equals("reprovision"))
+			{
+				action = "deactivate";
+			}
+
+
 			var tagFilter = DomInstanceExposers.Id.Equal(new DomInstanceId(tagInstanceId));
 			var tagInstances = innerDomHelper.DomInstances.Read(tagFilter);
 
@@ -110,10 +116,6 @@ public class Script
 				{
 					helper.TransitionState("deactivate_to_deactivating");
 				}
-				else if (action == "reprovision" && peacockInstance.StatusId == "reprovision")
-				{
-					helper.TransitionState("reprovision_to_inprogress");
-				}
 			}
 			catch (Exception ex)
 			{
@@ -134,6 +136,7 @@ public class Script
 					},
 				};
 				exceptionHelper.ProcessException(ex, log);
+				helper.ReturnSuccess();
 			}
 
 			helper.ReturnSuccess();
@@ -156,39 +159,25 @@ public class Script
 				},
 			};
 			exceptionHelper.ProcessException(ex, log);
+			helper.ReturnSuccess();
 		}
 	}
 
 	private void ExecuteActionOnInstance(Engine engine, string action, DomInstance instance)
 	{
-		foreach (var section in instance.Sections)
+		var status = instance.StatusId;
+
+		if (status == "active" || status == "completed" || status == "draft")
 		{
-			Func<SectionDefinitionID, SectionDefinition> sectionDefinitionFunc = SetSectionDefinitionById;
-
-			section.Stitch(sectionDefinitionFunc);
-			var fieldDescriptors = section.GetSectionDefinition().GetAllFieldDescriptors();
-			if (fieldDescriptors.Any(x => x.Name.Contains("Action")))
-			{
-				var fieldToUpdate = fieldDescriptors.First(x => x.Name.Contains("Action"));
-				instance.AddOrUpdateFieldValue(section.GetSectionDefinition(), fieldToUpdate, action);
-				innerDomHelper.DomInstances.Update(instance);
-				var status = instance.StatusId;
-
-				if (status == "active" || status == "completed" || status == "draft")
-				{
-					innerDomHelper.DomInstances.ExecuteAction(instance.ID, action);
-				}
-				else if (status.StartsWith("error"))
-				{
-					innerDomHelper.DomInstances.ExecuteAction(instance.ID, "error-" + action);
-				}
-				else
-				{
-					innerDomHelper.DomInstances.ExecuteAction(instance.ID, "activewitherrors-" + action);
-				}
-
-				break;
-			}
+			innerDomHelper.DomInstances.ExecuteAction(instance.ID, action);
+		}
+		else if (status.StartsWith("error"))
+		{
+			innerDomHelper.DomInstances.ExecuteAction(instance.ID, "error-" + action);
+		}
+		else
+		{
+			innerDomHelper.DomInstances.ExecuteAction(instance.ID, "activewitherrors-" + action);
 		}
 	}
 

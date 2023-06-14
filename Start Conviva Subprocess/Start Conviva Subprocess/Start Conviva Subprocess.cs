@@ -82,6 +82,11 @@ public class Script
 			provisionName = helper.GetParameterValue<string>("Provision Name (Peacock)");
 			engine.Log("Starting Conviva Subprocess");
 
+			if (action.Equals("reprovision"))
+			{
+				action = "deactivate";
+			}
+
 			var subFilter = DomInstanceExposers.Id.Equal(new DomInstanceId(subdomInstance));
 			var subInstances = domHelper.DomInstances.Read(subFilter);
 			if (subInstances.Count == 0)
@@ -125,6 +130,7 @@ public class Script
 				},
 			};
 			exceptionHelper.ProcessException(ex, log);
+			helper.ReturnSuccess();
 		}
 	}
 }

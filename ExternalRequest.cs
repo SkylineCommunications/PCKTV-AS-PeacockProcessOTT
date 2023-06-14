@@ -3,6 +3,7 @@ namespace Helper
 #pragma warning restore SA1633 // File should have header
 {
     using Newtonsoft.Json;
+    using Skyline.DataMiner.DataMinerSolutions.ProcessAutomation.Manager;
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "ignored")]
     public class ExternalRequest

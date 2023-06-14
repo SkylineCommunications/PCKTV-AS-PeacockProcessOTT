@@ -54,12 +54,14 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using Helper;
+using Library;
 using Newtonsoft.Json;
 using Skyline.DataMiner.Automation;
 using Skyline.DataMiner.DataMinerSolutions.ProcessAutomation.Helpers.Logging;
 using Skyline.DataMiner.DataMinerSolutions.ProcessAutomation.Manager;
 using Skyline.DataMiner.ExceptionHelper;
 using Skyline.DataMiner.Net.Apps.DataMinerObjectModel;
+using Skyline.DataMiner.ProtoBuf.Shared.Core.DataTypes.Shared.V1;
 
 /// <summary>
 /// DataMiner Script Class.
@@ -95,24 +97,17 @@ public class Script
 				return;
 			}
 
+
 			bool CheckStateChange()
 			{
 				try
 				{
-					touchstreamInstances = domHelper.DomInstances.Read(touchstreamFilter);
-					var touchstreamInstance = touchstreamInstances.First();
-
-					engine.GenerateInformation(DateTime.Now + "|ts instance " + touchstreamInstance.ID.Id + " with status: " + touchstreamInstance.StatusId);
-					if (touchstreamInstance.StatusId == "active" || touchstreamInstance.StatusId == "complete" || touchstreamInstance.StatusId == "active_with_errors" || touchstreamInstance.StatusId == "error")
-					{
-						return true;
-					}
-
-					return false;
+					return SharedMethods.CheckStateChange(engine, touchstreamInstances);
 				}
 				catch (Exception e)
 				{
 					engine.GenerateInformation("Exception thrown while verifying the subprocess: " + e);
+					helper.ReturnSuccess();
 					throw;
 				}
 			}
@@ -167,6 +162,8 @@ public class Script
 				},
 			};
 			exceptionHelper.ProcessException(ex, log);
+			helper.ReturnSuccess();
+
 		}
 	}
 
