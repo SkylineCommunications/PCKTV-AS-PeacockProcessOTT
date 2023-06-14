@@ -15,7 +15,7 @@
             </summary>
             <param name="engine">Link with SLAutomation process.</param>
         </member>
-        <member name="M:Script.Retry(System.Func{System.Boolean},System.TimeSpan)">
+        <member name="M:Library.SharedMethods.Retry(System.Func{System.Boolean},System.TimeSpan)">
             <summary>
             Retry until success or until timeout.
             </summary>
