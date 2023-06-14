@@ -6,6 +6,8 @@ using System.Linq;
 using Skyline.DataMiner.Automation;
 using Skyline.DataMiner.DataMinerSolutions.ProcessAutomation.Manager;
 using Skyline.DataMiner.Net.Apps.DataMinerObjectModel;
+using System.Diagnostics;
+using System.Threading;
 
 namespace Library
 {
@@ -60,13 +62,38 @@ namespace Library
         {
             var instance = instances.First();
 
-            engine.GenerateInformation(DateTime.Now + "|ts instance " + instance.ID.Id + " with status: " + instance.StatusId);
             if (instance.StatusId == "active" || instance.StatusId == "complete" || instance.StatusId == "active_with_errors" || instance.StatusId == "error")
             {
                 return true;
             }
 
             return false;
+        }
+
+        /// <summary>
+        /// Retry until success or until timeout.
+        /// </summary>
+        /// <param name="func">Operation to retry.</param>
+        /// <param name="timeout">Max TimeSpan during which the operation specified in <paramref name="func"/> can be retried.</param>
+        /// <returns><c>true</c> if one of the retries succeeded within the specified <paramref name="timeout"/>. Otherwise <c>false</c>.</returns>
+        public static bool Retry(Func<bool> func, TimeSpan timeout)
+        {
+            bool success;
+
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+
+            do
+            {
+                success = func();
+                if (!success)
+                {
+                    Thread.Sleep(3000);
+                }
+            }
+            while (!success && sw.Elapsed <= timeout);
+
+            return success;
         }
     }
 }

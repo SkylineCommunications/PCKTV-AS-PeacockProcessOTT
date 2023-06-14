@@ -121,7 +121,7 @@ public class Script
 				}
 			}
 
-			if (Retry(CheckStateChange, new TimeSpan(0, 10, 0)))
+			if (SharedMethods.Retry(CheckStateChange, new TimeSpan(0, 10, 0)))
 			{
 				engine.GenerateInformation("Conviva process DOM reports complete");
 				helper.Log("Finished Waiting Conviva Subprocess.", PaLogLevel.Debug);
@@ -172,31 +172,5 @@ public class Script
 			exceptionHelper.ProcessException(ex, log);
 			helper.ReturnSuccess();
 		}
-	}
-
-	/// <summary>
-	/// Retry until success or until timeout.
-	/// </summary>
-	/// <param name="func">Operation to retry.</param>
-	/// <param name="timeout">Max TimeSpan during which the operation specified in <paramref name="func"/> can be retried.</param>
-	/// <returns><c>true</c> if one of the retries succeeded within the specified <paramref name="timeout"/>. Otherwise <c>false</c>.</returns>
-	public static bool Retry(Func<bool> func, TimeSpan timeout)
-	{
-		bool success;
-
-		Stopwatch sw = new Stopwatch();
-		sw.Start();
-
-		do
-		{
-			success = func();
-			if (!success)
-			{
-				Thread.Sleep(3000);
-			}
-		}
-		while (!success && sw.Elapsed <= timeout);
-
-		return success;
 	}
 }
