@@ -268,7 +268,7 @@ namespace PA.ProfileLoadDomTemplate
 					Severity = ErrorCode.SeverityType.Major,
 					Description = description,
 				},
-				SummaryFlag = true,
+				//SummaryFlag = true,
 			};
 
 			return log;

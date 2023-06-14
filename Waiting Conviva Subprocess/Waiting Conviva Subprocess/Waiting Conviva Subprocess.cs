@@ -100,6 +100,22 @@ public class Script
 				catch (Exception e)
 				{
 					engine.Log("Exception thrown while verifying the subprocess: " + e);
+					var log = new Log
+					{
+						AffectedItem = scriptName,
+						AffectedService = provisionName,
+						Timestamp = DateTime.Now,
+						ErrorCode = new ErrorCode
+						{
+							ConfigurationItem = scriptName + " Script",
+							ConfigurationType = ErrorCode.ConfigType.Automation,
+							Severity = ErrorCode.SeverityType.Warning,
+							Source = "CheckStateChange()",
+							Code = "ExceptionCheckingStatus",
+							Description = "Exception Generated While Checking Status.",
+						},
+					};
+					exceptionHelper.GenerateLog(log);
 					helper.ReturnSuccess();
 					throw;
 				}
