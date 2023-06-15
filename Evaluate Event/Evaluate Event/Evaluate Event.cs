@@ -189,6 +189,8 @@ namespace PA.ProfileLoadDomTemplate
 
 			var tagStatus = GetChildInstanceStatus(tagId, domHelper, mainInstance.StatusId);
 			var touchstreamStatus = GetChildInstanceStatus(touchstreamId, domHelper, mainInstance.StatusId);
+
+
 			var convivaStatus = GetChildInstanceStatus(convivaId, domHelper, mainInstance.StatusId);
 
 			if (mainInstance.StatusId == "in_progress")
@@ -261,7 +263,7 @@ namespace PA.ProfileLoadDomTemplate
 				Timestamp = DateTime.Now,
 				ErrorCode = new ErrorCode
 				{
-					ConfigurationItem = "PA_PCK_Evaluate Event" + " Script",
+					ConfigurationItem = "PA_PCK_Evaluate Event Script",
 					ConfigurationType = ErrorCode.ConfigType.Automation,
 					Source = "CheckChildStatus()",
 					Code = code,
