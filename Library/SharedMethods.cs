@@ -60,7 +60,7 @@ namespace Library
             }
         }
 
-        public static bool CheckStateChange(DomHelper domHelper, Engine engine,ManagedFilter<DomInstance,Guid> filter)
+        public static bool CheckStateChange(DomHelper domHelper,ManagedFilter<DomInstance,Guid> filter)
         {
             var instances = domHelper.DomInstances.Read(filter);
             var instance = instances.First();

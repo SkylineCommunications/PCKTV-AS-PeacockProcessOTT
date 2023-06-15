@@ -95,7 +95,7 @@ public class Script
 			{
 				try
 				{
-					return SharedMethods.CheckStateChange(domHelper ,engine, filter);
+					return SharedMethods.CheckStateChange(domHelper, filter);
 				}
 				catch (Exception e)
 				{
