@@ -8,6 +8,8 @@ using Skyline.DataMiner.DataMinerSolutions.ProcessAutomation.Manager;
 using Skyline.DataMiner.Net.Apps.DataMinerObjectModel;
 using System.Diagnostics;
 using System.Threading;
+using Skyline.DataMiner.Net.LogHelpers;
+using Skyline.DataMiner.Net.Messages.SLDataGateway;
 
 namespace Library
 {
@@ -58,8 +60,9 @@ namespace Library
             }
         }
 
-        public static bool CheckStateChange(Engine engine, List<DomInstance> instances)
+        public static bool CheckStateChange(DomHelper domHelper, Engine engine,ManagedFilter<DomInstance,Guid> filter)
         {
+            var instances = domHelper.DomInstances.Read(filter);
             var instance = instances.First();
 
             if (instance.StatusId == "active" || instance.StatusId == "complete" || instance.StatusId == "active_with_errors" || instance.StatusId == "error")

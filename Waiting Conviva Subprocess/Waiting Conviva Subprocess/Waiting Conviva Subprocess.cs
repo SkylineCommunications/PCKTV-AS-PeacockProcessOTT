@@ -95,7 +95,7 @@ public class Script
 			{
 				try
 				{
-					return SharedMethods.CheckStateChange(engine, convivaInstances);
+					return SharedMethods.CheckStateChange(domHelper ,engine, filter);
 				}
 				catch (Exception e)
 				{

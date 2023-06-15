@@ -99,7 +99,7 @@ public class Script
 			{
 				try
 				{
-					return SharedMethods.CheckStateChange(engine, tagInstances);
+					return SharedMethods.CheckStateChange(domHelper,engine, tagFilter);
 				}
 				catch (Exception e)
 				{

@@ -102,7 +102,7 @@ public class Script
 			{
 				try
 				{
-					return SharedMethods.CheckStateChange(engine, touchstreamInstances);
+					return SharedMethods.CheckStateChange(domHelper,engine, touchstreamFilter);
 				}
 				catch (Exception e)
 				{
