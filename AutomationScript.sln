@@ -30,7 +30,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Verify Touchstream Provisio
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Evaluate Event", "Evaluate Event", "{D8A4A283-01FC-4A77-967E-BAB315C100D1}"
 	ProjectSection(SolutionItems) = preProject
-		Evaluate Event\PA_PCK_Evaluate Event.xml = Evaluate Event\PA_PCK_Evaluate Event.xml
+		Evaluate Event\PA_PCK_EvaluateEvent.xml = Evaluate Event\PA_PCK_EvaluateEvent.xml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Start Touchstream Instance", "Start Touchstream Instance", "{DBC7F2F0-4525-4013-BC8B-FB1B68770A9E}"
