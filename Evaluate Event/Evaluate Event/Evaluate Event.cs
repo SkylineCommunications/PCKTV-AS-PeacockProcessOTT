@@ -203,7 +203,7 @@ namespace PA.ProfileLoadDomTemplate
 					var description = $"Child Status In Error State | TAG Status: {tagStatus} | Conviva Status: {convivaStatus} | Touchstream Status: {touchstreamStatus}";
 					var log = CreateLog(provisionName, code, description);
 					exceptionHelper.GenerateLog(log);
-					helper.TransitionState("inprogress_to_error");
+					SharedMethods.TransitionToError(helper,mainInstance.StatusId);
 				}
 				else
 				{
@@ -226,7 +226,7 @@ namespace PA.ProfileLoadDomTemplate
 					var description = $"Failed to Deactivate | All Child Status In Error State | TAG Status: {tagStatus} | Conviva Status: {convivaStatus} | Touchstream Status: {touchstreamStatus}";
 					var log = CreateLog(provisionName,code,description);
 					exceptionHelper.GenerateLog(log);
-					helper.TransitionState("deactivating_to_error");
+					SharedMethods.TransitionToError(helper, mainInstance.StatusId);
 				}
 				else
 				{
@@ -234,7 +234,7 @@ namespace PA.ProfileLoadDomTemplate
 					var description = $"At least one child failed deactivating | TAG Status: {tagStatus} | Conviva Status: {convivaStatus} | Touchstream Status: {touchstreamStatus}";
 					var log = CreateLog(provisionName,code,description);
 					exceptionHelper.GenerateLog(log);
-					helper.TransitionState("deactivating_to_error");
+					SharedMethods.TransitionToError(helper, mainInstance.StatusId);
 				}
 			}
 			else
