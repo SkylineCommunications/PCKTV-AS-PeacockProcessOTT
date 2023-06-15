@@ -167,7 +167,7 @@ public class Script
 	{
 		var status = instance.StatusId;
 
-		if (status == "active" || status == "completed" || status == "draft")
+		if (status == "active" || status == "complete" || status == "draft")
 		{
 			innerDomHelper.DomInstances.ExecuteAction(instance.ID, action);
 		}

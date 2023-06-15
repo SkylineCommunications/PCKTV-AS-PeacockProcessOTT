@@ -97,7 +97,7 @@ public class Script
 
 			if (touchstreamInstances.Any())
 			{
-				if (tsstatus == "active" || tsstatus == "completed" || tsstatus == "draft")
+				if (tsstatus == "active" || tsstatus == "complete" || tsstatus == "draft")
 				{
 					domHelper.DomInstances.ExecuteAction(tsinstance.ID, action);
 				}
