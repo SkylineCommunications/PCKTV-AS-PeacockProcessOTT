@@ -153,9 +153,10 @@ namespace PA.ProfileLoadDomTemplate
 			}
 			catch (Exception ex)
 			{
+
+				SharedMethods.TransitionToError(helper, mainStatus);
 				helper.Log($"An issue occurred while evaluating the event: {ex}", PaLogLevel.Error);
 				engine.GenerateInformation("exception in evaluate event: " + ex);
-
 				var log = new Log
 				{
 					AffectedItem = scriptName,
@@ -170,7 +171,6 @@ namespace PA.ProfileLoadDomTemplate
 					},
 				};
 				exceptionHelper.ProcessException(ex, log);
-				SharedMethods.TransitionToError(helper, mainStatus);
 				helper.SendFinishMessageToTokenHandler();
 			}
 		}
@@ -201,11 +201,12 @@ namespace PA.ProfileLoadDomTemplate
 				}
 				else if (tagStatus == Status.Error && touchstreamStatus == Status.Error && convivaStatus == Status.Error)
 				{
+
+					SharedMethods.TransitionToError(helper, mainInstance.StatusId);
 					var code = "ChildStatusInErrorState";
 					var description = $"Child Status In Error State | TAG Status: {tagStatus} | Conviva Status: {convivaStatus} | Touchstream Status: {touchstreamStatus}";
 					var log = CreateLog(provisionName, code, description);
 					exceptionHelper.GenerateLog(log);
-					SharedMethods.TransitionToError(helper,mainInstance.StatusId);
 				}
 				else
 				{
@@ -224,19 +225,19 @@ namespace PA.ProfileLoadDomTemplate
 				}
 				else if (tagStatus == Status.Error && touchstreamStatus == Status.Error && convivaStatus == Status.Error)
 				{
+					SharedMethods.TransitionToError(helper, mainInstance.StatusId);
 					var code = "PeacockDeactivatingFailed";
 					var description = $"Failed to Deactivate | All Child Status In Error State | TAG Status: {tagStatus} | Conviva Status: {convivaStatus} | Touchstream Status: {touchstreamStatus}";
 					var log = CreateLog(provisionName,code,description);
 					exceptionHelper.GenerateLog(log);
-					SharedMethods.TransitionToError(helper, mainInstance.StatusId);
 				}
 				else
 				{
+					SharedMethods.TransitionToError(helper, mainInstance.StatusId);
 					var code = "ChildFailedDeactivating";
 					var description = $"At least one child failed deactivating | TAG Status: {tagStatus} | Conviva Status: {convivaStatus} | Touchstream Status: {touchstreamStatus}";
 					var log = CreateLog(provisionName,code,description);
 					exceptionHelper.GenerateLog(log);
-					SharedMethods.TransitionToError(helper, mainInstance.StatusId);
 				}
 			}
 			else
@@ -245,11 +246,11 @@ namespace PA.ProfileLoadDomTemplate
 
 				if (!mainInstance.StatusId.Equals("reprovision"))
 				{
+					SharedMethods.TransitionToError(helper, mainInstance.StatusId);
 					var code = "MainInstanceUnknownStatus";
 					var description = $"Main Instance Unknown Status - {mainInstance.StatusId}";
 					var log = CreateLog(provisionName, code, description);
 					exceptionHelper.GenerateLog(log);
-					SharedMethods.TransitionToError(helper, mainInstance.StatusId);
 				}
 			}
 		}
