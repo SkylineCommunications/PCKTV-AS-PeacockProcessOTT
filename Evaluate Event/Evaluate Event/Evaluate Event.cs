@@ -98,11 +98,12 @@ namespace PA.ProfileLoadDomTemplate
 			helper.Log("START " + scriptName, PaLogLevel.Information);
 
 			var mainStatus = String.Empty;
+			var maindomInstance = helper.GetParameterValue<string>("InstanceId (Peacock)");
+			var mainFilter = DomInstanceExposers.Id.Equal(new DomInstanceId(Guid.Parse(maindomInstance)));
+			var mainInstance = domHelper.DomInstances.Read(mainFilter).First();
+
 			try
 			{
-				var maindomInstance = helper.GetParameterValue<string>("InstanceId (Peacock)");
-				var mainFilter = DomInstanceExposers.Id.Equal(new DomInstanceId(Guid.Parse(maindomInstance)));
-				var mainInstance = domHelper.DomInstances.Read(mainFilter).First();
 				mainStatus = mainInstance.StatusId;
 
 				if (mainStatus == "ready")
@@ -117,28 +118,7 @@ namespace PA.ProfileLoadDomTemplate
 				}
 
 				CheckChildStatus(helper, domHelper, mainInstance, exceptionHelper, provisionName);
-
-				var sourceElement = helper.GetParameterValue<string>("Source Element (Peacock)");
-				var eventId = helper.GetParameterValue<string>("Event ID (Peacock)");
-
-				if (!string.IsNullOrWhiteSpace(sourceElement))
-				{
-					ExternalRequest evtmgrUpdate = new ExternalRequest
-					{
-						Type = "Process Automation",
-						ProcessResponse = new ProcessResponse
-						{
-							EventName = eventId,
-							Peacock = new PeacockResponse
-							{
-								Status = mainInstance.StatusId == "in_progress" ? "Active" : "Complete",
-							},
-						},
-					};
-					var elementSplit = sourceElement.Split('/');
-					var eventManager = engine.FindElement(Convert.ToInt32(elementSplit[0]), Convert.ToInt32(elementSplit[1]));
-					eventManager.SetParameter(999, JsonConvert.SerializeObject(evtmgrUpdate));
-				}
+				EventManagerCallback(engine, helper, mainInstance);
 
 				var action = helper.GetParameterValue<string>("Action (Peacock)");
 				if (action == "reprovision")
@@ -153,7 +133,6 @@ namespace PA.ProfileLoadDomTemplate
 			}
 			catch (Exception ex)
 			{
-
 				SharedMethods.TransitionToError(helper, mainStatus);
 				helper.Log($"An issue occurred while evaluating the event: {ex}", PaLogLevel.Error);
 				engine.GenerateInformation("exception in evaluate event: " + ex);
@@ -171,7 +150,34 @@ namespace PA.ProfileLoadDomTemplate
 					},
 				};
 				exceptionHelper.ProcessException(ex, log);
+				EventManagerCallback(engine, helper, mainInstance);
 				helper.SendFinishMessageToTokenHandler();
+			}
+		}
+
+		private static void EventManagerCallback(Engine engine, PaProfileLoadDomHelper helper, DomInstance mainInstance)
+		{
+			var sourceElement = helper.GetParameterValue<string>("Source Element (Peacock)");
+			var eventId = helper.GetParameterValue<string>("Event ID (Peacock)");
+
+			if (!string.IsNullOrWhiteSpace(sourceElement))
+			{
+				ExternalRequest evtmgrUpdate = new ExternalRequest
+				{
+					Type = "Process Automation",
+					ProcessResponse = new ProcessResponse
+					{
+						EventName = eventId,
+						Peacock = new PeacockResponse
+						{
+							Status = mainInstance.StatusId == "complete" ? "Complete" : "Active",
+						},
+					},
+				};
+
+				var elementSplit = sourceElement.Split('/');
+				var eventManager = engine.FindElement(Convert.ToInt32(elementSplit[0]), Convert.ToInt32(elementSplit[1]));
+				eventManager.SetParameter(999, JsonConvert.SerializeObject(evtmgrUpdate));
 			}
 		}
 
@@ -228,7 +234,7 @@ namespace PA.ProfileLoadDomTemplate
 					SharedMethods.TransitionToError(helper, mainInstance.StatusId);
 					var code = "PeacockDeactivatingFailed";
 					var description = $"Failed to Deactivate | All Child Status In Error State | TAG Status: {tagStatus} | Conviva Status: {convivaStatus} | Touchstream Status: {touchstreamStatus}";
-					var log = CreateLog(provisionName,code,description);
+					var log = CreateLog(provisionName, code, description);
 					exceptionHelper.GenerateLog(log);
 				}
 				else
@@ -236,7 +242,7 @@ namespace PA.ProfileLoadDomTemplate
 					SharedMethods.TransitionToError(helper, mainInstance.StatusId);
 					var code = "ChildFailedDeactivating";
 					var description = $"At least one child failed deactivating | TAG Status: {tagStatus} | Conviva Status: {convivaStatus} | Touchstream Status: {touchstreamStatus}";
-					var log = CreateLog(provisionName,code,description);
+					var log = CreateLog(provisionName, code, description);
 					exceptionHelper.GenerateLog(log);
 				}
 			}
