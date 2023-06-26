@@ -62,6 +62,7 @@ using Skyline.DataMiner.DataMinerSolutions.ProcessAutomation.Manager;
 using Skyline.DataMiner.ExceptionHelper;
 using Skyline.DataMiner.Net.Apps.DataMinerObjectModel;
 using Skyline.DataMiner.ProtoBuf.Shared.Core.DataTypes.Shared.V1;
+using SLLoggerUtil;
 
 /// <summary>
 /// DataMiner Script Class.
@@ -92,7 +93,6 @@ public class Script
 			if (!touchstreamInstances.Any())
 			{
 				engine.GenerateInformation("No touchstream instances provisioned, skipping.");
-				helper.Log("Finished Waiting Touchstream Subprocess.", PaLogLevel.Debug);
 				helper.ReturnSuccess();
 				return;
 			}
@@ -109,9 +109,10 @@ public class Script
 					engine.GenerateInformation("Exception thrown while verifying the subprocess: " + e);
 					var log = new Log
 					{
-						AffectedItem = scriptName,
+						AffectedItem = "Touchstream Subprocess",
 						AffectedService = provisionName,
 						Timestamp = DateTime.Now,
+						LogNotes = $"Exception thrown while verifying Touchstream {provisionName} provision status.",
 						ErrorCode = new ErrorCode
 						{
 							ConfigurationItem = scriptName + " Script",
@@ -119,7 +120,7 @@ public class Script
 							Severity = ErrorCode.SeverityType.Warning,
 							Source = "CheckStateChange()",
 							Code = "ExceptionCheckingStatus",
-							Description = "Exception Generated While Checking Status.",
+							Description = "Exception thrown While Checking Status.",
 						},
 					};
 					exceptionHelper.GenerateLog(log);
@@ -131,7 +132,6 @@ public class Script
 			if (SharedMethods.Retry(CheckStateChange, new TimeSpan(0, 10, 0)))
 			{
 				engine.GenerateInformation("Finished Verify Touchstream Provision.");
-				helper.Log("Finished Verify Touchstream Provision.", PaLogLevel.Debug);
 				helper.ReturnSuccess();
 			}
 			else
@@ -141,9 +141,10 @@ public class Script
 
 				var log = new Log
 				{
-					AffectedItem = scriptName,
+					AffectedItem = "Touchstream Subprocess",
 					AffectedService = provisionName,
 					Timestamp = DateTime.Now,
+					LogNotes = $"Verifying Touchstream {provisionName} provision took longer than expected and could not verify status.",
 					ErrorCode = new ErrorCode
 					{
 						ConfigurationItem = scriptName + " Script",
@@ -151,7 +152,7 @@ public class Script
 						Severity = ErrorCode.SeverityType.Warning,
 						Source = "Retry()",
 						Code = "RetryTimeout",
-						Description = "Verifying Touchstream provision took longer than expected and could not verify status.",
+						Description = "Verifying provision took longer than expected.",
 					},
 				};
 				exceptionHelper.GenerateLog(log);
@@ -162,7 +163,6 @@ public class Script
 		catch (Exception ex)
 		{
 			engine.GenerateInformation("Exception occurred in Verify Touchstream Provision: " + ex);
-			helper.Log("Exception occurred in Verify Touchstream Provision: " + ex, PaLogLevel.Error);
 
 			var log = new Log
 			{

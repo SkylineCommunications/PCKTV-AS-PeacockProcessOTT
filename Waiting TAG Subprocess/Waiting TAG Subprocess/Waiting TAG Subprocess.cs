@@ -90,7 +90,6 @@ public class Script
 			if (!tagInstances.Any())
 			{
 				engine.GenerateInformation("No tag instances found to provision, skipping");
-				helper.Log("Finished Waiting TAG Subprocess.", PaLogLevel.Debug);
 				helper.ReturnSuccess();
 				return;
 			}
@@ -106,9 +105,10 @@ public class Script
 					engine.GenerateInformation("Exception thrown while verifying the subprocess: " + e);
 					var log = new Log
 					{
-						AffectedItem = scriptName,
+						AffectedItem = "TAG Subprocess",
 						AffectedService = provisionName,
 						Timestamp = DateTime.Now,
+						LogNotes = $"Exception thrown on Event {provisionName} while checking status.",
 						ErrorCode = new ErrorCode
 						{
 							ConfigurationItem = scriptName + " Script",
@@ -129,7 +129,6 @@ public class Script
 			{
 				// successfully created filter
 				engine.GenerateInformation("TAG process dom reports complete");
-				helper.Log("Finished Waiting TAG Subprocess.", PaLogLevel.Debug);
 				helper.ReturnSuccess();
 			}
 			else
@@ -138,9 +137,10 @@ public class Script
 				engine.GenerateInformation("Verifying TAG subprocess took longer than expected and could not verify.");
 				var log = new Log
 				{
-					AffectedItem = scriptName,
+					AffectedItem = "TAG Subprocess",
 					AffectedService = provisionName,
 					Timestamp = DateTime.Now,
+					LogNotes = $"Verifying {provisionName} provision took longer than expected and could not verify status.",
 					ErrorCode = new ErrorCode
 					{
 						ConfigurationItem = scriptName + " Script",
@@ -148,7 +148,7 @@ public class Script
 						Severity = ErrorCode.SeverityType.Warning,
 						Source = "Retry()",
 						Code = "RetryTimeout",
-						Description = "Verifying TAG subprocess took longer than expected and could not verify.",
+						Description = "Verifying TAG subprocess took longer than expected.",
 					},
 				};
 				exceptionHelper.GenerateLog(log);
@@ -158,7 +158,6 @@ public class Script
 		catch (Exception ex)
 		{
 			engine.GenerateInformation("Exception occurred in Waiting TAG Subprocess: " + ex);
-			helper.Log("Exception occurred in Waiting TAG Subprocess: " + ex, PaLogLevel.Error);
 
 			var log = new Log
 			{

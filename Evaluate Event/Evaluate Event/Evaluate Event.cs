@@ -54,6 +54,7 @@ DATE        VERSION     AUTHOR          COMMENTS
 namespace PA.ProfileLoadDomTemplate
 {
 	using System;
+	using System.Collections.Generic;
 	using System.Diagnostics;
 	using System.Linq;
 	using System.Runtime.Remoting.Messaging;
@@ -66,7 +67,9 @@ namespace PA.ProfileLoadDomTemplate
 	using Skyline.DataMiner.DataMinerSolutions.ProcessAutomation.Manager;
 	using Skyline.DataMiner.ExceptionHelper;
 	using Skyline.DataMiner.Net.Apps.DataMinerObjectModel;
+	using Skyline.DataMiner.Net.Helper;
 	using Skyline.DataMiner.Net.LogHelpers;
+	using Skyline.DataMiner.Net.Messages;
 
 	public class Status
 	{
@@ -95,7 +98,6 @@ namespace PA.ProfileLoadDomTemplate
 			var exceptionHelper = new ExceptionHelper(engine, domHelper);
 			var provisionName = helper.GetParameterValue<string>("Provision Name (Peacock)");
 			engine.GenerateInformation("START " + scriptName);
-			helper.Log("START " + scriptName, PaLogLevel.Information);
 
 			var mainStatus = String.Empty;
 			var maindomInstance = helper.GetParameterValue<string>("InstanceId (Peacock)");
@@ -128,13 +130,11 @@ namespace PA.ProfileLoadDomTemplate
 					rebuildScript.StartScript();
 				}
 
-				helper.Log("Finished Evaluate Event.", PaLogLevel.Debug);
 				helper.SendFinishMessageToTokenHandler();
 			}
 			catch (Exception ex)
 			{
 				SharedMethods.TransitionToError(helper, mainStatus);
-				helper.Log($"An issue occurred while evaluating the event: {ex}", PaLogLevel.Error);
 				engine.GenerateInformation("exception in evaluate event: " + ex);
 				var log = new Log
 				{
@@ -188,43 +188,45 @@ namespace PA.ProfileLoadDomTemplate
 			ExceptionHelper exceptionHelper,
 			string provisionName)
 		{
-
 			var tagId = helper.GetParameterValue<Guid>("TAG (Peacock)");
 			var touchstreamId = helper.GetParameterValue<Guid>("Touchstream (Peacock)");
 			var convivaId = helper.GetParameterValue<Guid>("Conviva (Peacock)");
 
 			var tagStatus = GetChildInstanceStatus(tagId, domHelper, mainInstance.StatusId);
 			var touchstreamStatus = GetChildInstanceStatus(touchstreamId, domHelper, mainInstance.StatusId);
-
-
 			var convivaStatus = GetChildInstanceStatus(convivaId, domHelper, mainInstance.StatusId);
 
 			if (mainInstance.StatusId == "in_progress")
 			{
+				var description = $"Failed to Deactivate Service";
+
 				if (tagStatus == Status.Active && touchstreamStatus == Status.Active && convivaStatus == Status.Active)
 				{
 					helper.TransitionState("inprogress_to_active");
 				}
 				else if (tagStatus == Status.Error && touchstreamStatus == Status.Error && convivaStatus == Status.Error)
 				{
-
 					SharedMethods.TransitionToError(helper, mainInstance.StatusId);
-					var code = "ChildStatusInErrorState";
-					var description = $"Child Status In Error State | TAG Status: {tagStatus} | Conviva Status: {convivaStatus} | Touchstream Status: {touchstreamStatus}";
-					var log = CreateLog(provisionName, code, description);
+					var affectedItem = "TAG - Conviva - Touchstream";
+					var code = "SubprocessStatusInErrorState";
+					var logNotes = $"Failed to provision event {mainInstance.Name} due to all subprocess in ERROR state";
+					var log = CreateLog(affectedItem, provisionName, code, description, logNotes);
 					exceptionHelper.GenerateLog(log);
 				}
 				else
 				{
-					var code = "ChildFailedProvisioning";
-					var description = "At least one child failed provisioning | TAG Status: " + tagStatus + " | Touchstream Status: " + touchstreamStatus + " | Conviva Status: " + convivaStatus;
-					var log = CreateLog(provisionName, code, description);
+					var affectedItem = GetAffectedItems(tagStatus, convivaStatus, touchstreamStatus);
+					var code = "SubprocessFailedToProvision";
+					var logNotes = $"At least one subprocess failed to provision {mainInstance.Name}. Subprocess status TAG: {tagStatus}. Conviva: {convivaStatus}. Touchstream: {touchstreamStatus} ";
+					var log = CreateLog(affectedItem, provisionName, code, description, logNotes);
 					exceptionHelper.GenerateLog(log);
 					helper.TransitionState("inprogress_to_activewitherrors");
 				}
 			}
 			else if (mainInstance.StatusId == "deactivating")
 			{
+				var description = $"Failed to Deactivate Service";
+
 				if (tagStatus == Status.Complete && touchstreamStatus == Status.Complete && convivaStatus == Status.Complete)
 				{
 					helper.TransitionState("deactivating_to_complete");
@@ -232,17 +234,19 @@ namespace PA.ProfileLoadDomTemplate
 				else if (tagStatus == Status.Error && touchstreamStatus == Status.Error && convivaStatus == Status.Error)
 				{
 					SharedMethods.TransitionToError(helper, mainInstance.StatusId);
-					var code = "PeacockDeactivatingFailed";
-					var description = $"Failed to Deactivate | All Child Status In Error State | TAG Status: {tagStatus} | Conviva Status: {convivaStatus} | Touchstream Status: {touchstreamStatus}";
-					var log = CreateLog(provisionName, code, description);
+					var affectedItem = "TAG - Conviva - Touchstream";
+					var code = "MainInstanceDeactivationFailed";
+					var logNotes = $"Failed to deactivate event {mainInstance.Name} due to all subprocess in ERROR state";
+					var log = CreateLog(affectedItem, provisionName, code, description, logNotes);
 					exceptionHelper.GenerateLog(log);
 				}
 				else
 				{
+					var affectedItem = GetAffectedItems(tagStatus, convivaStatus, touchstreamStatus);
 					SharedMethods.TransitionToError(helper, mainInstance.StatusId);
-					var code = "ChildFailedDeactivating";
-					var description = $"At least one child failed deactivating | TAG Status: {tagStatus} | Conviva Status: {convivaStatus} | Touchstream Status: {touchstreamStatus}";
-					var log = CreateLog(provisionName, code, description);
+					var code = "SubprocessdFailedToDeactivate";
+					var logNotes = $"At least one subprocess failed to deactivate {mainInstance.Name}. Subprocess status TAG: {tagStatus}. Conviva: {convivaStatus}. Touchstream: {touchstreamStatus} ";
+					var log = CreateLog(affectedItem, provisionName, code, description, logNotes);
 					exceptionHelper.GenerateLog(log);
 				}
 			}
@@ -252,22 +256,25 @@ namespace PA.ProfileLoadDomTemplate
 
 				if (!mainInstance.StatusId.Equals("reprovision"))
 				{
+					var affectedItem = "Main Provision";
+					var code = "UnknownStatus";
+					var description = $"Main Instance Unknown Status";
+					var logNotes = $"Unkown status for event {mainInstance.Name}. Current status: {mainInstance.StatusId}";
 					SharedMethods.TransitionToError(helper, mainInstance.StatusId);
-					var code = "MainInstanceUnknownStatus";
-					var description = $"Main Instance Unknown Status - {mainInstance.StatusId}";
-					var log = CreateLog(provisionName, code, description);
+					var log = CreateLog(affectedItem, provisionName, code, description, logNotes);
 					exceptionHelper.GenerateLog(log);
 				}
 			}
 		}
 
-		private Log CreateLog(string provisionName, string code, string description)
+		private Log CreateLog(string affectedItem, string provisionName, string code, string description, string logNotes)
 		{
 			var log = new Log
 			{
-				AffectedItem = "PA_PCK_Evaluate Event",
+				AffectedItem = affectedItem,
 				AffectedService = provisionName,
 				Timestamp = DateTime.Now,
+				LogNotes = logNotes,
 				ErrorCode = new ErrorCode
 				{
 					ConfigurationItem = "PA_PCK_Evaluate Event Script",
@@ -277,7 +284,7 @@ namespace PA.ProfileLoadDomTemplate
 					Severity = ErrorCode.SeverityType.Major,
 					Description = description,
 				},
-				//SummaryFlag = true,
+				SummaryFlag = true,
 			};
 
 			return log;
@@ -300,6 +307,31 @@ namespace PA.ProfileLoadDomTemplate
 
 			var instance = childInstance.First();
 			return instance.StatusId;
+		}
+
+		private string GetAffectedItems(string tagStatus, string convivaStatus, string touchstreamStatus)
+		{
+			List<string> affectedItems = new List<string>();
+
+			if (tagStatus == Status.Error)
+			{
+				affectedItems.Add("TAG");
+			}
+
+			if (convivaStatus == Status.Error)
+			{
+				affectedItems.Add("Conviva");
+			}
+
+			if (touchstreamStatus == Status.Error)
+			{
+				affectedItems.Add("Touchstream");
+
+			}
+
+			var items = string.Join(" - ", affectedItems);
+
+			return items;
 		}
 	}
 }

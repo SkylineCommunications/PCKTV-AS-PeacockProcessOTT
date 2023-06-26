@@ -120,7 +120,6 @@ public class Script
 			catch (Exception ex)
 			{
 				engine.GenerateInformation("Failed to transition main state in Start TAG Subprocess: " + ex);
-				helper.Log("Failed to transition main state in Start TAG Subprocess: " + ex, PaLogLevel.Error);
 
 				var log = new Log
 				{

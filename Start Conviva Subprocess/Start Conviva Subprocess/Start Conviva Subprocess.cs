@@ -114,7 +114,6 @@ public class Script
 		catch (Exception ex)
 		{
 			engine.Log("Error: " + ex);
-			helper.Log($"Exception while running script {scriptName}: {ex}", PaLogLevel.Error);
 
 			var log = new Log
 			{

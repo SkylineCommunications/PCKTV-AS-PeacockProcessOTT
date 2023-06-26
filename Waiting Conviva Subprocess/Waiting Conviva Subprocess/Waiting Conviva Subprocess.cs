@@ -102,9 +102,10 @@ public class Script
 					engine.Log("Exception thrown while verifying the subprocess: " + e);
 					var log = new Log
 					{
-						AffectedItem = scriptName,
+						AffectedItem = "Conviva Subprocess",
 						AffectedService = provisionName,
 						Timestamp = DateTime.Now,
+						LogNotes = $"Error while checking {provisionName} status",
 						ErrorCode = new ErrorCode
 						{
 							ConfigurationItem = scriptName + " Script",
@@ -124,7 +125,6 @@ public class Script
 			if (SharedMethods.Retry(CheckStateChange, new TimeSpan(0, 10, 0)))
 			{
 				engine.GenerateInformation("Conviva process DOM reports complete");
-				helper.Log("Finished Waiting Conviva Subprocess.", PaLogLevel.Debug);
 				helper.ReturnSuccess();
 			}
 			else
@@ -133,9 +133,10 @@ public class Script
 				engine.GenerateInformation("Conviva took too long to complete");
 				var log = new Log
 				{
-					AffectedItem = scriptName,
+					AffectedItem = "Conviva Subprocess",
 					AffectedService = provisionName,
 					Timestamp = DateTime.Now,
+					LogNotes = $"Verifying {provisionName} provision took longer than expected and could not verify status.",
 					ErrorCode = new ErrorCode
 					{
 						ConfigurationItem = scriptName + " Script",
@@ -143,7 +144,7 @@ public class Script
 						Severity = ErrorCode.SeverityType.Warning,
 						Source = "Retry()",
 						Code = "RetryTimeout",
-						Description = "Conviva took too long to complete",
+						Description = "Verifying provision took longer than expected.",
 					},
 				};
 				exceptionHelper.GenerateLog(log);
@@ -154,7 +155,6 @@ public class Script
 		{
 			engine.Log("Error: " + ex);
 			engine.GenerateInformation("Exception waiting for conviva: " + ex);
-			helper.Log("Exception waiting for conviva: " + ex, PaLogLevel.Error);
 
 			var log = new Log
 			{
