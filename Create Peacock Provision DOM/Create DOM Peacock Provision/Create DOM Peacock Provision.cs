@@ -106,8 +106,9 @@ public class Script
             var nameDescriptor = new FieldDescriptorID();
             var provisionInfoSectionDefinitions = SectionDefinitions.CreateProvisionInfoServiceDefinition(domHelper, ref nameDescriptor);
             var domInstancesSectionDefinitions = SectionDefinitions.CreateDomInstancesServiceDefinition(engine, domHelper);
+            var reportSectionDefinitions = SectionDefinitions.CreateReportServiceDefinition(domHelper);
 
-            var sections = new List<SectionDefinition> { provisionInfoSectionDefinitions, domInstancesSectionDefinitions };
+            var sections = new List<SectionDefinition> { provisionInfoSectionDefinitions, domInstancesSectionDefinitions, reportSectionDefinitions };
 
             // Create DomBehaviorDefinition
             var domBehaviorDefinition = BehaviorDefinitions.CreateDomBehaviorDefinition(sections);
@@ -130,7 +131,7 @@ public class Script
             return new DomDefinition
             {
                 Name = DefinitionName,
-                SectionDefinitionLinks = new List<SectionDefinitionLink> { new SectionDefinitionLink(provisionInfoSectionDefinitions.GetID()), new SectionDefinitionLink(domInstancesSectionDefinitions.GetID()) },
+                SectionDefinitionLinks = new List<SectionDefinitionLink> { new SectionDefinitionLink(provisionInfoSectionDefinitions.GetID()), new SectionDefinitionLink(domInstancesSectionDefinitions.GetID()), new SectionDefinitionLink(reportSectionDefinitions.GetID()) },
                 DomBehaviorDefinitionId = domBehaviorDefinition.ID,
                 ModuleSettingsOverrides = nameDefinition,
             };
@@ -191,6 +192,24 @@ public class Script
             var provisionInfoSection = CreateOrUpdateSection("Provision Info", domHelper, fieldDescriptors);
 
             return provisionInfoSection;
+        }
+
+        public static SectionDefinition CreateReportServiceDefinition(DomHelper domHelper)
+        {
+            var totalOutagesFieldDescriptor = CreateFieldDescriptorObject<double>("Total Outages (Peacock)", "The total number of outages that were created in SLA.");
+            var totalReportedOutagesFieldDescriptor = CreateFieldDescriptorObject<double>("Total Reported Outages (Peacock)", "The total number of outages with tickets reported in SLA.");
+            var convivaPrimaryKeyFieldDescriptor = CreateFieldDescriptorObject<string>("Conviva Primary Key (Peacock)", "The conviva primary key referencing events table.");
+
+            List<FieldDescriptor> fieldDescriptors = new List<FieldDescriptor>
+            {
+                totalOutagesFieldDescriptor,
+                totalReportedOutagesFieldDescriptor,
+                convivaPrimaryKeyFieldDescriptor,
+            };
+
+            var reportSection = CreateOrUpdateSection("Report", domHelper, fieldDescriptors);
+
+            return reportSection;
         }
 
         private static SectionDefinition CreateOrUpdateSection(string name, DomHelper domHelper, List<FieldDescriptor> fieldDescriptors)
@@ -624,6 +643,7 @@ public class Script
                 var sectionLinks = new List<DomStatusSectionDefinitionLink>();
                 var fieldDescriptors = sections.First(x => x.GetName().Contains("Provision Info")).GetAllFieldDescriptors().ToList();
                 var instanceAndAction = fieldDescriptors.FindAll(x => x.Name.Contains("InstanceId") || x.Name.Contains("Action")).Select(x => x.ID).ToList();
+                var readwriteFields = fieldDescriptors.FindAll(x => x.Name.Contains("Total Outages") || x.Name.Contains("Total Reported Outages") || x.Name.Contains("Conviva Primary Key")).Select(x => x.ID).ToList();
 
                 foreach (var section in sections)
                 {
@@ -636,7 +656,7 @@ public class Script
                         statusLink.FieldDescriptorLinks.Add(new DomStatusFieldDescriptorLink(fieldId)
                         {
                             Visible = !instanceAndAction.Contains(fieldId),
-                            ReadOnly = !instanceAndAction.Contains(fieldId),
+                            ReadOnly = !instanceAndAction.Contains(fieldId) && !readwriteFields.Contains(fieldId),
                             RequiredForStatus = false,
                         });
                     }

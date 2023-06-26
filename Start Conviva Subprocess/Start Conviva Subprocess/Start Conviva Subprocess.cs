@@ -52,17 +52,23 @@ dd/mm/2022  1.0.0.1     XXX, Skyline    Initial version
 using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Skyline.DataMiner.Automation;
+using Skyline.DataMiner.Core.DataMinerSystem.Automation;
+using Skyline.DataMiner.Core.DataMinerSystem.Common;
 using Skyline.DataMiner.DataMinerSolutions.ProcessAutomation.Helpers.Logging;
 using Skyline.DataMiner.DataMinerSolutions.ProcessAutomation.Manager;
 using Skyline.DataMiner.ExceptionHelper;
 using Skyline.DataMiner.Net.Apps.DataMinerObjectModel;
+using Skyline.DataMiner.Net.Sections;
 
 /// <summary>
 /// DataMiner Script Class.
 /// </summary>
 public class Script
 {
+
+	private DomHelper domHelper;
 	/// <summary>
 	/// The Script entry point.
 	/// </summary>
@@ -72,14 +78,16 @@ public class Script
 		var scriptName = "PA_PCK_Start Conviva Subprocess";
 		var provisionName = String.Empty;
 		var helper = new PaProfileLoadDomHelper(engine);
-		var domHelper = new DomHelper(engine.SendSLNetMessages, "process_automation");
-		var exceptionHelper = new ExceptionHelper(engine, domHelper);
+		this.domHelper = new DomHelper(engine.SendSLNetMessages, "process_automation");
+		var exceptionHelper = new ExceptionHelper(engine, this.domHelper);
 
 		try
 		{
 			var subdomInstance = helper.GetParameterValue<Guid>("Conviva (Peacock)");
 			var action = helper.GetParameterValue<string>("Action (Peacock)");
 			provisionName = helper.GetParameterValue<string>("Provision Name (Peacock)");
+			var provisionType = helper.GetParameterValue<string>("Provisioning Type (Peacock)");
+			var instanceId = helper.GetParameterValue<string>("InstanceId (Peacock)");
 			engine.Log("Starting Conviva Subprocess");
 
 			if (action.Equals("reprovision"))
@@ -87,8 +95,12 @@ public class Script
 				action = "deactivate";
 			}
 
+			var filter = DomInstanceExposers.Id.Equal(new DomInstanceId(Guid.Parse(instanceId)));
+			var instances = this.domHelper.DomInstances.Read(filter);
+			var instance = instances.First();
+
 			var subFilter = DomInstanceExposers.Id.Equal(new DomInstanceId(subdomInstance));
-			var subInstances = domHelper.DomInstances.Read(subFilter);
+			var subInstances = this.domHelper.DomInstances.Read(subFilter);
 			if (subInstances.Count == 0)
 			{
 				engine.GenerateInformation("No Conviva Instance found, skipping");
@@ -99,13 +111,50 @@ public class Script
 			var subInstance = subInstances.First();
 			var convivaStatus = subInstance.StatusId;
 
+			if (provisionType == "SLE" && action.Equals("deactivate"))
+			{
+				IDms dms = engine.GetDms();
+				IDmsElement convivaElement = dms.GetElement("Conviva Test Platform - PopUp");
+				var metricLensQualityTable = convivaElement.GetTable(2100);
+				var tableRows = metricLensQualityTable.GetData();
+				var pid = Regex.Match(provisionName, @"\(\d+\)$").Value;
+
+				if (!String.IsNullOrWhiteSpace(pid))
+				{
+					SectionDefinition matchedSectionDefinition = null;
+					FieldDescriptor fieldDescriptor = null;
+					foreach (var section in instance.Sections)
+					{
+						section.Stitch(this.SetSectionDefinitionById);
+						var sectionDefinition = section.GetSectionDefinition();
+
+						if (!sectionDefinition.GetName().Equals("Report"))
+						{
+							continue;
+						}
+
+						matchedSectionDefinition = sectionDefinition;
+						var allFields = sectionDefinition.GetAllFieldDescriptors();
+						fieldDescriptor = allFields.First(x => x.Name.Equals("Conviva Primary Key (Peacock)"));
+						break;
+					}
+
+					var matchedRow = tableRows.First(x => x.Value[4].ToString().Contains(pid));
+					if (matchedSectionDefinition != null && fieldDescriptor != null)
+					{
+						instance.AddOrUpdateFieldValue(matchedSectionDefinition, fieldDescriptor, matchedRow.Key);
+						this.domHelper.DomInstances.Update(instance);
+					}
+				}
+			}
+
 			if (convivaStatus.StartsWith("error"))
 			{
-				domHelper.DomInstances.ExecuteAction(subInstance.ID, "error-" + action);
+				this.domHelper.DomInstances.ExecuteAction(subInstance.ID, "error-" + action);
 			}
 			else
 			{
-				domHelper.DomInstances.ExecuteAction(subInstance.ID, action);
+				this.domHelper.DomInstances.ExecuteAction(subInstance.ID, action);
 			}
 
 			engine.GenerateInformation("Started Conviva Instance");
@@ -131,5 +180,10 @@ public class Script
 			exceptionHelper.ProcessException(ex, log);
 			helper.ReturnSuccess();
 		}
+	}
+
+	private SectionDefinition SetSectionDefinitionById(SectionDefinitionID sectionDefinitionId)
+	{
+		return this.domHelper.SectionDefinitions.Read(SectionDefinitionExposers.ID.Equal(sectionDefinitionId)).First();
 	}
 }

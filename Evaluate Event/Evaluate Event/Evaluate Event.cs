@@ -73,7 +73,6 @@ namespace PA.ProfileLoadDomTemplate
 
 	public class Status
 	{
-
 		public static readonly string Error = "error";
 		public static readonly string Active = "active";
 		public static readonly string ActiveWithErrors = "active_with_errors";
