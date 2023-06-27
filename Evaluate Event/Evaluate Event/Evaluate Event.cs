@@ -120,6 +120,10 @@ namespace PA.ProfileLoadDomTemplate
 				}
 
 				CheckChildStatus(helper, domHelper, mainInstance, exceptionHelper, provisionName);
+
+				// Update the instance after performing a transition
+				mainFilter = DomInstanceExposers.Id.Equal(new DomInstanceId(Guid.Parse(maindomInstance)));
+				mainInstance = domHelper.DomInstances.Read(mainFilter).First();
 				EventManagerCallback(engine, helper, mainInstance);
 
 				var action = helper.GetParameterValue<string>("Action (Peacock)");
