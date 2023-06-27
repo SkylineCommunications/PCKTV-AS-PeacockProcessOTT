@@ -161,6 +161,7 @@ public class Script
 				AffectedItem = scriptName,
 				AffectedService = provisionName,
 				Timestamp = DateTime.Now,
+				LogNotes = ex.ToString(),
 				ErrorCode = new ErrorCode
 				{
 					ConfigurationItem = scriptName + " Script",

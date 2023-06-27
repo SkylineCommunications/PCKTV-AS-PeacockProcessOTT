@@ -141,6 +141,7 @@ namespace PA.ProfileLoadDomTemplate
 					AffectedItem = scriptName,
 					AffectedService = provisionName,
 					Timestamp = DateTime.Now,
+					LogNotes = ex.ToString(),
 					ErrorCode = new ErrorCode
 					{
 						ConfigurationItem = scriptName + " Script",
@@ -198,7 +199,7 @@ namespace PA.ProfileLoadDomTemplate
 
 			if (mainInstance.StatusId == "in_progress")
 			{
-				var description = $"Failed to Deactivate Service";
+				var description = $"Failed to Provision Service";
 
 				if (tagStatus == Status.Active && touchstreamStatus == Status.Active && convivaStatus == Status.Active)
 				{
