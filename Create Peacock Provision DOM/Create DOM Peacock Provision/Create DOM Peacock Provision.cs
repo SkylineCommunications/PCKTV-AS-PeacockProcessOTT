@@ -643,7 +643,8 @@ public class Script
                 var sectionLinks = new List<DomStatusSectionDefinitionLink>();
                 var fieldDescriptors = sections.First(x => x.GetName().Contains("Provision Info")).GetAllFieldDescriptors().ToList();
                 var instanceAndAction = fieldDescriptors.FindAll(x => x.Name.Contains("InstanceId") || x.Name.Contains("Action")).Select(x => x.ID).ToList();
-                var readwriteFields = fieldDescriptors.FindAll(x => x.Name.Contains("Total Outages") || x.Name.Contains("Total Reported Outages") || x.Name.Contains("Conviva Primary Key")).Select(x => x.ID).ToList();
+				var reportFieldDescriptors = sections.First(x => x.GetName().Contains("Report")).GetAllFieldDescriptors().ToList();
+				var readwriteFields = reportFieldDescriptors.FindAll(x => x.Name.Contains("Total Outages") || x.Name.Contains("Total Reported Outages") || x.Name.Contains("Conviva Primary Key")).Select(x => x.ID).ToList();
 
                 foreach (var section in sections)
                 {
