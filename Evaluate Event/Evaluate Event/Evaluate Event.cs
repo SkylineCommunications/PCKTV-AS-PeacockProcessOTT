@@ -142,7 +142,7 @@ namespace PA.ProfileLoadDomTemplate
 				engine.GenerateInformation("exception in evaluate event: " + ex);
 				var log = new Log
 				{
-					AffectedItem = scriptName,
+					AffectedItem = "Main Provision",
 					AffectedService = provisionName,
 					Timestamp = DateTime.Now,
 					LogNotes = ex.ToString(),

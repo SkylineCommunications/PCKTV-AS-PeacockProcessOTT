@@ -123,7 +123,7 @@ public class Script
 
 				var log = new Log
 				{
-					AffectedItem = scriptName,
+					AffectedItem = "TAG",
 					AffectedService = provisionName,
 					Timestamp = DateTime.Now,
 					LogNotes = ex.ToString(),
@@ -147,7 +147,7 @@ public class Script
 
 			var log = new Log
 			{
-				AffectedItem = scriptName,
+				AffectedItem = "TAG",
 				AffectedService = provisionName,
 				Timestamp = DateTime.Now,
 				LogNotes = ex.ToString(),

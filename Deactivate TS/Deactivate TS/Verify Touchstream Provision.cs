@@ -166,7 +166,7 @@ public class Script
 
 			var log = new Log
 			{
-				AffectedItem = scriptName,
+				AffectedItem = "Touchstream",
 				AffectedService = provisionName,
 				Timestamp = DateTime.Now,
 				LogNotes = ex.ToString(),

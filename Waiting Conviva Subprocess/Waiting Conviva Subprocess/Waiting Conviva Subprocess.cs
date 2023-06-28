@@ -158,7 +158,7 @@ public class Script
 
 			var log = new Log
 			{
-				AffectedItem = scriptName,
+				AffectedItem = "Conviva",
 				AffectedService = provisionName,
 				Timestamp = DateTime.Now,
 				LogNotes = ex.ToString(),
