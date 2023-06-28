@@ -95,9 +95,7 @@ public class Script
 				action = "deactivate";
 			}
 
-			var filter = DomInstanceExposers.Id.Equal(new DomInstanceId(Guid.Parse(instanceId)));
-			var instances = this.domHelper.DomInstances.Read(filter);
-			var instance = instances.First();
+			this.UpdateConvivaSLEPrimaryKey(engine, provisionName, action, provisionType, instanceId);
 
 			var subFilter = DomInstanceExposers.Id.Equal(new DomInstanceId(subdomInstance));
 			var subInstances = this.domHelper.DomInstances.Read(subFilter);
@@ -110,43 +108,6 @@ public class Script
 
 			var subInstance = subInstances.First();
 			var convivaStatus = subInstance.StatusId;
-
-			if (provisionType == "SLE" && action.Equals("deactivate"))
-			{
-				IDms dms = engine.GetDms();
-				IDmsElement convivaElement = dms.GetElement("Conviva Test Platform - PopUp");
-				var metricLensQualityTable = convivaElement.GetTable(2100);
-				var tableRows = metricLensQualityTable.GetData();
-				var pid = Regex.Match(provisionName, @"\(\d+\)$").Value;
-
-				if (!String.IsNullOrWhiteSpace(pid))
-				{
-					SectionDefinition matchedSectionDefinition = null;
-					FieldDescriptor fieldDescriptor = null;
-					foreach (var section in instance.Sections)
-					{
-						section.Stitch(this.SetSectionDefinitionById);
-						var sectionDefinition = section.GetSectionDefinition();
-
-						if (!sectionDefinition.GetName().Equals("Report"))
-						{
-							continue;
-						}
-
-						matchedSectionDefinition = sectionDefinition;
-						var allFields = sectionDefinition.GetAllFieldDescriptors();
-						fieldDescriptor = allFields.First(x => x.Name.Equals("Conviva Primary Key (Peacock)"));
-						break;
-					}
-
-					var matchedRow = tableRows.First(x => x.Value[4].ToString().Contains(pid));
-					if (matchedSectionDefinition != null && fieldDescriptor != null)
-					{
-						instance.AddOrUpdateFieldValue(matchedSectionDefinition, fieldDescriptor, matchedRow.Key);
-						this.domHelper.DomInstances.Update(instance);
-					}
-				}
-			}
 
 			if (convivaStatus.StartsWith("error"))
 			{
@@ -179,6 +140,51 @@ public class Script
 			};
 			exceptionHelper.ProcessException(ex, log);
 			helper.ReturnSuccess();
+		}
+	}
+
+	private void UpdateConvivaSLEPrimaryKey(Engine engine, string provisionName, string action, string provisionType, string instanceId)
+	{
+		var filter = DomInstanceExposers.Id.Equal(new DomInstanceId(Guid.Parse(instanceId)));
+		var instances = this.domHelper.DomInstances.Read(filter);
+		var instance = instances.First();
+
+		if (provisionType == "SLE" && action.Equals("deactivate"))
+		{
+			IDms dms = engine.GetDms();
+			IDmsElement convivaElement = dms.GetElement("Conviva Test Platform - PopUp");
+			var metricLensQualityTable = convivaElement.GetTable(2100);
+			var tableRows = metricLensQualityTable.GetData();
+			var pid = Regex.Match(provisionName, @"\(\d+\)$").Value;
+
+			if (!String.IsNullOrWhiteSpace(pid))
+			{
+				SectionDefinition matchedSectionDefinition = null;
+				FieldDescriptor fieldDescriptor = null;
+				foreach (var section in instance.Sections)
+				{
+					section.Stitch(this.SetSectionDefinitionById);
+					var sectionDefinition = section.GetSectionDefinition();
+
+					if (!sectionDefinition.GetName().Equals("Report"))
+					{
+						continue;
+					}
+
+					matchedSectionDefinition = sectionDefinition;
+					var allFields = sectionDefinition.GetAllFieldDescriptors();
+					fieldDescriptor = allFields.First(x => x.Name.Equals("Conviva Primary Key (Peacock)"));
+					break;
+				}
+
+				var matchedRow = tableRows.First(x => x.Value[4].ToString().Contains(pid));
+				engine.GenerateInformation($"Conviva key: {matchedRow.Key}");
+				if (matchedSectionDefinition != null && fieldDescriptor != null)
+				{
+					instance.AddOrUpdateFieldValue(matchedSectionDefinition, fieldDescriptor, matchedRow.Key);
+					this.domHelper.DomInstances.Update(instance);
+				}
+			}
 		}
 	}
 
