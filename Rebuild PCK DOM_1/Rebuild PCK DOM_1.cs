@@ -61,6 +61,7 @@ namespace Rebuild_PCK_DOM_1
 	using Skyline.DataMiner.Core.DataMinerSystem.Automation;
 	using Skyline.DataMiner.Core.DataMinerSystem.Common;
 	using Skyline.DataMiner.Net.Apps.DataMinerObjectModel;
+	using Skyline.DataMiner.Net.Messages.SLDataGateway;
 	using Skyline.DataMiner.Net.Sections;
 
 	/// <summary>
@@ -101,6 +102,11 @@ namespace Rebuild_PCK_DOM_1
 						section.Stitch(sectionDefinitionFunc);
 
 						var sectionDefinition = section.GetSectionDefinition();
+						if (!sectionDefinition.GetName().Contains("Instances"))
+						{
+							continue;
+						}
+
 						var fields = sectionDefinition.GetAllFieldDescriptors();
 
 						foreach (var field in fields)
