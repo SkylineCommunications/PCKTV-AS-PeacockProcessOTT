@@ -102,7 +102,7 @@ namespace Rebuild_PCK_DOM_1
 						section.Stitch(sectionDefinitionFunc);
 
 						var sectionDefinition = section.GetSectionDefinition();
-						if (!sectionDefinition.GetName().Contains("Instances"))
+						if (sectionDefinition.GetName().Contains("Report"))
 						{
 							continue;
 						}
