@@ -62,6 +62,7 @@ using Skyline.DataMiner.DataMinerSolutions.ProcessAutomation.Manager;
 using Skyline.DataMiner.ExceptionHelper;
 using Skyline.DataMiner.Net.Apps.DataMinerObjectModel;
 using Skyline.DataMiner.Net.ManagerStore;
+using Skyline.DataMiner.Net.Messages.SLDataGateway;
 using Skyline.DataMiner.Net.Sections;
 
 /// <summary>
@@ -155,15 +156,16 @@ public class Script
 			IDmsElement convivaElement = dms.GetElement("Conviva Test Platform - PopUp");
 			var metricLensQualityTable = convivaElement.GetTable(2100);
 			var tableRows = metricLensQualityTable.GetData();
-			var pid = Regex.Match(provisionName, @"\(\d+\)$").Value.Replace("(", String.Empty).Replace(")", String.Empty);
+			var pid = Regex.Match(provisionName, @"\((?<Pid>\d+)\)$").Value;
 
 			if (String.IsNullOrWhiteSpace(pid))
 			{
 				return;
 			}
 
-			var sectionDefinitions = domHelper.SectionDefinitions.ReadAll();
-			var reportSectionDefinition = sectionDefinitions.First(x => x.GetName().Equals("Report"));
+			var sectionFilter = SectionDefinitionExposers.Name.Equal("Report");
+			var sectionDefinitions = domHelper.SectionDefinitions.Read(sectionFilter);
+			var reportSectionDefinition = sectionDefinitions.First();
 			var convivaKeyFieldDescriptor = reportSectionDefinition.GetAllFieldDescriptors().First(x => x.Name.Equals("Conviva Primary Key (Peacock)"));
 
 			var matchedRow = tableRows.First(x => x.Value[4].ToString().Contains(pid));
