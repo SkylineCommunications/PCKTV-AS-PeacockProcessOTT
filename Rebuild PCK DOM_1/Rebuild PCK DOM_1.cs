@@ -156,8 +156,9 @@ namespace Rebuild_PCK_DOM_1
 
 		private void FindAndDeleteTagInstances(DomHelper domHelper, string tagId)
 		{
-			if (String.IsNullOrWhiteSpace(tagId))
+			if (String.IsNullOrWhiteSpace(tagId) && Guid.TryParse(tagId, out Guid id))
 			{
+				bigengine.GenerateInformation("Unable to handle instance id (TAG): " + tagId);
 				return;
 			}
 
@@ -224,10 +225,11 @@ namespace Rebuild_PCK_DOM_1
 			return childIds;
 		}
 
-		private static void FindAndDeleteInstance(DomHelper domHelper, string instanceId)
+		private void FindAndDeleteInstance(DomHelper domHelper, string instanceId)
 		{
-			if (String.IsNullOrWhiteSpace(instanceId))
+			if (String.IsNullOrWhiteSpace(instanceId) && Guid.TryParse(instanceId, out Guid id))
 			{
+				bigengine.GenerateInformation("Unable to handle instance id (Conviva): " + instanceId);
 				return;
 			}
 
@@ -242,8 +244,9 @@ namespace Rebuild_PCK_DOM_1
 
 		private void FindAndDeleteTouchstreamInstances(DomHelper domHelper, string instanceId)
 		{
-			if (String.IsNullOrWhiteSpace(instanceId))
+			if (String.IsNullOrWhiteSpace(instanceId) && Guid.TryParse(instanceId, out Guid id))
 			{
+				bigengine.GenerateInformation("Unable to handle instance id (Touchstream): " + instanceId);
 				return;
 			}
 
