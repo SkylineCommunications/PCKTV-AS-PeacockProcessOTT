@@ -156,7 +156,7 @@ public class Script
 			IDmsElement convivaElement = dms.GetElement("Conviva Test Platform - PopUp");
 			var metricLensQualityTable = convivaElement.GetTable(2100);
 			var tableRows = metricLensQualityTable.GetData();
-			var pid = Regex.Match(provisionName, @"\((?<Pid>\d+)\)$").Value;
+			var pid = Regex.Match(provisionName, @"\((?<Pid>\d+)\)$").Groups["Pid"].Value;
 
 			if (String.IsNullOrWhiteSpace(pid))
 			{
